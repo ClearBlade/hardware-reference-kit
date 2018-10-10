@@ -1,0 +1,219 @@
+<form name="newCollectionForm">   
+    <div class="modal-header">
+        <h2>New Collection or Connection</h2>
+    </div>
+
+    <div class="modal-body">
+        <strong class="errorMessage">{{errorMessage}}</strong>
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label col-sm-3">
+                    Type:
+                </label>
+                <div class="col-sm-3 radio text-center">
+                    <label><input ng-model="newCollection.type" required type="radio" value="cloud" name="collectionType"/>Cloud</label>
+                </div>
+                <div class="col-sm-3 radio text-center">
+                    <label><input ng-model="newCollection.type" required type="radio" value="connection" name="collectionType"/>Connection</label>
+                </div>
+                <div class="col-sm-2 col-sm-offset-1 radio text-center">
+                    <i class="glyphicon glyphicon-question-sign"
+                       uib-popover="ClearBlade Data collection or ClearConnect database connection"
+                       popover-trigger="mouseenter"></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-3">Name:</label>
+                <div class="col-sm-7">
+                    <input ng-model="newCollection.collectionName" placeholder="Alphanumeric name" class="form-control"
+                           id="collectionName" type="text" required name="collectionName" autofocus/>
+                </div>
+            </div>
+
+            <div class="form-group" ng-if="newCollection.type == 'cloud'">
+                <label class="control-label col-sm-3">
+                    Data:
+                </label>
+                <div class="col-sm-7">
+                    <div class="button-group">
+                        <div class="btn-group cb-btn-menu">
+                            <label class="btn btn-default cb-menu-btn" ng-class="{active: newCollection.state=='new'}" ng-click="changeState('new')">Empty</label>
+                            <label class="btn btn-default cb-menu-btn" ng-class="{active: newCollection.state=='import'}" ng-click="changeState('import')">Import <span class="glyphicon glyphicon-import" /></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2 radio text-center">
+                    <i class="glyphicon glyphicon-question-sign"
+                       uib-popover="Create an empty collection or import existing. (JSON or CSV)"
+                       popover-trigger="mouseenter"></i>
+                </div>
+            </div>
+
+
+            <div class="form-group" ng-show="newCollection.type == 'cloud' && newCollection.state =='import'">
+                <div class="col-sm-7 col-sm-offset-3">
+                    <file-import file-name="fileName" file-type="fileType" file="file" selected="selected" callback="isValidUpload"></file-import>
+                    <div ng-show="complete">{{status}}</div>
+                    <div ng-show="error" style="color:red">Error: {{status}}</div>
+                </div>
+            </div>
+
+            <div ng-if="newCollection.type == 'connection'">
+                <div class="form-group">
+                    <label class="control-label col-sm-3" for="dbTypes">Database:</label>
+                    <div class="col-sm-7">
+                        <select name="dbTypes" ng-model="newCollection.dbType"
+                                ng-options="name as name for (name, details) in DBTypes"
+                                ng-change="dbChange(newCollection.dbType)" required class="form-control"></select>
+                    </div>
+                    <div class="col-sm-2 radio text-center">
+                        <i class="glyphicon glyphicon-question-sign" uib-popover="Type of database connection"
+                           popover-trigger="mouseenter"></i>
+                    </div>
+                </div>
+
+                <div>
+                    <strong class="errorMessage">{{dbError}}</strong>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-3" for="dbName">Database Name:</label>
+                    <div class="col-sm-7">
+                        <input class="form-control" name="dbName" ng-model="newCollection.dbName" type="text" required/>
+                    </div>
+                    <div class="col-sm-2 radio text-center">
+                        <i class="glyphicon glyphicon-question-sign" uib-popover="Name of connected database"
+                           popover-trigger="mouseenter"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-3" for="ipAddress">{{locationLabel}}:</label>
+                    <div class="col-sm-7">
+                        <input class="form-control" ng-model="newCollection.ipAddress" id="ipAddress" type="text"
+                               name="collectionHostName" required/>
+                    </div>
+                    <div class="col-sm-2 radio text-center">
+                        <i class="glyphicon glyphicon-question-sign" uib-popover="IP address or hostname of database server"
+                           popover-trigger="mouseenter"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-3" for="collectionPort">Port:</label>
+                    <div class="col-sm-7">
+                        <input class="form-control" ng-model="newCollection.port" type="text" name="collectionPort"/>
+                    </div>
+                    <div class="col-sm-2 radio text-center">
+                        <i class="glyphicon glyphicon-question-sign" uib-popover="Port of database to connect to"
+                           popover-trigger="mouseenter"></i>
+                    </div>
+                </div>
+
+                <div class="form-group" ng-if="encryptionSupported">
+
+                    <div class="col-sm-7 col-sm-offset-3">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <input id="encryption" ng-model="newCollection.encryption" name="encryption" type="checkbox" >
+                            </span>
+                            <label class="form-control" for="encryption">Use Encryption</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 radio text-center">
+                        <i class="glyphicon glyphicon-question-sign" uib-popover="Use encrypted connection; SSL or TLS"
+                           popover-trigger="mouseenter"></i>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-3" for="collectionUsername">Username:</label>
+                    <div class="col-sm-7">
+                        <input class="form-control" ng-model="newCollection.user.username" type="text" name="collectionUsername"
+                               required/>
+                    </div>
+                    <div class="col-sm-2 radio text-center">
+                        <i class="glyphicon glyphicon-question-sign" uib-popover="Username for database; full access required"
+                           popover-trigger="mouseenter"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-3" for="collectionPassword">Password:</label>
+                    <div class="col-sm-7">
+                        <input class="form-control" ng-model="newCollection.user.password" type="password" name="collectionPassword"
+                               required/>
+                    </div>
+                    <div class="col-sm-2 radio text-center">
+                        <i class="glyphicon glyphicon-question-sign" uib-popover="Password for database credentials"
+                           popover-trigger="mouseenter"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-3">Table name:</label>
+                    <div class="col-sm-7">
+                        <input class="form-control" ng-model="newCollection.tableName" name="tableName" type="text" required/>
+                    </div>
+                    <div class="col-sm-2 radio text-center">
+                        <i class="glyphicon glyphicon-question-sign" uib-popover="Name of table within database to use for collection"
+                           popover-trigger="mouseenter"></i>
+                    </div>
+                </div>
+
+
+                <div ng-if="newCollection.dbType === 'DB2 System i'">
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Schema:</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" ng-model="newCollection.schema" name="tableName" type="text"/>
+                        </div>
+                        <div class="col-sm-2 radio text-center">
+                            <i class="glyphicon glyphicon-question-sign"
+                               uib-popover="Name of schema within database to use for collection"
+                               popover-trigger="mouseenter"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Library:</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" ng-model="newCollection.library" name="tableName" type="text"/>
+                        </div>
+                        <div class="col-sm-2 radio text-center">
+                            <i class="glyphicon glyphicon-question-sign"
+                               uib-popover="Name of library within database to use for collection"
+                               popover-trigger="mouseenter"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Catalog:</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" ng-model="newCollection.catalog" name="tableName" type="text"/>
+                        </div>
+                        <div class="col-sm-2 radio text-center">
+                            <i class="glyphicon glyphicon-question-sign"
+                               uib-popover="Name of catalog within database to use for collection"
+                               popover-trigger="mouseenter"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="controls">
+            
+            <input type="submit" ng-if="newCollection.state !== 'import' || newCollection.type == 'connection'" ng-click="saveNewCollection(newCollection)" class="btn btn-success cb-padding" id="collectionSubmit" value="Submit" ng-disabled="newCollectionForm.$invalid || submitDisabled || (newCollection.type == 'cloud' && newCollection.state == '')"/>
+             
+            <input type="submit" ng-if="newCollection.type == 'cloud' && newCollection.state =='import'" ng-click="importCollection(newCollection)" class="btn btn-success cb-padding" id="collectionSubmit" value="Submit" ng-disabled="newCollectionForm.$invalid || submitDisabled || newCollection.state == ''">
+           
+            <input type="button" class="btn btn-default cb-padding" ng-click="close()" value="Cancel"/>
+        
+        </div>
+    </div>
+</form>

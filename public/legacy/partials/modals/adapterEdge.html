@@ -1,0 +1,49 @@
+<div class="modal-header">
+    <div class="row">
+        <h3>{{currentAdapter[consoleConstants.external.ADAPTER.NAME]}}-{{currentEdge[consoleConstants.external.ADAPTER.NAME]}}</h3>
+    </div>
+</div>
+ <div class="modal-body">
+    <div class="row form-group">
+        <label class="col-sm-2">Status:</label>
+        <span class="ng-scope col-sm-3">{{currentEdge[consoleConstants.external.ADAPTER.EDGE_STATUS]}}</span>
+    </div>
+
+    <div class="row form-group">
+        <div class="btn-group-wrap">
+            <input type="button" class="btn btn-default" ng-click="startAdapter()" value="Start"
+                ng-disabled="currentAdapter[consoleConstants.external.ADAPTER.START_CMD] == ''">
+            <input type="button" class="btn btn-default" ng-click="stopAdapter()" value="Stop"
+                ng-disabled="currentAdapter[consoleConstants.external.ADAPTER.STOP_CMD] == ''">
+            <input type="button" class="btn btn-default" ng-click="restartAdapter()" value="Reload/Restart"
+                ng-disabled="currentAdapter[consoleConstants.external.ADAPTER.START_CMD] == '' || currentAdapter[consoleConstants.external.ADAPTER.STOP_CMD] == ''">
+        </div>
+    </div>
+    <div class="row">
+        <label class="col-sm-6">Logs:</label>
+
+        <div class="col-sm-6 collections-controls text-right">
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button title="Refresh" class="btn btn-default" ng-click="refreshLogs()"
+                        ng-disabled="currentAdapter[consoleConstants.external.ADAPTER.LOGS_CMD] == ''">
+                        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <textarea class="form-control adapter-logs scrollable-modal-body"
+                ng-disabled="currentAdapter[consoleConstants.external.ADAPTER.LOGS_CMD] == ''">{{currentEdge.logs}}</textarea>
+        </div>
+    </div>
+<div>
+<div class="modal-footer"
+    <div class="control-group">
+        <div class="controls modal-submit">
+            <button class="btn btn-default" ng-click="closeDialog()">Close</button>
+        </div>
+    </div>
+</div>

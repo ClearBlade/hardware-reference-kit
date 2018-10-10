@@ -1,0 +1,133 @@
+<form ng-submit="createDevice()" name="createForm">
+    <div class="modal-header cb-modal">
+        <h2>New Device</h2>
+    </div>
+    <div class="modal-body">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-3">Name: </label>
+                <div class="col-sm-9">
+                    <input class="form-control" type="text" ng-model="newDevice[consoleConstants.external.DEVICE.NAME]" name="deviceName"
+                           placeholder="Alphanumeric Name" required autofocus/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3">Type: </label>
+                <div class="col-sm-9">
+                    <input class="form-control" type="text" ng-model="newDevice[consoleConstants.external.DEVICE.TYPE]" name="deviceType"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3">State: </label>
+                <div class="col-sm-9">
+                    <input class="form-control" type="text" ng-model="newDevice[consoleConstants.external.DEVICE.STATE]"
+                           name="deviceState"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3">Active Key: </label>
+                <div class="col-sm-9">
+                    <input class="form-control" type="text" ng-model="newDevice[consoleConstants.external.DEVICE.ACTIVE_KEY]"
+                           name="deviceActiveKey"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3">Enabled: </label>
+                <div class="col-sm-9">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default"
+                                ng-model="newDevice[consoleConstants.external.DEVICE.ENABLED]"
+                                uib-btn-radio="true">
+                            Yes
+                        </button>
+                        <button type="button" class="btn btn-default"
+                                ng-model="newDevice[consoleConstants.external.DEVICE.ENABLED]"
+                                uib-btn-radio="false">
+                            No
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="col-sm-3">Allow Key
+                    Authorization:</label>
+                <div class="col-sm-9">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default"
+                                ng-model="newDevice[consoleConstants.external.DEVICE.ALLOW_KEY_AUTH]"
+                                uib-btn-radio="true">
+                            Yes
+                        </button>
+                        <button type="button" class="btn btn-default"
+                                ng-model="newDevice[consoleConstants.external.DEVICE.ALLOW_KEY_AUTH]"
+                                uib-btn-radio="false">
+                            No
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3">Allow Certificate
+                    Authorization:</label>
+                <div class="col-sm-9">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default"
+                                ng-model="newDevice[consoleConstants.external.DEVICE.ALLOW_CERTIFICATE_AUTH]"
+                                uib-btn-radio="true">Yes
+                        </button>
+                        <button type="button" class="btn btn-default"
+                                ng-model="newDevice[consoleConstants.external.DEVICE.ALLOW_CERTIFICATE_AUTH]"
+                                uib-btn-radio="false">No
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!--<div class="form-group">-->
+            <!--<label class="col-sm-3">Keys: </label>-->
+            <!--<div class="col-sm-9">-->
+            <!--<input type="text" ng-model="newDevice[consoleConstants.external.DEVICE.KEYS]"-->
+            <!--name="deviceKeys"/>-->
+            <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="form-group">-->
+            <!--<label class="col-sm-3">Active Key: </label>-->
+            <!--<div class="col-sm-9">-->
+            <!--<input type="text" ng-model="newDevice[consoleConstants.external.DEVICE.ACTIVE_KEY]"-->
+            <!--name="deviceActiveKey" />-->
+            <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="form-group">-->
+            <!--<label class="col-sm-3">Certificate: </label>-->
+            <!--<div class="col-sm-9">-->
+            <!--<textarea type="textarea" ng-model="newDevice[consoleConstants.external.DEVICE.CERTIFICATE]"-->
+            <!--style="width:100%" name="systemDesc"></textarea>-->
+            <!--</div>-->
+            <!--</div>-->
+
+            <div class="form-group">
+                <label class="col-sm-3">Description: </label>
+                <div class="col-sm-12">
+                        <textarea class="form-control" type="textarea" ng-model="newDevice[consoleConstants.external.DEVICE.DESCRIPTION]"
+                                   name="systemDesc" placeholder="Description"></textarea>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <input type="submit" value="Create" ng-disabled="createForm.$invalid"
+               class="btn btn-success cb-padding"/>
+        <button ng-click="cancel()" class="btn btn-default cb-padding">Cancel</button>
+    </div>
+</form>

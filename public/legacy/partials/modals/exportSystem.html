@@ -1,0 +1,257 @@
+<div class="modal-header">
+    <h2 class="display-4">Export System {{displayContent}}</h2>
+</div>
+<div class="modal-body">
+
+    <div ng-if="pages[pageIndex].name === SHOW_FORM">
+        <form name="createForm" class="form-horizontal">
+            <div ng-init="setForm(createForm)">
+                <div class="form-group" ng-class="{'has-error': createForm.name_field.$error.pattern}">
+                    <span class="col-sm-4">
+                        <label>Package Name</label>
+                        <i class="glyphicon glyphicon-question-sign" uib-popover="Name of new package and the GitHub Repository" popover-placement="auto right"
+                            popover-trigger="mouseenter"></i>
+                    </span>
+                    <div class="col-sm-12">
+                        <input class="form-control" type="text" placeholder="System Name" ng-model="repo.Name" ng-pattern="/^[0-9a-z-]*$/" required
+                            name="name_field" autofocus/>
+                        <span class="errorMessage" ng-show="createForm.name_field.$error.pattern">Invalid name, ex. your-package-here</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <span class="col-sm-4">
+                        <label>
+                            Description
+                        </label>
+                        <i class="glyphicon glyphicon-question-sign" uib-popover="This becomes the part of the description in Readme if exported to github"
+                            popover-placement="auto right" popover-trigger="mouseenter"></i>
+                    </span>
+                    <div class="col-sm-12">
+                        <div>
+                            <textarea class="form-control" style="min-height:100px" ng-model="repo.Description"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <span class="col-sm-2">
+                        <label>Image URL</label>
+                        <i class="glyphicon glyphicon-question-sign" uib-popover="Specify an image url to represent your package. Default is prepopulated"
+                            popover-placement="auto right" popover-trigger="mouseenter"></i>
+                    </span>
+                    <div class="col-sm-10">
+                        <input class="form-control" type="text" ng-model="repo.image_url" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <span class="col-sm-2">
+                        <label>Version</label>
+                    </span>
+                    <div class="col-sm-10">
+                        <input class="form-control" placeholder="1.0.0" type="text" ng-model="repo.version" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <span class="col-sm-2">
+                        <label>License</label>
+                        <i class="glyphicon glyphicon-question-sign" uib-popover="Specify a license for your package. Default is MIT." popover-placement="auto right"
+                            popover-trigger="mouseenter"></i>
+                    </span>
+                    <div class="col-sm-10">
+                        <input class="form-control" type="text" ng-model="repo.license" />
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <span class="col-sm-4">
+                        <label>
+                            Keywords
+                        </label>
+                        <i class="glyphicon glyphicon-question-sign" uib-popover="These keywords increase the searchability of your system in clearblade import. Searchability on github is also increased as these keywords become the topics of the repository if exported to github"
+                            popover-placement="auto right" popover-trigger="mouseenter"></i>
+                    </span>
+
+                    <div class="col-sm-12">
+                        <tag-manager tags="repo.Tags" show-suggestions="true" autocomplete="on"></tag-manager>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <span class="col-sm-12">
+                        <label class="clickable" ng-click="isAdvancedTagsSectionCollapsed = !isAdvancedTagsSectionCollapsed">
+                            Advanced Tags
+                            <i ng-show="isAdvancedTagsSectionCollapsed" class="glyphicon glyphicon-chevron-down"></i>
+                            <i ng-show="!isAdvancedTagsSectionCollapsed" class="glyphicon glyphicon-chevron-up"></i>
+                        </label>
+                    </span>
+                </div>
+
+                <div uib-collapse="isAdvancedTagsSectionCollapsed">
+                    <div class="form-group">
+                        <span class="col-sm-2">
+                            <label>
+                                Protocols
+                            </label>
+                        </span>
+
+                        <span class="col-sm-10">
+                            <tag-manager tags="repo.protocols" autocomplete="on"></tag-manager>
+                        </span>
+                    </div>
+
+                    <div class="form-group">
+                        <span class="col-sm-2">
+                            <label>
+                                Things
+                            </label>
+                        </span>
+
+                        <span class="col-sm-10">
+                            <tag-manager tags="repo.things" autocomplete="on"></tag-manager>
+                        </span>
+                    </div>
+
+                    <div class="form-group">
+                        <span class="col-sm-2">
+                            <label>
+                                Domains
+                            </label>
+                        </span>
+
+                        <span class="col-sm-10">
+                            <tag-manager tags="repo.domains" autocomplete="on"></tag-manager>
+                        </span>
+                    </div>
+
+                    <div class="form-group">
+                        <span class="col-sm-2">
+                            <label>
+                                Gateways
+                            </label>
+                        </span>
+
+                        <span class="col-sm-10">
+                            <tag-manager tags="repo.gateways" autocomplete="on"></tag-manager>
+                        </span>
+                    </div>
+
+                    <div class="form-group">
+                        <span class="col-sm-2">
+                            <label>
+                                Programming Lang
+                            </label>
+                        </span>
+
+                        <span class="col-sm-10">
+                            <tag-manager tags="repo.prog_lang" autocomplete="on"></tag-manager>
+                        </span>
+                    </div>
+
+                    <div class="form-group">
+                        <span class="col-sm-2">
+                            <label>
+                                Clouds
+                            </label>
+                        </span>
+
+                        <span class="col-sm-10">
+                            <tag-manager tags="repo.clouds" autocomplete="on"></tag-manager>
+                        </span>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </form>
+    </div>
+
+    <div ng-if="pages[pageIndex].name === SHOW_SYSTEM_STRUCTURE">
+        <div id="exportSystemName">
+            <h2>{{repo.Name}}</h2>
+        </div>
+        <div>
+            <h4 class="info-message">Select Assets to Export</h4>
+        </div>
+        <div class="article-tree top-buffer">
+            <div ng-style="{'overflow': 'auto'}">
+                <div class="tree well accordion-content-handle">
+                    <ul class="ul-padding">
+                        <node-tree ng-model="subdirectories"></node-tree>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="pages[pageIndex].name === SHOW_EXPORT_SUCCESS" class="text-center">
+
+        <div ng-show="isGitHubExport">
+            <div>
+                <h2>
+                    Export success!
+                    <div>
+                        <small>
+                            You can find your IoT package here:
+                        </small>
+                    </div>
+                </h2>
+                <a target="_blank" href="{{gitHubRepoLink}}">{{gitHubRepoLink}}</a>
+            </div>
+
+            <div>
+                <h2>
+                    Join the community!
+                    <div>
+                        <small>
+                            Publish your IoT package into a community of IoT Developers and Organizations!
+                        </small>
+                    </div>
+                </h2>
+                <a target="_blank" href="https://ipm.clearblade.com/portal/?systemKey=AAAAAAAAAAAAAAAAAAAAAJ55Gat-2m1A4tBaDIkip1xGMgStbd803vkm9Czquw==&systemSecret=AAAAAAAAAAAAAAAAAAAAAF5AzcvPIP5pafDqgFXa9fZvMWiKiB8aZcfMRnU=&name=CommonsPortal&allowAnon=true&githubUrl={{gitHubRepoLink}}&targetPage=PublishPackage#/Auth">Publish IoT Package</a>
+            </div>
+
+            <div>
+                <h2>
+                    Or just browse!
+                </h2>
+                <a target="_blank" href="https://ipm.clearblade.com/portal/?systemKey=AAAAAAAAAAAAAAAAAAAAAJ55Gat-2m1A4tBaDIkip1xGMgStbd803vkm9Czquw==&systemSecret=AAAAAAAAAAAAAAAAAAAAAF5AzcvPIP5pafDqgFXa9fZvMWiKiB8aZcfMRnU=&name=CommonsPortal&allowAnon=true">Browse IoT Packages</a>
+            </div>
+        </div>
+
+        <div ng-hide="isGitHubExport">
+            <h2>
+                Export success!
+                <div>
+                    <small>
+                        Click the link below to start your download
+                    </small>
+                </div>
+            </h2>
+            <a href="/console-api/batch/export/files?fullFileName={{fileAddress}}">
+                Download {{repo.Name}}
+            </a>
+        </div>
+
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" ng-show="pages[pageIndex].name === SHOW_FORM" ng-click="Previous()" class="btn btn-primary cb-padding pull-left">
+        Previous
+    </button>
+    <button ng-show="pages[pageIndex].name === SHOW_SYSTEM_STRUCTURE" type="button" ng-click="Next()" class="btn btn-success cb-padding"
+        ng-disabled="myForm.$invalid">Next
+    </button>
+    <button type="button" ng-show="pages[pageIndex].name === SHOW_FORM" ng-click="export()" class="btn btn-success cb-padding"
+        ng-disabled="myForm.$invalid">Export
+    </button>
+    <button ng-show="pages[pageIndex].name !== SHOW_EXPORT_SUCCESS" ng-click="cancel()" class="btn btn-danger cb-padding">Cancel
+    </button>
+    <button ng-show="pages[pageIndex].name === SHOW_EXPORT_SUCCESS" ng-click="cancel()" class="btn btn-danger cb-padding">Close
+    </button>
+
+</div>

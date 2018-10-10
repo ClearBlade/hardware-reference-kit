@@ -1,0 +1,29 @@
+<form ng-submit="createSystem()" name="createForm">
+    <div class="modal-header">
+        <h2>{{title}}</h2>
+    </div>
+    <div class="modal-body">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <input class="form-control" type="text" ng-model="newSystem[consoleConstants.external.SYSTEM_NAME]"
+                           name="appSystem" placeholder="Alphanumeric Name" autofocus required/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <textarea class="form-control" type="textarea"
+                              ng-model="newSystem[consoleConstants.external.SYSTEM_DESCRIPTION]"
+                              name="systemDesc" placeholder="Description"></textarea>
+                </div>
+            </div>
+
+            <edge-form system="newSystem" ng-if="isEdge" is-new="true"></edge-form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="submit" value="Create" ng-disabled="createForm.$invalid"
+               class="btn btn-success cb-padding"/>
+        <button ng-click="cancel()" class="btn btn-default cb-padding">Cancel</button>
+    </div>
+</form>

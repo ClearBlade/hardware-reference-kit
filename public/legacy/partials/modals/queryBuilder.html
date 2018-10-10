@@ -1,0 +1,52 @@
+<div>
+    <cb-modal-header close-fn="close()">
+        <h3 style="display: inline-block">Filter for <b>{{title}}</b></h3>
+    </cb-modal-header>
+    <div class="modal-body">
+        <div ng-repeat="condition in conditions track by $index">
+            <div class="well">
+                <i ng-click="removeCondition($index)" class="icon-remove-circle condition-remover"></i>
+      <span ng-repeat="clause in condition track by $index">
+        {{clause.column.field}} {{possibleConditions[clause.operator].display}} {{clause.value}}<span
+              style="margin-left: 5px; margin-right: 5px" ng-if="$index !== condition.length - 1"><b>&&</b></span>
+      </span>
+            </div>
+            <div ng-if="$index !== conditions.length - 1" style="margin-bottom: 15px; margin-left: 10px">OR</div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <div class="col-sm-3">
+                    <select class="form-control" ng-model="newCondition.column" ng-change="updateCondition('column')"
+                            ng-options="column as column.field for column in columns"></select>
+                </div>
+                <div class="col-sm-3">
+                    <select class="form-control" ng-model="newCondition.operator"
+                            ng-change="updateCondition('operator')"
+                            ng-options="k as k for (k, v) in possibleConditions" class="operator-select"></select>
+                </div>
+                <div class="col-sm-6" ng-show="newCondition.column">
+                    <input class="form-control" type="text" ng-change="updateValue()"
+                           ng-model="newCondition.value" ng-model-options="{debounce: 500}"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:10px">
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <button ng-click="addOR()" ng-disabled="isDisabled()" class="btn btn-default"><i
+                            class="glyphicon glyphicon-plus"></i> OR
+                    </button>
+                    <button ng-click="addAND()" ng-disabled="isDisabled()" class="btn btn-default"><i
+                            class="glyphicon glyphicon-plus"></i> AND
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <a class="clickable" ng-click="clearConditions()" style="margin-right:10px">Clear All</a>
+        <button ng-click="applyFilter()" ng-disabled="isDisabled()" class="btn btn-success">Run</button>
+    </div>
+</div>

@@ -1,0 +1,33 @@
+<div id="collectionBlock">
+  <div class="text-center row" style="border-bottom:1px solid #e5e5e5; margin-bottom-5px;">
+    <div class="col-sm-5 text-left">Name</div>
+    <div class="col-sm-2">Create</div>
+    <div class="col-sm-2">Read</div>
+    <div class="col-sm-2">Update</div>
+    <div class="col-sm-1">Delete</div>
+  </div>
+  <div class="text-center row" ng-repeat="role in roleFilter()">
+    <div ng-if="role.collIdx > -1">
+      <div class="col-sm-5 text-left">
+        {{role.name}}
+      </div>
+      <div class="col-sm-2"><input type="checkbox" class="create.checkbox" ng-model="role.devices.create"></div>
+      <div class="col-sm-2"><input type="checkbox" class="read.checkbox" ng-model="role.devices.read"></div>
+      <div class="col-sm-2"><input type="checkbox" class="update.checkbox" ng-model="role.devices.update"></div>
+      <div class="col-sm-1"><input type="checkbox" class="delete.checkbox" ng-model="role.devices.delete"></div>
+    </div>
+  </div>
+  <div class="text-center row" ng-repeat="newRole in newRoles track by $index">
+    <div class="col-sm-1">
+      <i class="clickable glyphicon glyphicon-remove" ng-click="removeNewRole(newRole)"></i>
+    </div>
+    <div class="col-sm-4">
+      <input class="form-control" ng-model="newRole.name" typeahead="rolo.name for rolo in getOtherRoles() | filter:$viewValue" typeahead-on-select="addUserPermsToRole($item, $index)" typeahead-append-to-body="true" type="text"/>
+    </div>
+    <div class="col-sm-2"><input type="checkbox" ng-model="newRole.create"></div>
+    <div class="col-sm-2"><input type="checkbox" ng-model="newRole.read"></div>
+    <div class="col-sm-2"><input type="checkbox" ng-model="newRole.update"></div>
+    <div class="col-sm-1"><input type="checkbox" ng-model="newRole.delete"></div>
+  </div>
+  <button ng-click="createNewRole()" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Role</button>
+</div>

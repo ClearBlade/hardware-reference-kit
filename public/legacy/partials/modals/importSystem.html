@@ -1,0 +1,47 @@
+
+<div class="spinner" ng-show="loading"></div>
+
+<div class="modal-header">
+    <h2 class="display-4">Import into {{displayContent}}</h2>
+</div>
+<div class="modal-body">
+    <form name="createForm">
+        <div ng-style="{'overflow': 'auto'}">
+            <h3><a target="_blank" href="https://ipm.clearblade.com/portal/?systemKey=AAAAAAAAAAAAAAAAAAAAAJ55Gat-2m1A4tBaDIkip1xGMgStbd803vkm9Czquw==&systemSecret=AAAAAAAAAAAAAAAAAAAAAF5AzcvPIP5pafDqgFXa9fZvMWiKiB8aZcfMRnU=&name=CommonsPortal&allowAnon=true">Search IoT Packages</a></h3>
+            <h4 class="info-message">Search and Discover new IoT Packages to Install</h4>
+        </div>
+        <div ng-style="{'overflow': 'auto'}">
+            <h4 class="info-message">Enter the github url of the system to import</h4>
+            <div class="col-xs-12">
+                <div class="input-group" ng-class="{'has-error': createForm.name_field.$error.pattern}">
+                    <input autofocus type="text" class="form-control" ng-model="newSystem['url']" placeholder="{{urlFormat}}" name="appSystem" ng-pattern="">
+                    <span class="input-group-btn">
+                    <button class="btn btn-success" type="button" ng-click="fetchSystem(newSystem['url'])" ng-disabled="createForm.$invalid">Fetch!</button>
+                    </span>
+                </div>   
+            </div>
+        </div>
+    </form>
+    <div ng-show="fetchedSystem.isSystemFetched" class="top-buffer">
+        <div class="article-tree top-buffer">
+            <div>
+                <h4 class="info-message">Select Assets to Import from</h4>
+                <div class="heading-system"><a href="{{fetchedSystem.url}}" target="_blank" class="tooltip-hover">{{fetchedSystem.name}}</a>
+                </div>
+                
+            </div>
+            <div ng-style="{'overflow': 'auto'}" class="top-buffer"> 
+                <div class="tree well accordion-content-handle">
+                    <ul class="ul-padding">
+                        <node-tree ng-model="fetchedSystem.structure"></node-tree>
+                    </ul>
+                </div>
+                <button type="button" ng-click="name=fetchedSystem.name;url=fetchedSystem.url;importSystem(url,name)" class="btn btn-success cb-padding pull-right">Import</button>
+            </div> 
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+ <button ng-click="cancel()" class="btn btn-default cb-padding">Cancel</button>
+</div>      

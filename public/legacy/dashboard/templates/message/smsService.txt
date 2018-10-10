@@ -1,0 +1,20 @@
+function @SERVICE_NAME@ (req, resp) {
+    var messageObject;
+
+    try {
+        var request = JSON.parse(req.params.body);
+        messageObject = request;
+    } catch(e) {
+        messageObject = req.params.body;
+    }
+    
+    if(@CONDITION_TO_CHECK@) {
+        sendSMS();
+    }
+    
+    function sendSMS() {
+        @PROVIDER_IMPL@
+    }
+
+    resp.success("success");
+}

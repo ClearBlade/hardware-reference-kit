@@ -1,0 +1,25 @@
+<div ng-menu page="adminManage"></div>
+<div class="container-fluid cb-page">
+
+    <div class="text-center">
+
+        <div class="btn-group cb-btn-menu">
+            <label class="btn btn-default cb-menu-btn"
+                   ui-sref="app.admin.manage.developers" ui-sref-active="active">
+                Developers
+            </label>
+            <label class="btn btn-default cb-menu-btn" ui-sref-active="active"
+                   ui-sref="app.admin.manage.systems">
+                Systems
+            </label>
+            <label class="btn btn-default cb-menu-btn" ui-sref-active="active"
+                   ui-sref="app.admin.manage.edges">
+                Edges
+            </label>
+        </div>
+
+    </div>
+
+    <div ui-view></div>
+
+</div>

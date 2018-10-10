@@ -1,0 +1,25 @@
+<div class="container-fluid">
+    <div class="row" style="margin-bottom: 10px;">
+        <a class="{{titleClass || 'offset2'}} clickable" ng-click="addParam()">
+            Add Parameter <i class="glyphicon glyphicon-plus"></i>
+        </a>
+    </div>
+    <div class="row" ng-repeat="param in list track by $index">
+        <form ng-submit="saveParam(param)">
+            <div class="col-sm-4">
+                <input class="form-control" ng-model="param.name" cb-validate="validate" length-err="lengthErr"
+                       unique-err="uniqueErr" placeholder="Parameter name" required type="text"/>
+            </div>
+            <div class="col-sm-4">
+                <input class="form-control" ng-model="param.value" ng-if="create == 'false'"
+                       placeholder="Parameter value" type="text"/>
+            </div>
+            <div class="col-sm-3">
+                <span class="text-danger">{{param.error}}</span>
+            </div>
+            <div>
+                <i ng-click="removeParam(param)" class="close">&times;</i>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+<span ng-switch="supported">
+	<span ng-switch-when="true">
+		<div class="input-group" clipboard supported="supported" text="target" on-copied="success()"
+			 on-error="fail(err)">
+			<!-- note - any "transcluded" content will need to do $event.stopImmediatePropagation() to avoid triggering the copy to clipboard if said functionality is unwanted -->
+			<i id="{{target}}"></i>
+			<input class="form-control copyInput" value="{{prefix + ' ' + target}}" readonly type="text" />
+		  <span class="input-group-addon feedback clickable" style="cursor:copy">copy <span
+                  class="glyphicon glyphicon glyphicon-copy"
+                  aria-hidden="true"></span></span>
+		</div>
+	</span>
+	<span ng-switch-when="false">
+		<!-- we add the input-group class only when we have transcluded content -->
+		<div ng-class="{'input-group': hasTranscludedContent}">
+			<i id="{{target}}"></i>
+			<input class="form-control copyInput" value="{{prefix + ' ' + target}}" readonly type="text" />
+		</div>
+	</span>
+</span>
+

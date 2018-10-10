@@ -1,0 +1,23 @@
+<div>
+    <div class="modal-header">
+        <h3>{{roleName}}'s Device Permissions</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="text-center col-sm-3">Create</div>
+            <div class="text-center col-sm-3">Read</div>
+            <div class="text-center col-sm-3">Update</div>
+            <div class="text-center col-sm-3">Delete</div>
+        </div>
+        <div class="row">
+            <div class="text-center col-sm-3"><input type="checkbox" ng-model="role.devices.create"></div>
+            <div class="text-center col-sm-3"><input type="checkbox" ng-model="role.devices.read"></div>
+            <div class="text-center col-sm-3"><input type="checkbox" ng-model="role.devices.update"></div>
+            <div class="text-center col-sm-3"><input type="checkbox" ng-model="role.devices.delete"></div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+        <button class="btn btn-success" ng-click="save()">Save</button>
+    </div>
+</div>

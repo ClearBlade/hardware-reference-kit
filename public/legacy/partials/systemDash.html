@@ -1,0 +1,67 @@
+<div ng-menu icon="glyphicon-dashboard" add-fn="newThing" system-refresh="refreshDash"></div>
+<div class="container-fluid cb-page">
+
+    <h2>Portals</h2>
+    <div class="row">
+        <div class="col-sm-12 collections-controls text-right" ng-show="dashList.results.length > 0">
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button title="Export" class="btn btn-default" ng-click="exportPortals()"><span class="glyphicon glyphicon-export" aria-hidden="true"></span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <table class="table table-striped">
+            <tbody>
+            <tr class="row">
+                <th class="col-sm-3">Name</th>
+                <th class="col-sm-2">Type</th>
+                <th class="col-sm-1 text-center">Version</th>
+                <th class="col-sm-3">Description</th>
+                <th class="col-sm-2">Last Updated</th>
+                <th class="col-sm-1 text-center">Settings</th>
+            </tr>
+            <tr ng-repeat="item in dashList.results" class="row">
+                <td class="col-sm-3">
+                    <span ng-click="copyUrl(item)" class="clickable glyphicon glyphicon-share col-sm-3"></span>
+                    <a href="{{item.createUrl()}}" target="_blank">{{item[dashboardConstants.NAME]}}</a>
+                </td>
+                <td class="col-sm-2">{{item[dashboardConstants.TYPE]}}</td>
+                <td class="col-sm-1 text-center">{{isOfTypeV2(item[dashboardConstants.VERSION]) ? 2 : 1}}</td>
+                <td class="col-sm-3">{{item[dashboardConstants.DESCRIPTION]}}</td>
+                <td class="col-sm-2">{{item[dashboardConstants.LAST_UPDATED]}}</td>
+                <td class="col-sm-1 text-center"><span ng-click="editDash(item)" class="clickable glyphicon glyphicon-wrench"></span></td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>Plugins</h2>
+    <div class="row">
+        <div class="col-sm-12 collections-controls text-right" ng-show="pluginList.results.length > 0">
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button title="Export" class="btn btn-default" ng-click="exportPlugins()"><span class="glyphicon glyphicon-export" aria-hidden="true"></span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <table class="table table-striped">
+            <tbody>
+            <tr class="row">
+                <th class="col-sm-4">Name</th>
+                <th class="col-sm-4">URL</th>
+                <th class="col-sm-4">Settings</th>
+            </tr>
+            <tr ng-repeat="item in pluginList.results" class="row">
+                <td class="col-sm-4">{{item[pluginConstants.NAME]}}</td>
+                <td class="col-sm-4"><a href="{{item[pluginConstants.URL]}}">{{item[pluginConstants.URL]}}</a></td>
+                <td class="col-sm-4"><span ng-click="editPlugin(item)" class="clickable glyphicon glyphicon-wrench"></span></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

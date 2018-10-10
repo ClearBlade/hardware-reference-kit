@@ -1,0 +1,50 @@
+<div>
+    <span ng-click="addItem()" class="clickable feedback">Add <strong>{{title}}</strong> <i class="glyphicon glyphicon-plus"></i></span>
+    <div id="collectionBlock">
+        <div class="row text-center" ng-switch="title">
+            <div class="col-sm-3 col-sm-offset-1">Name</div>
+            <div ng-switch-when="collections">
+                <div class="text-center col-sm-2">Create</div>
+                <div class="text-center col-sm-2">Read</div>
+                <div class="text-center col-sm-2">Update</div>
+                <div class="text-center col-sm-2">Delete</div>
+            </div>
+            <div ng-switch-when="portals">
+                <div class="text-center col-sm-2">Create</div>
+                <div class="text-center col-sm-2">Read</div>
+                <div class="text-center col-sm-2">Update</div>
+                <div class="text-center col-sm-2">Delete</div>
+            </div>
+            <div ng-switch-when="services">
+                <div class="col-sm-3 col-sm-offset-2">Executable</div>
+            </div>
+            
+        </div>
+        <div class="row text-center" ng-repeat="permItem in permList" ng-switch="title">
+            <div class="col-sm-1">
+                <i class="glyphicon glyphicon-remove clickable feedback" ng-click="removeItem(permItem)"></i>
+            </div>
+            <div class="col-sm-3">
+                <select ng-model="permItem.itemInfo" class="form-control"
+                        ng-options="option.name for option in optionList track by option.name">
+                </select>
+            </div>
+            <div ng-switch-when="collections">
+                <div class="text-center col-sm-2"><input type="checkbox" ng-model="permItem.create"></div>
+                <div class="text-center col-sm-2"><input type="checkbox" ng-model="permItem.read"></div>
+                <div class="text-center col-sm-2"><input type="checkbox" ng-model="permItem.update"></div>
+                <div class="text-center col-sm-2"><input type="checkbox" ng-model="permItem.delete"></div>
+            </div>
+            <div ng-switch-when="portals">
+                <div class="text-center col-sm-2"><input type="checkbox" ng-model="permItem.create"></div>
+                <div class="text-center col-sm-2"><input type="checkbox" ng-model="permItem.read"></div>
+                <div class="text-center col-sm-2"><input type="checkbox" ng-model="permItem.update"></div>
+                <div class="text-center col-sm-2"><input type="checkbox" ng-model="permItem.delete"></div>
+            </div>
+            <div ng-switch-when="services">
+                <div class="text-center col-sm-3 col-sm-offset-2"><input type="checkbox" ng-model="permItem.read"></div>
+            </div>
+            
+        </div>
+    </div>
+</div>

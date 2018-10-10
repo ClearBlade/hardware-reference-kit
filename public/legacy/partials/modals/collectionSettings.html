@@ -1,0 +1,75 @@
+<div class="modal-body">
+  <h2>Properties</h2>
+  <div class="container-fluid form-horizontal">
+    <form name="updateConnectionForm" ng-submit="updateConnection()">
+      <div class="control-group">
+        <div class="control-section">
+          <div class="control-section" style="line-height:30px">
+            <label class="control-label" style="cursor:auto;">Collection Name:</label>
+            <div class="controls">
+              <div id="collectionName">{{collection.name}}</div>
+            </div>
+          </div>
+          <div class="control-section">
+          <div style="max-height: 100px; overflow: auto">
+            <table style="margin: auto; width: 80%; border-collapse:collapse;">
+              <tr style="border: 1px solid black;">
+                <th style="border: 1px solid black;">Role</th>
+                <th style="border: 1px solid black;">Permissions</th>
+              </tr>
+              <tr style="border: 1px solid black;" ng-repeat="role in relevantRoles">
+                <td style="border: 1px solid black;">{{role.name}}</td>
+                <td style="border: 1px solid black;">{{permToDisplay(role)}}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+          <span ng-if="isConnection()">
+            <div class="control-section">
+              <label class="control-label" for="dbName">Database Name:</label>
+              <div class="controls">
+                <input name="dbName" ng-model="collection.dbName" required type="text"> <i class="icon-question-sign" popover="Name of connected database" popover-trigger="mouseenter" popover-placement="left"></i>
+              </div>
+            </div>
+            <div class="control-section">
+              <label class="control-label" for="ipAddress">IP Address:</label>
+              <div class="controls">
+                <input ng-model="collection.ip" required id="ipAddress" type="text" name="collectionHostName"> <i class="icon-question-sign" popover="IP address of database to connect to" popover-trigger="mouseenter" popover-placement="left"></i>
+              </div>
+            </div>
+            <div class="control-section">
+              <label class="control-label" for="collectionPort">Port:</label>
+              <div class="controls">
+                <input ng-model="collection.port" required type="text" name="collectionPort"> <i class="icon-question-sign" popover="Port of database to connect to" popover-trigger="mouseenter" popover-placement="left"></i>
+              </div>
+            </div>
+            <div class="control-section">
+              <label class="control-label" for="collectionUsername">Username:</label>
+              <div class="controls">
+                <input ng-model="collection.username" required type="text" name="collectionUsername"> <i class="icon-question-sign" popover="Username for database; full access required" popover-trigger="mouseenter" popover-placement="left"></i>
+              </div>
+            </div>
+            <div class="control-section">
+              <label class="control-label" for="collectionPassword">Password:</label>
+              <div class="controls">
+                <input ng-model="collection.password" type="password" name="collectionPassword"> <i class="icon-question-sign" popover="Password for database credentials" popover-trigger="mouseenter" popover-placement="left"></i>
+              </div>
+            </div>
+            <div class="control-section">
+              <label class="control-label">Table name:</label>
+              <div class="controls">
+                <input ng-model="collection.tableName" name="tableName" required type="text"> <i class="icon-question-sign" popover="Name of table within database to use for collection" popover-trigger="mouseenter" popover-placement="left"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </span>
+      <div class="control-group">
+        <div class="controls modal-submit">
+          <input type="submit" ng-disabled="updateConnectionForm.$invalid" class="btn btn-success cb-padding" id="collectionSubmit" value="Submit"/>
+          <button class="btn btn-default" ng-click="close()">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

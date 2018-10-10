@@ -1,0 +1,26 @@
+        var smsTo = @SMS_TO@;
+
+        var options = {
+            "auth": {
+                user : "@TWILIO_APIKEY@",
+                pass : "@TWILIO_APISECRET@"
+            },
+            uri : "https://api.twilio.com/2010-04-01/Accounts/@TWILIO_APIKEY@/SMS/Messages.json",
+            "body": {
+                "Body": @SMS_MESSAGE@,
+                "From": "@SMS_FROM@"
+            },
+            "form": true
+        };
+
+        var requestObject = Requests();
+
+        for (i=0; i< smsTo.length; i++) {
+            options.body.To = smsTo[i];
+
+            requestObject.post(options,function(err,result) {
+                if(err) {
+                    resp.error("Failed");
+                }
+            });
+        }

@@ -1,0 +1,97 @@
+<div ng-menu icon="img/collections.png" add-fn="addCollection" page="data" system-refresh="refreshCollections"></div>
+<!--resources -->
+<div class="cb-page container-fluid" id="cbPage">
+    <splash-box ng-if="collectionList.results.length === 0" name="collections" icon="img/collections.png">
+        <h4 class="text-center">
+            You can
+            <a class="clickable" ng-click="addCollection()">
+                <strong>create a new collection</strong>
+            </a> or
+            <a class="clickable" ng-click="import()">
+                <strong>import an existing one</strong>
+            </a>
+        </h4>
+        <h2>Check out our tutorial</h2>
+        <a class="btn btn-block" href="https://docs.clearblade.com/v/3/2-console_administration/Overview/" target="_blank">
+            <img src="img/cblogo_tbr_dgl_large.png" />
+        </a>
+    </splash-box>
+    <div ng-show="collectionList.results.length > 0" class="container-fluid">
+        <pageslide ps-open="panelOpen" class="cb-left-panel" ps-side="left" ps-auto-close="true" ps-container="cbPage">
+            <page-slide-close ng-click="panelOpen=false"></page-slide-close>
+            <div>
+                <uib-tabset vertical="true" type="pills" active="collectionList.indexForActiveCollection">
+                    <uib-tab-heading>
+                        <img style="margin: 9px;" src="img/collections.png" />
+                        <span class="cb-left-panel-heading-text">Collections</span>
+                    </uib-tab-heading>
+
+                    <uib-tab class="cb-left-panel-entry" ng-repeat="collection in collectionList.results track by $index" ng-click="goToCollection(collection)"
+                        index="$index">
+
+                        <uib-tab-heading>
+                            <span class="cb-left-panel-text">{{collection.name}}</span>
+                            <span class="pull-right cb-left-panel-arrow" ng-if='$index === collectionList.indexForActiveCollection'>
+                                <i class='glyphicon glyphicon-play'></i>
+                            </span>
+                        </uib-tab-heading>
+                    </uib-tab>
+                </uib-tabset>
+            </div>
+        </pageslide>
+        <div class="container-fluid">
+            <div class="row cb-info-bar">
+                <span ng-click="panelOpen = !panelOpen" class="clickable feedback">
+                    <img src="img/sidebar-collectionsmenu.png" />
+                </span>
+            </div>
+            <div ng-show="!displayOverview" class="row" ui-view></div>
+        </div>
+
+        <div ng-show="displayOverview" class="row">
+            <h2>Collections</h2>
+            <div class="row">
+                <div class="col-sm-12 collections-controls text-right">
+                    <div class="input-group">
+                        <div class="input-group-btn">
+                            <button title="Export" class="btn btn-default" ng-click="export()">
+                                <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width:300px">ID</th>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Settings</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="(key,val) in collectionList.results">
+                            <td>
+                                <a ng-click="goToCollection(val)">{{val.collectionID}}</a>
+                            </td>
+                            <td>
+                                <a ng-click="goToCollection(val)">{{val.name}}</a>
+                            </td>
+                            <td>
+                                <span ng-show="val.isConnect === undefined">Cloud</span>
+                                <span ng-show="val.isConnect !== undefined">Connection</span>
+                            </td>
+                            <td>
+                                <span ng-click="collectionSettings(val)" class="clickable glyphicon glyphicon-wrench"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+    </div>
+</div>

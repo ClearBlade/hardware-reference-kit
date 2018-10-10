@@ -1,0 +1,20 @@
+<form ng-submit="applyChanges(updated)">
+
+    <cb-modal-header close-fn="applyChanges(false)">
+        <h3>Run Parameters</h3>
+    </cb-modal-header>
+
+    <div class="modal-body" id="blockModal">
+        <param-list create="false" list="code.params" length-err="paramLengthErr" unique-err="paramUniqueErr"
+                    callback="paramChange"></param-list>
+    </div>
+    <div class="modal-footer">
+        <div class="control-group">
+            <div class="controls modal-submit">
+                <input ng-click="applyChanges(updated)" type="submit" ng-disabled="paramLengthErr || paramUniqueErr"
+                       class="btn btn-success" id="collectionSubmit" value="Close"/>
+            </div>
+        </div>
+    </div>
+
+</form>

@@ -1,0 +1,32 @@
+<span ng-click="createNewRole()" style="cursor: pointer;">+ Role</span>
+<div id="collectionBlock" style="position: relative; border-top:1px solid #ddd" class="text-center code-role-list">
+    <div class="row">
+        <div class="col-sm-5">Name</div>
+        <div class="col-sm-2">Executable</div>
+    </div>
+    <div class="row" ng-repeat="role in serviceFilter()" ng-if="role.collIdx > -1">
+        <div class="col-sm-1">
+            <i class="glyphicon glyphicon-remove clickable feedback" ng-click="removeRole(role, role.collIdx)"></i>
+        </div>
+        <div class="col-sm-4">
+            {{role.name}}
+        </div>
+        <div class="col-sm-2">
+            <input type="checkbox" class="read.checkbox" ng-model="role.services[role.collIdx].read">
+        </div>
+    </div>
+    <div class="row" ng-repeat="newRole in newRoles track by $index">
+        <div class="col-sm-1">
+            <i class="glyphicon glyphicon-remove clickable feedback" ng-click="removeNewRole(newRole)"></i>
+        </div>
+        <div class="col-sm-4">
+            <input class="form-control" ng-model="newRole.name"
+                   uib-typeahead="rolo.name for rolo in getOtherRoles() | filter:{'name':$viewValue}:emptyOrMatch"
+                   typeahead-on-select="addServiceToRole($item, $index)" typeahead-append-to-body="true" typeahead-focus
+                   type="text"/>
+        </div>
+        <div class="col-sm-2">
+            <input type="checkbox" ng-model="newRole.read">
+        </div>
+    </div>
+</div>

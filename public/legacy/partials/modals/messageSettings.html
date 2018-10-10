@@ -1,0 +1,35 @@
+<div class="modal-header">
+    <div class="row">
+        <h3>Message Settings</h3>
+    </div>
+
+    <div class="row">
+        <div class="btn-group-wrap">
+            <div class="btn-group cb-btn-menu">
+                <button class="btn btn-default cb-menu-btn" ng-class="{active: section=='security'}"
+                        ng-click="changeSection('security')" id="securityTab">
+                    Security
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-body scrollable-modal-body" id="blockModal">
+
+    <div ng-if="section==='security'">
+        <div class="row-fluid">
+            <h3>Roles</h3>
+        </div>
+        <div>
+            <msg-role-list roles="roles" new-roles="newRoles"
+                           role-filter="filterRoles"></msg-role-list>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal-footer">
+    <input ng-click="applyChanges()" type="submit" class="btn btn-success" value="Save"/>
+    <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+</div>

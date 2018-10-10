@@ -1,0 +1,71 @@
+<div class="col-xs-10 col-sm-6 col-md-4 col-xs-offset-1 col-sm-offset-3 col-md-offset-4" ng-controller="onPremRegistrationCtrl">
+	<h3>Register for the ClearBlade Platform</h3>
+	<form name="registrationForm" ng-submit="register(user)" autocomplete="off" class="form-horizontal">
+
+		<div class="form-group">
+			
+				<input ng-model="hashKey" type="text" name="key" id="key" placeholder="registration key" class="form-control">
+			
+		</div>
+
+		<div class="form-group" ng-class="{'has-error': registrationForm.fname.$error.required && !registrationForm.fname.$pristine}">
+			<label ng-show="registrationForm.fname.$error.required && !registrationForm.fname.$pristine" class="control-label">Required!</label>
+			
+				<input ng-model="user.reg.fname" type="text" name="fname" id="fname" placeholder="first name" required="" class="form-control">
+			
+		</div>
+
+		<div class="form-group" ng-class="{'has-error': registrationForm.lname.$error.required && !registrationForm.lname.$pristine}">
+			<label ng-show="registrationForm.lname.$error.required && !registrationForm.lname.$pristine" class="control-label">Required!</label>
+			
+				<input ng-model="user.reg.lname" type="text" name="lname" id="lname" placeholder='last name' required class="form-control"/>
+			
+		</div>
+
+		<div class="form-group" ng-class="{'has-error': (registrationForm.email.$error.required && !registrationForm.email.$pristine) || (registrationForm.email.$error.email && !registrationForm.email.$pristine)}">
+			<label ng-show="registrationForm.email.$error.required && !registrationForm.email.$pristine" class="control-label">Required!</label>
+			<label ng-show="registrationForm.email.$error.email && !registrationForm.email.$pristine" class="control-label">Invalid Email!</label>
+			
+				<input ng-model="user.reg.email" type="email" name="email" id="email" placeholder='email' required class="form-control"/>
+			
+		</div>
+
+		<div class="form-group" ng-class="{'has-error': registrationForm.org.$error.required && !registrationForm.org.$pristine}">
+			<label ng-show="registrationForm.org.$error.required && !registrationForm.org.$pristine" class="control-label">Required!</label>
+			
+				<input ng-model="user.reg.org" type="text" name="org" id="org" placeholder="organization" required="" class="form-control">
+			
+		</div>
+
+		<div class="form-group" ng-class="{'has-error': registrationForm.pass1.$error.required && !registrationForm.pass1.$pristine}">
+			<label ng-show="registrationForm.pass1.$error.required && !registrationForm.pass1.$pristine" class="control-label">Required!</label>
+			
+				<input data-ng-model="user.reg.password" type="password" name="pass1" placeholder="password" required="" class="form-control">
+			
+		</div>
+
+		<div class="form-group" ng-class="{'has-error': registrationForm.pass2.$error.passwordVerify && !registrationForm.pass1.$pristine}">
+			<label ng-show="registrationForm.pass2.$error.passwordVerify && !registrationForm.pass1.$pristine" class="control-label">Passwords do not match!</label>
+			
+				<input ng-model="user.reg.password_verify" type="password" name="pass2" placeholder="confirm password" data-password-verify="user.reg.password" required passwordverify class="form-control">
+			
+		</div>
+
+		<div class="form-group text-center">
+          <button class="btn btn-warning cb-padding" type="button" ng-click="clearInfo($event)">Clear</button>
+          <button class="btn btn-success cb-padding" type="submit" name="submitReg" id="submitReg" value="Register" ng-disabled="!registrationForm.$valid || registrationForm.pass2.$error.passwordVerify" class="form-control">
+              Register
+          </button>
+      	</div>
+
+	</form> 
+
+	<!-- <div id="loginBox" > -->
+	<!--   <h4>Or sign in using:</h4> -->
+	<!-- 	<div id="socialBtnContainer"> -->		
+	<!-- 		<a href="/twitterlogin"><img src="static/img/twitter.png" /></a> -->
+	<!-- 		<a href="/facebooklogin"><img src="static/img/facebook.png" /></a> -->
+	<!-- 		<a href="/googlelogin"><img src="static/img/google.png" /></a> -->
+	<!-- 	</div> -->	
+	<!-- </div> -->
+</div>

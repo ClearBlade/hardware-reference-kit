@@ -1,0 +1,166 @@
+    <div class="modal-header">
+        <div class="row">
+            <h3>{{selectedAdapter[consoleConstants.external.ADAPTER.NAME]}} Properties</h3>
+            <div class="cb-modal-action">
+                <span class="glyphicon glyphicon-trash pull-right cb-standardIconSize clickable" ng-click="deleteAdapter()"></span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="btn-group-wrap">
+                <div class="btn-group cb-btn-menu">
+                    <button class="btn btn-default cb-menu-btn" ng-class="{active: section=='properties'}"
+                           ng-click="changeSection('properties')">
+                        Properties
+                    </button>
+                    <button class="btn btn-default cb-menu-btn" ng-class="{active: section=='files'}"
+                           ng-click="changeSection('files')">
+                        Files
+                    </button>
+<!-- TODO - Uncomment when ready to implement security -->
+<!--                    <button class="btn btn-default cb-menu-btn" ng-class="{active: section=='security'}"
+                           ng-click="changeSection('security')" id="securityTab">
+                        Security
+                    </button>-->
+                    <button class="btn btn-default cb-menu-btn" ng-class="{active: section=='config'}"
+                           ng-click="changeSection('config')" id="configTab">
+                        Config
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-body scrollable-modal-body" id="blockModal">
+        <div ng-class="{'no-pad': section === 'security'}">
+            <div ng-if="section==='properties'">
+                <div class="form-group">
+                    <label class="control-label col-sm-3" for="dbTypes">Architecture:</label>
+                    <div class="col-sm-7">
+                        <select name="architectures" ng-model="selectedAdapter[consoleConstants.external.ADAPTER.ARCH]"
+                                ng-options="key as value for (key , value) in Architectures track by selectedAdapter[consoleConstants.external.ADAPTER.ARCH]" required class="form-control"></select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-3">Description: </label>
+                    <div class="col-sm-7">
+                        <textarea class="form-control" type="textarea" ng-model="selectedAdapter[consoleConstants.external.ADAPTER.DESCRIPTION]"
+                                    name="adapterDesc" placeholder="Description">
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="section==='files'">
+                <div class="centerDiv">
+                    <table class="table table-adapter-settings-files">
+                        <thead>
+                            <tr>
+                                <th class="column-filename">File Name</th>
+                                <th class="column-icon"></th>
+                                <th class="column-icon"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Existing Adapter Files-->
+                            <tr ng-repeat="file in selectedAdapter.files">
+                                <td>{{file.name}}</td>
+                                <td>
+                                    <label class="clickable feedback" for="adapterfile_{{$index}}">
+                                        <span class="glyphicon glyphicon-import cb-standardIconSize clickable" ng-click="NewFile()"></span>
+                                    </label>
+                                    <input type="file" id="adapterfile_{{$index}}" accept="*" style="display:none" 
+                                        onchange="angular.element(this).scope().updateAdapterFile(angular.element(this).scope().$index, this.files)">
+                                </td>
+                                <td>
+                                    <span class="glyphicon glyphicon-trash cb-standardIconSize clickable" 
+                                        ng-click="deleteAdapterFile($index)"></span>
+                                </td>
+                            </tr>
+                            <tr ng-repeat="file in newFiles">
+                                <td>{{file.name}}</td>
+                                <td>
+                                    <label class="clickable feedback" for="newfile_{{$index}}">
+                                        <span class="glyphicon glyphicon-import cb-standardIconSize clickable" ng-click="NewFile()"></span>
+                                    </label>
+                                    <input type="file" id="newfile_{{$index}}" accept="*" style="display:none" 
+                                        onchange="angular.element(this).scope().updateNewFile(angular.element(this).scope().$index, this.files)">
+                                </td>
+                                <td>
+                                    <span class="glyphicon glyphicon-trash cb-standardIconSize clickable" 
+                                        ng-click="deleteNewFile(angular.element(this).scope().$index)"></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!--<div class="row">
+                        <label class="col-sm-7">Filename</label>
+                        <label class="col-sm-2">File Version</label>
+                    </div>-->
+                </div>
+
+                <label class="clickable feedback" for="uploadedFile">+ Add File</label>
+                <input type="file" id="uploadedFile" accept="*" style="display:none" multiple
+                    onchange="angular.element(this).scope().handleUpload(this.files)">
+            </div>
+
+<!-- TODO - Fix this when the security strategy has been determined-->
+<!--            <div ng-if="section==='security'">
+                <div class="row-fluid">
+                    <h3>Roles</h3>
+                </div>
+                <div>
+                    <role-list roles="roles" new-roles="newRoles" resource="selectedAdapter"
+                               resource-filter="filterRoles" resource-key="adapters"></role-list>
+                </div>
+            </div>-->
+
+            <div ng-if="section === 'config'">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="deployCommand">Deploy Command:</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" name="deployCommand" ng-model="selectedAdapter[consoleConstants.external.ADAPTER.DEPLOY_CMD]" type="text"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="startupCommand">Start-up Command:</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" name="startupCommand" ng-model="selectedAdapter[consoleConstants.external.ADAPTER.START_CMD]" type="text"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="stopCommand">Stop Command:</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" name="stopCommand" ng-model="selectedAdapter[consoleConstants.external.ADAPTER.STOP_CMD]" type="text"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="restartCommand">Status Command:</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" name="restartCommand" ng-model="selectedAdapter[consoleConstants.external.ADAPTER.STATUS_CMD]" type="text"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="restartCommand">Undeploy Command:</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" name="restartCommand" ng-model="selectedAdapter[consoleConstants.external.ADAPTER.UNDEPLOY_CMD]" type="text"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="restartCommand">Logs Command:</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" name="restartCommand" ng-model="selectedAdapter[consoleConstants.external.ADAPTER.LOGS_CMD]" type="text"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <input ng-disabled="!enableSave"
+            ng-click="applyChanges()" type="submit" class="btn btn-success" id="adapterSubmit" value="Save"/>
+        <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+    </div>

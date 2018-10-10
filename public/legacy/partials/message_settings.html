@@ -1,0 +1,91 @@
+<div ng-menu></div>
+<div class="container-fluid">
+ <div class="container-fluid" >
+  <div class="row-fluid">
+    <h2>Message Settings</h2>
+  </div>
+
+  <div class="row-fluid">
+
+    <div class="span10">
+      <div class="text-center">
+        <span class="section-links"><span class="section-links-active"><a href="#/messages/settings/">Settings</a></span><span class="section-links-inactive"> <a href="#/messages/activity">Activity</a></span></span>
+      </div>
+    </div>
+
+    <div class="span2">
+      <div class="pull-left" toggle-switch model="switchStatus"></div>
+    </div>
+
+  </div>
+
+  <div class="row-fluid settings-row">
+    <div class="span10 settings-box">
+
+      <!-- <div class="row-fluid">
+        <div class="settings-header-top"><strong>Quality of Service</strong></div>
+        <form class="quality-form" name="service-quality">
+          <label class="radio">
+            <input type="radio" name="quality" value="most"
+            ng-click="qualityClick($event)" ng-checked="quality == 'most'"> At most once
+          </label>
+          <label class="radio">
+            <input type="radio" name="quality" value="least"
+            ng-click="qualityClick($event)" ng-checked="quality == 'least'"> At least once
+          </label>
+          <label class="radio">
+            <input type="radio" name="quality" value="once"
+            ng-click="qualityClick($event)" ng-checked="quality == 'once'"> Once
+          </label>
+        </form>
+      </div> -->
+
+      <div class="row-fluid">
+        <div class="settings-header"><strong>Dedicated Topics</strong></div>
+        <div ng-grid="topicGridOptions" class="topic-grid"></div>
+        <!-- <div class="toggle-button">
+          <div class="btn" name="history" ng-click="historyToggle()">Toggle history of selected rows</div>
+        </div> -->
+      </div>
+
+      <!-- <div class="row-fluid">
+        <div class="settings-header"><strong>Dynamic Topics</strong></div>
+        <div class="dynamic-messages"><input type="checkbox" name="dynamic" ng-click="historyToggle()"> Allow dynamic messages?</div>
+
+        <div class="span11 security-box">
+          <div class="row-fluid">
+            <form class="quality-form" name="service-quality">
+              <label class="control-label"><strong>Security Level</strong></label>
+              <label class="radio">
+                <input type="radio" name="security" value="system"
+                ng-click="securityClick($event)" ng-checked="security == 'system'"> System scoped (all topics visible to all apps)
+              </label>
+              <label class="radio">
+                <input type="radio" name="security" value="application"
+                ng-click="securityClick($event)" ng-checked="security == 'application'"> Application scoped (topics are visible based on app)
+              </label>
+              <label class="radio">
+                <input type="radio" name="security" value="role" ng-click="securityClick($event)" ng-checked="security == 'role'"> Role scoped (topics are visible based on user role)
+              </label>
+              <label class="radio">
+                <input type="radio" name="security" value="device" ng-click="securityClick($event)" ng-checked="security == 'device'"> Device scoped (topics are visible based on device type)
+              </label>
+            </form>
+          </div>
+        </div>
+      </div> -->
+ 
+     </div>   <!-- actually settings-box -->
+
+     <!-- <div class="span2 health-box">
+      <h3>Health</h3>
+
+      <div class="health-info">
+        <p>Message Frequency</p>
+        <p>240 msg/sec</p>
+      </div>
+    </div>
+ 
+   </div> --> <!-- settings-box row -->
+
+</div>

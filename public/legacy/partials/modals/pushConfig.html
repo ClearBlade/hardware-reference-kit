@@ -1,0 +1,63 @@
+<div class="modal-header">
+  <h2>Push Configuration</h2>
+  <div class="btn-group cb-btn-menu">
+    <label ng-repeat="platform in availablePlatforms" class="btn cb-menu-btn" ng-class="{active: activePlatform==platform.name}" ng-click="changePlatform(platform.name)">
+      {{platform.dispName}}
+    </label>
+  </div>
+</div>
+
+<div class="modal-body scrollable-modal-body">
+  <div class="container-fluid">
+    <div class="form-horizontal">
+
+        <!-- ios config stuff -->
+        <div ng-if="activePlatform==='ios'">
+          <div ng-click="addAccount()">Add Bundle ID/Cert</div>
+          <div ng-repeat="account in systemAccounts track by $index">
+            <form name="pushConfigForm">
+              <div class="control-group">
+                <div class="control-section">
+                  <label class="control-label">App Bundle ID</label>
+                  <div class="controls">
+                    <input type="text" ng-model="account.appid" required/>
+                  </div>
+                </div>
+                <div class="control-section">
+                  <label class="control-label">Certificate</label>
+                  <div class="controls">
+                    <div ng-show="account.fileValid">
+                      Certificate already uploaded. <input type="button" class="btn btn-primary" value="Replace?" ng-click="account.fileValid = !account.fileValid">
+                      <input type="button" class="btn btn-danger" value="Delete" ng-click="deleteAccount(account, $index)"/>
+                    </div>
+                    <div ng-show="!account.fileValid">
+                      <file-import file="certFile" callback="certAddedToForm" params="{&quot;accountIndex&quot;: {{$index}}}"></file-import>
+                    </div>
+                  </div>
+                </div>
+                <div class="control-section">
+                  <label class="control-label">APN Environment to Use</label>
+                  <div class="controls">
+                    <select ng-model="account.connectionId">
+                      <option value="prod">Production</option>
+                      <option value="sandbox">Sandbox</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- android config stuff -->
+        <div ng-if="activePlatform==='android'">
+          android
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <input type="submit" class="btn btn-success" value="Save" ng-click="saveChanges()">
+  <input type="button" class="btn btn-default" value="Cancel" ng-click="close()">
+</div>

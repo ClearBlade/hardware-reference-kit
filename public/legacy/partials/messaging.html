@@ -1,0 +1,34 @@
+<div ng-menu page="messages"></div>
+<div class="container-fluid cb-page" id="cbPage">
+  <!-- commenting this out till we bring back push -->
+	<!-- <div class="row-fluid cb-info-bar">
+		<span ng-click="panelOpen = !panelOpen" class="clickable"><img src="img/sidebar-collectionsmenu.png" /></span> 
+	</div> -->	
+
+	<!-- <pageslide ps-open="panelOpen" class="cb-left-panel" ps-side="left" ps-auto-close="true" ps-container="cbPage" ps-custom-top="81px" cb-mouse-out="panelOpen=false">
+      <div>
+        <tabset vertical="true" type="'pills'">
+          <tab-heading>
+            <img style="margin: 9px;"/><span class="cb-left-panel-heading-text">Messaging</span>
+          </tab-heading>
+          <li ui-sref-active="active" class="cb-left-panel-entry tab">
+            <a ui-sref="app.system.message.mqtt">
+              <span class="cb-left-panel-text">
+              MQTT
+              </span>
+            </a>
+          </li>
+          <li ui-sref-active="active" class="cb-left-panel-entry tab">
+            <a ui-sref="app.system.message.push">
+              <span class="cb-left-panel-text">
+              Push
+              </span>
+            </a>
+          </li>
+        </tabset>
+      </div>
+    </pageslide> -->
+
+	<div ui-view></div>
+
+</div>

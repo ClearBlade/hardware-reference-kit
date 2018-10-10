@@ -1,0 +1,4 @@
+<a tabindex="-1">
+  <span ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
+  <span class="pull-right clickable" style="text-decoration:underline" ng-click="$parent.$parent.$parent.showApi(match.model);$event.stopPropagation();">API</span>
+</a>

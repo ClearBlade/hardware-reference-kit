@@ -1,0 +1,37 @@
+function @SERVICE_NAME@ (req, resp) {
+    var messageObject;
+
+    try {
+        var request = JSON.parse(req.params.body);
+        messageObject = request;
+    } catch(e) {
+        messageObject = req.params.body;
+    }
+
+    if(@CONDITION_TO_CHECK@) {
+        sendEmailToList(@EMAIL_SUBJECT@, @EMAIL_BODY@, @EMAIL_TO@);
+    }
+
+    function sendEmailToList(subject, body, recipientList) {
+        @PROVIDER_IMPL@
+
+        var requestObject = Requests();
+        requestObject.post(options, function(err,result) {
+            if(err) {
+                resp.error("Sending E-Mail Failed");
+            } else {
+                resp.success(result);
+            }
+        });
+    }
+
+    function formatRecipients(recipientList) {
+        var field = [];
+        for(i in recipientList){
+            var email = recipientList[i];
+            field.push({email:email});
+        }
+        return field;
+    }
+    resp.success("success");
+}

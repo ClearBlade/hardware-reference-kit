@@ -1,0 +1,52 @@
+<div>
+  <div ng-hide="type == 'users' || type == 'msgHistory' || type == 'push'" class="span4 ellipsis">{{name}}</div>
+  <div ng-if="type == 'collections'">
+    <div class="span2">
+      <i ng-show="permissions.create" class="glyphicon glyphicon-ok cb-icon-green"></i>
+      <i ng-hide="permissions.create" class="glyphicon glyphicon-remove cb-icon-red"></i>
+    </div>
+    <div class="span2">
+      <i ng-show="permissions.read" class="glyphicon glyphicon-ok cb-icon-green"></i>
+      <i ng-hide="permissions.read" class="glyphicon glyphicon-remove cb-icon-red"></i>
+    </div>
+    <div class="span2">
+      <i ng-show="permissions.update" class="glyphicon glyphicon-ok cb-icon-green"></i>
+      <i ng-hide="permissions.update" class="glyphicon glyphicon-remove cb-icon-red"></i>
+    </div>
+    <div class="span2">
+      <i ng-show="permissions.delete" class="glyphicon glyphicon-ok cb-icon-green"></i>
+      <i ng-hide="permissions.delete" class="glyphicon glyphicon-remove cb-icon-red"></i>
+    </div>
+  </div>
+  <div ng-if="type == 'users' || type == 'msgHistory'">
+    <div class="span3">
+      <i ng-show="permissions.create" class="glyphicon glyphicon-ok cb-icon-green"></i>
+      <i ng-hide="permissions.create" class="glyphicon glyphicon-remove cb-icon-red"></i>
+    </div>
+    <div class="span3">
+      <i ng-show="permissions.read" class="glyphicon glyphicon-ok cb-icon-green"></i>
+      <i ng-hide="permissions.read" class="glyphicon glyphicon-remove cb-icon-red"></i>
+    </div>
+    <div class="span3">
+      <i ng-show="permissions.update" class="glyphicon glyphicon-ok cb-icon-green"></i>
+      <i ng-hide="permissions.update" class="glyphicon glyphicon-remove cb-icon-red"></i>
+    </div>
+    <div class="span3">
+      <i ng-show="permissions.delete" class="glyphicon glyphicon-ok cb-icon-green"></i>
+      <i ng-hide="permissions.delete" class="glyphicon glyphicon-remove cb-icon-red"></i>
+    </div>
+  </div>
+  <div ng-if="type == 'services'">
+    <div class="span2">
+      <i ng-show="permissions.read" class="glyphicon glyphicon-ok cb-icon-green"></i>
+      <i ng-hide="permissions.read" class="glyphicon glyphicon-remove cb-icon-red"></i>
+    </div>
+  </div>
+  <!-- commenting this out till we bring back push -->
+  <!--<div ng-if="type == 'push'">
+    <div class="span3">
+      <i ng-show="permissions.create" class="glyphicon glyphicon-ok cb-icon-green"></i>
+      <i ng-hide="permissions.create" class="glyphicon glyphicon-remove cb-icon-red"></i>
+    </div>
+  </div>-->
+</div>

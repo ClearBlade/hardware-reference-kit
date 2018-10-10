@@ -1,0 +1,174 @@
+<div ng-menu page="analytics"></div>
+<div class="container-fluid cb-page">
+    <div class="row-fluid control-row">
+        <pageslide ng-init="panelOpen=true" ps-side="left" ps-open="panelOpen" class="cb-left-panel"
+                   ps-custom-top="102px" ps-size="19em" ps-custom-height="inherit">
+
+            <div class="form-horizontal" style="color:white">
+
+                <h4 class="text-center">Filters: </h4>
+                <div>
+                    <label class="col-sm-12">Select Type:</label>
+                    <div class="col-sm-12">
+                        <select class="form-control" ng-model="filter.general"
+                                ng-options="general as general for (general, _) in filterOptions"
+                                ng-change="generateChart()" id="generalData"></select>
+                    </div>
+                </div>
+                <div ng-if="filter.general == 'Users'">
+                    <label class="col-sm-12">Select Users</label>
+                    <div class="col-sm-12">
+                        <select ng-init="filter.user=''" ng-model="filter.user" ng-change="generateChart()"
+                                ng-options="user.user_id as user.email for user in users" class="form-control"></select>
+                    </div>
+                </div>
+
+                <div
+                     ng-if="filter.general && filter.general!=='Counts' && filter.general!=='Storage'&& filter.general!=='Events'">
+                    <label class="col-sm-12">Select Source:</label>
+                    <div class="col-sm-12">
+                        <select ng-init="filter.module=''" ng-model="filter.module"
+                                ng-options="module for module in filterOptions[filter.general].modules"
+                                ng-change="generateChart()" class="form-control"></select>
+                    </div>
+                </div>
+
+                <div
+                     ng-if="filter.general && filter.module && filter.general!=='Counts' && filter.module==='Collection'&& filter.general!=='Events'&& filter.general!=='Storage'">
+                    <label class="col-sm-12">Select Collection:</label>
+                    <div class="col-sm-12">
+                        <select ng-init="filter.collection=''" ng-model="filter.collection" ng-change="generateChart()"
+                                ng-options="collection.collectionID as collection.name for collection in collections"
+                                class="form-control"></select>
+                    </div>
+                </div>
+
+                <div
+                     ng-if="filter.general && filter.module && filter.general!=='Counts' && filter.module ==='Service'&& filter.general!=='Events'">
+                    <label class="col-sm-12">Select Service</label>
+                    <div class="col-sm-12">
+                        <select ng-init="filter.service=''" ng-model="filter.service" ng-change="generateChart()"
+                                ng-options="service.value as service.name for service in services"
+                                class="form-control"></select>
+                    </div>
+                </div>
+
+                <div
+                     ng-if="filter.general && filter.general!=='Counts' && filter.general!=='Storage' && filter.module =='Collection'&& filter.general!=='Events'">
+                    <label class="col-sm-12">Select Action:</label>
+                    <div class="col-sm-12">
+                        <select ng-init="filter.action=''" ng-model="filter.action" ng-change="generateChart()"
+                                ng-options="action for action in filterOptions[filter.general].actions"
+                                class="form-control"></select>
+                    </div>
+                </div>
+
+                <div ng-if="filter.general === 'Events'">
+
+                    <label for="inputDatepicker" class="col-sm-12"
+                           ng-click="open($event, 'start')">Start: </label>
+                    <div class="col-sm-10">
+                        <div class="input-group">
+                            <input type="text" class="form-control" uib-datepicker-popup="dd-MMMM-yyyy" datepicker-append-to-body="true"
+                                   ng-model="filter.startDate" ng-change="generateChart()" is-open="opened.start" max-date="today"
+                                   datepicker-options="dateOptions" ng-click="open($event, 'start')"/>
+                        <div class="input-group-addon btn btn-default" ng-click="open($event, 'start')">
+                              <i class="glyphicon glyphicon-calendar"></i>
+                        </div>
+                        </div>
+                    </div>
+
+                    <label for="inputDatepicker" class="col-sm-12"
+                           ng-click="open($event, 'end')">End: </label>
+                    <div class="col-sm-10">
+                        <div class="input-group">
+                            <input type="text" class="form-control" uib-datepicker-popup="dd-MMMM-yyyy" datepicker-append-to-body="true"
+                                   ng-model="filter.endDate" ng-change="generateChart()" is-open="opened.end" max-date="today"
+                                   datepicker-options="dateOptions" ng-click="open($event, 'end')"/>
+                            <div class="input-group-addon btn btn-default" ng-click="open($event, 'end')">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-repeat="(key, value) in eventGroup.events">
+                    <div ng-if="value" class='single-event-container'>
+
+                        <div ng-if="filter.general=='Events'">
+                            <label class="col-sm-12">Select Source:</label>
+                            <div class="col-sm-12">
+                                <select ng-init="value.filter.module=''" ng-model="value.filter.module"
+                                        ng-options="moduleName as moduleName for (moduleName, val) in filterOptions['Events'].modules"
+                                        ng-change="value.filter.action=filterOptions['Events'].modules[value.filter.module].actions[0].name;generateChart()" class="form-control"></select>
+                            </div>
+                        </div>
+
+                        <div ng-if="value.filter.module=='User'">
+                            <label class="col-sm-12">Select Users:</label>
+                            <div class="col-sm-12">
+                                <select ng-init="value.filter.user=''" ng-model="value.filter.id"
+                                        ng-change="generateChart()"
+                                        ng-options="user.user_id as user.email for user in users"
+                                        class="form-control"></select>
+                            </div>
+                        </div>
+
+                        <div ng-if="value.filter.module=='Collection'">
+                            <label class="col-sm-12">Select Collection:</label>
+                            <div class="col-sm-12">
+                                <select ng-init="value.filter.collection=''" ng-model="value.filter.id"
+                                        ng-change="generateChart()"
+                                        ng-options="collection.collectionID as collection.name for collection in collections"
+                                        class="form-control"></select>
+                            </div>
+                        </div>
+
+                        <div ng-if="value.filter.module=='Service'">
+                            <label class="col-sm-12">Select Service:</label>
+                            <div class="col-sm-12">
+                                <select ng-init="value.filter.service=''" ng-model="value.filter.id"
+                                        ng-change="generateChart()"
+                                        ng-options="service.value as service.name for service in services"
+                                        class="form-control"></select>
+                            </div>
+                        </div>
+
+                        <div ng-if="value.filter.module !== 'Service' && value.filter.module">
+                            <label class="col-sm-12">Select Action:</label>
+                            <div class="col-sm-12">
+                                <select ng-model="value.filter.action"
+                                        ng-change="generateChart()"
+                                        ng-options="action.name as action.name for action in filterOptions['Events'].modules[value.filter.module].actions"
+                                        class="form-control"></select>
+                            </div>
+                        </div>
+
+                        <div class='col-sm-12' style="margin-top: 10px;">
+                            <button type="button" class="btn btn-default" ng-click="removeFromEventGroup(key)"
+                                    style="float:right;"><span>&times;</span> Remove
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4" style="margin-top: 10px;">
+                    <button type="button" class="btn btn-default" ng-click="addToEventGroup()"> Add +</button>
+                </div>
+
+            </div>
+    </div>
+    </pageslide>
+    <div ng-click="panelOpen = !panelOpen" class="row-fluid cb-info-bar analytics-panelButton">
+        <span class="clickable feedback"><img src="img/sidebar-collectionsmenu.png"/></span>
+    </div>
+    <div ng-click="closePanel()" class="row-fluid" id="blockAnalytics"
+         style="position:relative;width:{{graphWidth}};float:right">
+        <div ng-if="countChart" id="countChart" class="c3-chart-bars"></div>
+        <div ng-if="usersChart" id="usersChart" class="c3-chart-bars"></div>
+        <div ng-if="eventChart" id="eventChart" class="c3-chart-bars"></div>
+        <div ng-if="storageChart" id="storageChart" class="c3-chart-bars"></div>
+        <h4 align="center" ng-if="!countChart && !usersChart && !eventChart && !storageChart">No data found. Please
+            select new filters.</h4>
+    </div>
+</div>
+</div>

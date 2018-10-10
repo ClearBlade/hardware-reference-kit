@@ -1,0 +1,149 @@
+<div>
+
+    <nav class="navbar navbar-default cb-navbar cb-header" ng-class="{'cb-edge-header': getIsEdge()}">
+        <div class="container-fluid">
+            <div>
+                    <a class="navbar-brand" ui-sref="app" id="company-brand-logo"></a>
+                    <span class="powered-by-clearblade">Powered by CLEAR<span class="blade-in-powered-by">BLADE</span></span>
+            </div>
+            
+
+            
+
+            <ul ng-if="'app.system' | includedByState" class="nav navbar-nav center-x-axis system-title">
+                <li>
+                    <a>
+                        <h3 style="margin:0">{{getSystemName()}}</h3>
+                    </a>
+                </li>
+
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown" uib-dropdown ng-show="loggedInUser.loggedIn()">
+                    <a href class="dropdown-toggle" uib-dropdown-toggle ng-bind="loggedInUser.email">
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="option in dropDownOptions">
+                            <a ng-click="call(option)">{{ option.name }}</a>
+                        </li>
+                    </ul>
+                </li>
+                <li ng-show="!loggedInUser.loggedIn()"><a ui-sref="app.register">Sign Up</a></li>
+                <li ng-show="!loggedInUser.loggedIn()"><a href="" ng-click="login()">Sign In</a></li>
+            </ul>
+
+        </div>
+    </nav>
+
+    <div ui-view>
+
+        <div>
+            <div class="centerDiv">
+                <div class="hero-unit welcome-hero">
+                    <!--img id="clearblade-logo" src="img/clearblade_logo_white.svg"-->
+                    <h2 class="text-center"><span style="color:#73D1FF;">ClearBlade: </span>The Enterprise IoT Platform</h2>
+                    <p>ClearBlade is revolutionary development and integration software that powers solutions for mobile, web
+                        and the Internet of things. Built for the enterprise, ClearBlade’s platform is secure end
+                        to end, designed to support millions of devices and endpoints, and delivers extreme performance
+                        to enable complex, multi-threaded apps and solutions.</p>
+                </div>
+
+
+                <div class="row-fluid feature-row">
+                    <div class="col-xs-12">
+                        <div class="col-lg-4 col-sm-6">
+                            <h3 class="text-left" style="color:#315373;">Data</h3>
+                            <p class="text-left">Store your data in a scalable architecture</p>
+                        </div>
+                        <div class="col-lg-4 col-sm-6">  
+                            <h3 class="text-left" style="color:#A64B47;">Message</h3>
+                            <p class="text-left">Communicate instantly between devices</p>
+                        </div>
+
+
+                        <div class="col-lg-4 col-sm-6">
+                            <h3 class="text-left" style="color:#9AAE6A;">Code</h3>
+                            <p class="text-left">Define logic to execute as services</p>
+                        </div>
+
+                        <div class="col-lg-4 col-sm-6">
+                            <h3 class="text-left" style="color:#000000;">Auth</h3>
+                            <p class="text-left">Control and secure your information</p>
+                        </div>
+
+                        <div class="col-lg-4 col-sm-6">
+                            <h3 class="text-left" style="color:#73D1FF;">Portal</h3>
+                            <p class="text-left">Visualize and interact with your IoT systems</p>
+                        </div>
+
+                        <!--<div class="col-lg-4 col-sm-6">
+                                <h3 class="text-left" style="color:#4C4C4C;">Audit</h3>
+                                <p class="text-left">Understand interactions and measure performance</p>
+                        </div>-->
+
+                        <div class="col-lg-4 col-sm-6">
+                                <h3 class="text-left" style="color:#4C4C4C;">Adapters</h3>
+                                <p class="text-left">Deploy and maintain adapters on ClearBlade Edge</p>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12"  style="margin-top:20px;border-color:#315373;border-width:1px;border-style:solid;padding:8px;">
+                        <h2 class="text-left" style="font-weight:normal">BUILD</h2>
+                        <div class="col-md-3 col-sm-4 col-xs-6">
+                            <h4>iOS</h4>
+                            <ul class="no-bullet-list">
+                                <li><a href="https://docs.clearblade.com/v/3/4-developer_reference/ios/QuickStart/">quickstart</a></li>
+                                <li><a href="https://github.com/ClearBlade/iOS-API">github<img style="height:22px; margin-left:5px;" src="img/GitHub-Mark-60.png"></a></li>
+                                <li><a href="https://docs.clearblade.com/v/3/4-developer_reference/ios/Tutorial/">tutorial</a></li>
+                                <li><a href="http://cocoadocs.org/docsets/ClearBlade-iOS-API/1.16.3/">reference</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-3 col-sm-4 col-xs-6">
+                            <h4>Android</h4>
+                            <ul class="no-bullet-list">
+                                <li><a href="https://docs.clearblade.com/v/3/4-developer_reference/android/QuickStart/">quickstart</a></li>
+                                <li><a href="https://github.com/ClearBlade/android-API">github<img style="height:22px; margin-left:5px;" src="img/GitHub-Mark-60.png"></a></li>
+                                <li><a href="https://docs.clearblade.com/v/3/4-developer_reference/android/Tutorial/">tutorial</a></li>
+                                <li><a href="https://docs.clearblade.com/v/3/4-developer_reference/android/Javadoc/">reference</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="col-md-3 col-sm-4 col-xs-6">
+                            <h4>JS</h4>
+                            <ul class="no-bullet-list">
+                                <li><a href="https://docs.clearblade.com/v/3/4-developer_reference/javascript/QuickStart/">quickstart</a></li>
+                                <li><a href="https://github.com/ClearBlade/JavaScript-API">github<img style="height:22px; margin-left:5px;" src="img/GitHub-Mark-60.png"></a></li>
+                                <li><a href="https://docs.clearblade.com/v/3/4-developer_reference/javascript/Tutorial/">tutorial</a></li>
+                                <li><a href="https://docs.clearblade.com/v/3/4-developer_reference/javascript/JSDoc/">reference</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="col-md-3 col-sm-4 col-xs-6">
+                            <h4>Open Standards</h4>
+                            <ul class="no-bullet-list">
+                                <li><a href="https://docs.clearblade.com/v/3/4-developer_reference/REST/">REST</a></li>
+                                <li><a href="https://docs.clearblade.com/v/3/4-developer_reference/MQTT/">MQTT</a></li>
+                                <li><a href="https://github.com/ClearBlade/">github<img style="height:22px; margin-left:5px;" src="img/GitHub-Mark-60.png"></a></li>
+                                
+                            </ul>
+                        </div>
+                    </div>
+                    <!--div class="span4">
+                     <h2 class="text-center" style="color:#A64B47;">clearMessage</h2>
+                      <p class="text-left">Instantly communicate between apps</p>
+                    </div>
+                    <div class="span4">
+                      <h2 class="text-center" style="color:#9AAE6A;">clearCode</h2>
+                      <p class="text-left">Define logic to execute as services</p>
+                    </div-->
+                </div>
+
+
+            </div>
+        </div><!--/span-->
+
+
+    </div>
+</div>

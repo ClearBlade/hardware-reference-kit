@@ -1,0 +1,13 @@
+<div class="modal-header">
+	<h2>Billing Information</h2>
+</div>
+<div class="modal-body">
+	<form name="billingInfo" class="form-horizontal">
+    	<billing-info billing-obj="billingObj" saas-plans="saasPlans"></billing-info>
+	</form>
+</div>
+
+<div class="modal-footer">
+	<button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-success" ng-click="confirm()" ng-disabled="billingInfo.$invalid">{{confirmationButtonText}}</button>
+</div>

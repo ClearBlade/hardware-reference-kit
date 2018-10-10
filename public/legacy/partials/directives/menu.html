@@ -1,0 +1,149 @@
+<nav class="navbar-inverse cb-navbar cb-sub-header" ng-class="{'edge-header': currentSystem.isEdge}">
+    <div class="container-fluid">
+
+        <ul class="nav navbar-nav navbar-toggleable-*">
+            <li><a ui-sref="app.dashboard">
+                <span class="glyphicon glyphicon-home white"></span>
+            </a></li>
+            <li class="dropdown" uib-dropdown>
+                <a href class="dropdown-toggle" uib-dropdown-toggle ng-cloak>
+                    <span class="glyphicon glyphicon-menu-hamburger"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li ng-repeat="system in systems" ng-class="{'active': system.getSystemKey() === currentSystem.getSystemKey()}">
+                        <a ng-click="selectSystem(system)">
+                            {{system.name}}
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="cb-navbar-divider"></li>
+            <li ng-show="{{icon != undefined}}">
+                <a ng-click="addFn()">+New
+                    <span class="glyphicon {{icon}}"></span>
+                    <!--<img ng-src="{{icon}}"/>-->
+                </a>
+            </li>
+            <li ng-show="{{textIcon != undefined}}">
+                <a ng-click="addFn()" id="NewCode">+New
+                    <span>{{textIcon}}</span>
+                </a>
+            </li>
+            <li ng-show="{{('app.system' | includedByState) || ('app.dashboard' | includedByState)}}">
+                <a ng-click="requestImport()" id="ImportNewSystem"><span>Install</span></a>
+            </li>
+            
+        </ul>
+        <!-- TODO: Take care of overlapping these two ul on screen compression -->
+        <!--  <ul class="nav navbar-nav" 
+        show import only when New is shown !!</ul>--> 
+        <ul class="nav navbar-nav nav-pills center-x-axis" ng-show="{{'app.system' | includedByState}}">
+            <li ui-sref-active="active">
+                <a ui-sref="app.system.data({systemKey:currentSystem.getUniqueSystemKey()})" ui-sref-opts="{ reload: true }">
+                    Data
+                </a>
+            </li>
+
+            <li ui-sref-active="active">
+                <a ui-sref="app.system.message.mqtt({systemKey:currentSystem.getUniqueSystemKey()})">
+                    Message
+                </a>
+            </li>
+
+            <li ng-class="{active: ('app.system.code' | includedByState)}">
+                <a ui-sref="app.system.code({systemKey:currentSystem.getUniqueSystemKey()})" ui-sref-opts="{ reload: true }">
+                    Code
+                </a>
+            </li>
+
+            <li ng-class="{active: ('app.system.auth' | includedByState)}" uib-dropdown>
+                <a uib-dropdown-toggle ui-sref="app.system.auth.users({systemKey:currentSystem.getUniqueSystemKey()})">
+                    Auth
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" uib-dropdown-menu>
+                    <li role="menuitem" ui-sref-active="active"><a ui-sref="app.system.auth.users({systemKey:currentSystem.getUniqueSystemKey()})">Users</a></li>
+                    <li role="menuitem" ui-sref-active="active"><a ui-sref="app.system.auth.devices({systemKey:currentSystem.getUniqueSystemKey()})">Devices</a></li>
+                    <li ng-if="!isEdge" role="menuitem" ui-sref-active="active"><a ui-sref="app.system.auth.edges({systemKey:currentSystem.getUniqueSystemKey()})">Edges</a></li>
+                    <li role="menuitem" ui-sref-active="active"><a ui-sref="app.system.auth.roles({systemKey:currentSystem.getUniqueSystemKey()})">Roles</a></li>
+                </ul>
+            </li>
+
+<!--            <li ui-sref-active="active">
+                <a ui-sref="app.system.analytics({systemKey:currentSystem.getUniqueSystemKey()})">
+                    Audit
+                </a>
+            </li>-->
+
+            <li ui-sref-active="active">
+                <a ui-sref="app.system.adapters({systemKey:currentSystem.getUniqueSystemKey()})" ui-sref-opts="{ reload: true }">
+                    Adapters
+                </a>
+            </li>
+
+            <li ui-sref-active="active">
+                <a ui-sref="app.system.portal({systemKey:currentSystem.getUniqueSystemKey()})">
+                    Portal
+                </a>
+            </li>
+
+        </ul>
+
+        <ul class="nav navbar-nav nav-pills center-x-axis" ng-show="{{'app.admin' | includedByState}}">
+
+            <li ui-sref-active="active" ui-sref="app.admin.dashboard">
+                <a>
+                    Dashboard
+                </a>
+            </li>
+
+            <li ng-class="{active: ('app.admin.manage' | includedByState)}"
+                ui-sref="app.admin.manage.developers">
+                <a>
+                    Manage
+                </a>
+            </li>
+
+            <li ui-sref-active="active"
+                ui-sref="app.admin.operations">
+                <a>
+                    Operations
+                </a>
+            </li>
+
+        </ul>
+
+
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown" uib-dropdown>
+                <a href="#" uib-dropdown-toggle ng-cloak class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span name="Information" class="glyphicon glyphicon-info-sign white"></span> <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a ng-click="platformAbout()">About</a></li>
+                    <li><a href="https://docs.clearblade.com/{{hash}}" target="_blank">Documentation</a></li>
+                    <li ng-show="{{'app.system' | includedByState}}"><a ng-click="systemSettings()">System Settings</a></li>
+                </ul>
+            </li>
+        </ul>
+
+
+
+<!--
+        <ul class="nav navbar-nav navbar-right">
+            <li ng-show="{{'app.system' | includedByState}}">
+                <a ng-click="systemSettings()">
+                    System Settings
+                </a>
+            </li>
+            <li class="system-nav">
+                <a href="https://docs.clearblade.com/{{hash}}" target="_blank">Documentation</a>
+            </li>
+            <li class="system-nav">
+                <a ng-click="platformAbout()">About</a>
+            </li>
+        </ul>
+    -->
+    </div>
+
+</nav>
+
+

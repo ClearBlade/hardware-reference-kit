@@ -1,0 +1,17 @@
+  <li class="parent_li" ng-if="isNodeValid(node)">
+   <uib-accordion close others="oneAtATime" >
+      <div uib-accordion-group ng-click="toggleAccordionNode(node)" class="panel-default" is-disabled="isDisable(node)" >
+      <uib-accordion-heading>
+      <div>
+            <input type="checkbox" ng-click="$event.stopImmediatePropagation();
+      nodeClicked(node);" ng-checked="node.checked">          
+            {{node.name}}
+      </div>
+      </uib-accordion-heading>
+        <uib-accordion-body>
+          <node-tree ng-model="childnode.children"></node-tree>
+         </uib-accordion-body>
+      </div> 
+   
+  </uib-accordion>
+  </li>

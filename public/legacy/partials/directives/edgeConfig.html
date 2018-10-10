@@ -1,0 +1,136 @@
+<div class="row">
+    <div class="btn-group-wrap">
+        <div class="btn-group cb-btn-menu">
+            <button class="btn btn-default cb-menu-btn" ng-class="{active: section == 'setup'}" ng-click="changeSelector($event, 'setup')">Setup</button>
+            <button class="btn btn-default cb-menu-btn" ng-class="{active: section == 'ports'}" ng-click="changeSelector($event, 'ports')">Ports</button>
+        </div>
+    </div>
+</div>
+<hr />
+<form class="row" ng-if="section == 'setup'">
+
+    <h4 class="text-center">Install <span ng-if="!isConnectedToEdge">&amp; Update</span></h4>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Target</label>
+        <div class="col-sm-9">
+            <select class="form-control" ng-model="selectedTarget" ng-options="id as target.name for (id , target) in targets">
+                <option value="">- Please Choose -</option>
+            </select>
+        </div>
+
+        <div ng-show="selectedTarget != ''">
+            <div ng-repeat="(step, code) in targets[selectedTarget].install">
+                <label class="col-sm-3 control-label">{{step}}</label>
+                <div class="col-sm-9"> 
+                    <cb-copy target="{{code}}"></cd-copy>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-show="targets[selectedTarget] != undefined">
+        <div class="panel-group form-group">
+            <label class="col-sm-3 control-label">Installation Script</label>
+            <div class="col-sm-9">
+                <button class="btn btn-primary form-control" ng-click="downloadSetup()">Download Edge Installation Script</button>                    
+            </div>
+        </div>
+    </div>
+
+    <hr />
+    <div ng-if="isConnectedToEdge">
+        <h4 class="text-center">Update</span></h4>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Update Script</label>
+                <div class="col-sm-9"> 
+                    <cb-copy target="{{updateScript}}"></cd-copy>
+                </div>
+            </div>
+        </div>
+        <hr />
+    </div>
+    
+    <h4 class="text-center">Generate Startup Command</h4>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">ClearBlade Platform IP</label>
+        <div class="col-sm-9">
+            <input class="form-control" ng-model="startup.platformIp" placeholder="IP Address"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Edge IP</label>
+        <div class="col-sm-9">
+            <input class="form-control" ng-model="startup.edgeIp" placeholder="IP Address"/>
+        </div>
+    </div>
+
+     <div class="form-group">
+        <label class="col-sm-3 control-label">Start script:</label>
+        <div class="col-sm-9"> 
+            <cb-copy target="{{getStartupCommand()}}"></cb-copy>
+        </div>
+    </div>
+
+</form>
+<form class="row" ng-if="section == 'ports'">
+    <div class="form-group">
+        <label class="col-sm-3 control-label"> {{consoleConstants.internal.EDGE.LABELS.PUBLIC_ADDRESS}}</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" readonly ng-model="system[consoleConstants.external.EDGE.PUBLIC_ADDRESS]" placeholder="IP Address"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label"> {{consoleConstants.internal.EDGE.LABELS.LOCAL_ADDRESS}}</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" readonly ng-model="system[consoleConstants.external.EDGE.LOCAL_ADDRESS]" placeholder="IP Address"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label"> {{consoleConstants.internal.EDGE.LABELS.PUBLIC_PORT}}</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="number" readonly ng-model="system[consoleConstants.external.EDGE.PUBLIC_PORT]" placeholder="Integer"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label"> {{consoleConstants.internal.EDGE.LABELS.LOCAL_PORT}}</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="number" readonly ng-model="system[consoleConstants.external.EDGE.LOCAL_PORT]" placeholder="Integer"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label"> {{consoleConstants.internal.EDGE.LABELS.BROKER_AUTH_PORT}}</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" readonly ng-model="system[consoleConstants.external.EDGE.BROKER_AUTH_PORT]" placeholder="Integer"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label"> {{consoleConstants.internal.EDGE.LABELS.BROKER_PORT}}</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" readonly ng-model="system[consoleConstants.external.EDGE.BROKER_PORT]" placeholder="Integer"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label"> {{consoleConstants.internal.EDGE.LABELS.BROKER_TLS_PORT}}</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" readonly ng-model="system[consoleConstants.external.EDGE.BROKER_TLS_PORT]" placeholder="Integer"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label"> {{consoleConstants.internal.EDGE.LABELS.BROKER_WS_AUTH_PORT}}</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" readonly ng-model="system[consoleConstants.external.EDGE.BROKER_WS_AUTH_PORT]" placeholder="Integer"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label"> {{consoleConstants.internal.EDGE.LABELS.BROKER_WS_PORT}}</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" readonly ng-model="system[consoleConstants.external.EDGE.BROKER_WS_PORT]" placeholder="Integer"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label"> {{consoleConstants.internal.EDGE.LABELS.BROKER_WSS_PORT}}</label>
+        <div class="col-sm-9">
+            <input class="form-control" type="text" readonly ng-model="system[consoleConstants.external.EDGE.BROKER_WSS_PORT]" placeholder="Integer"/>
+        </div>
+    </div>
+</div>

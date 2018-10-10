@@ -1,0 +1,62 @@
+<div ng-menu></div>
+<div class="container-fluid">
+ <div class="container-fluid" >
+  <div class="row-fluid">
+    <div class="span10">
+       <h2>Message Activity</h2>
+    </div>
+    <!-- <div class="span2" style='margin-top:15px;'>
+      <button ng-click="refreshTable()"  class="btn pull-right"><i class="icon-refresh"></i></button>
+      <button class="btn pull-right"><a href="https://docs.clearblade.com/v/3/2-console_administration/Messaging/">Documentation</a></button>
+    </div> -->
+    <div style="margin-top:15px" class="pull-right">
+      <button ng-click="refreshTable()"  class="btn"><i class="icon-refresh"></i></button>
+      <button class="btn"><a href="https://docs.clearblade.com/v/3/2-console_administration/Messaging/">Documentation</a></button>
+    </div>
+  </div>
+
+  <div class="row-fluid">
+
+    <div class="span10">
+      <div class="text-center">
+        <span class="section-links"><span class="section-links-inactive"><a href="#/messages/settings/">Settings</a></span><span class="section-links-active"> <a href="#/messages/activity">Activity</a></span></span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row-fluid settings-row">
+    <div class="span10 settings-box">
+
+      <div class="row-fluid">
+        <div class="activity-header-top"><strong>Current Messages</strong></div>
+        <div ng-grid="recentTopicGridOptions" class="topic-grid"></div>
+        <div class="download-link text-right"><!--a href="#">Download history</a--></div>
+      </div>
+    </br><!--filler for download history--> 
+      <div class="row-fluid">
+        <div class="settings-header"><strong>Current Topics</strong></div>
+        <div ng-grid="liveMessageGridOptions" class="topic-grid"></div>
+        <div class="download-link text-right"><!--a href="#">Download history</a--></div>
+      </div>
+     </br><!--filler for download history--> 
+      </div>  <!-- actually settings-box -->
+
+    <div class="span2 health-box">
+      <h3>Status</h3>
+
+      <div class="health-info">
+        <p>Current Subscribers</p>
+        <p>{{totalSubs}}</p>
+
+        <div class="health-info">
+        <p>Total Publishes</p>
+        <p>{{totalPubs}}</p>
+      </div>
+
+      </div>
+    </div>
+ 
+   </div>  <!-- settings-box row -->
+
+</div>

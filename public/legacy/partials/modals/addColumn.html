@@ -1,0 +1,35 @@
+<form name="newColumnForm" ng-submit="saveNewColumn()">
+    <div class="modal-header">
+        <h2>Add Column</h2>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="form-group" ng-class="{'has-error': newColumnForm.columnName.$error.pattern}">
+                    <label class="control-label col-sm-2" for="columnName">Name:</label>
+                    <div class="col-sm-10">
+                        <input ng-model="column.addColumnName" ng-change="doesColumnExist(column.addColumnName)" ng-pattern="/^[a-zA-Z_][a-zA-Z0-9_]*$/" class="form-control"
+                               id="columnName" type="text" name="columnName" required
+                               autofocus>
+                    </div>
+                    <div class="text-danger text-center" ng-show="newColumnForm.columnName.$error.pattern">Column name must start with a letter or an underscore and can only contain letters, numbers, and underscores. </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="columnDataType">Type:</label>
+                    <div class="col-sm-10">
+                        <select ng-model="column.columnDataType"
+                                ng-options="obj.value as obj.text for (type, obj) in columnDataTypeOptions"
+                                class="form-control"
+                                required></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="submit" class="btn btn-success cb-padding" id="columnSubmit"
+               ng-disabled="newColumnForm.$invalid || !uniqueName"
+               value="Submit">
+        <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    </div>
+</form>

@@ -1,0 +1,61 @@
+<div class="modal-body">
+    <div class="form-horizontal login">
+        <div class="control-group">
+            <label class="control-label">Email</label>
+            <div class="controls">
+                <span>{{developer[consoleConstants.external.EMAIL]}}</span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Name:</label>
+            <div class="controls">
+                <span>{{developer[consoleConstants.internal.FULL_NAME]}}</span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Organization</label>
+            <div class="controls">
+                <span>{{developer[consoleConstants.external.ORGANIZATION]}}</span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Administrator </label>
+            <div class="controls">
+                <div class="btn-group">
+                    <button type="button" class="btn userauth" ng-model="developer[consoleConstants.external.ADMIN]"
+                            btn-radio="true">Yes
+                    </button>
+                    <button type="button" class="btn userauth" ng-model="developer[consoleConstants.external.ADMIN]"
+                            btn-radio="false">No
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Systems: </label>
+        </div>
+        <div class="well cb-list-scroll edge-list" style="max-height:60px; height: auto">
+            <div ng-repeat="system in devSystems">
+                {{system[consoleConstants.external.SYSTEM_NAME]}}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="control-group">
+            <span ng-switch="developer[consoleConstants.internal.ENABLED]" style="float:left">
+                    <button ng-switch-when="true" class="btn btn-danger cb-padding" ng-click="toggleDevStatus()">Disable
+                        User
+                    </button>
+                    <button ng-switch-when="false" class="btn btn-warning cb-padding" ng-click="toggleDevStatus()">
+                        Enable User
+                    </button>
+            </span>
+        <div class="controls modal-submit">
+
+            <input type="submit" class="btn btn-success cb-padding"
+                   id="registerSubmit" value="Update" ng-click="updateDeveloper(developer)"/>
+            <button class="btn btn-default cb-padding" ng-click="cancel($event)">Cancel</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,58 @@
+<div ng-menu page="users" system-refresh="refresh"></div>
+<div class="cb-page" id="page">
+
+    <div class="container-fluid">
+
+        <pageslide ps-open="panelOpen" class="cb-left-panel" ps-side="left" ps-auto-close="true" ps-container="page">
+            <page-slide-close ng-click="panelOpen=false"></page-slide-close>
+            <uib-tabset vertical="true" type="pills">
+                <uib-tab-heading>
+                    <img style="margin: 9px;" src="img/user.png" />
+                    <span class="cb-left-panel-heading-text">Security</span>
+                </uib-tab-heading>
+
+                <li ui-sref-active="active" class="cb-left-panel-entry tab">
+                    <a ui-sref="app.system.auth.users">
+                        <span class="cb-left-panel-text">
+                            Users
+                        </span>
+                    </a>
+                </li>
+                <li ui-sref-active="active" class="cb-left-panel-entry tab">
+                    <a ui-sref="app.system.auth.devices">
+                        <span class="cb-left-panel-text">
+                            Devices
+                        </span>
+                    </a>
+                </li>
+                <li ui-sref-active="active" class="cb-left-panel-entry tab" ng-if="!isEdge">
+                    <a ui-sref="app.system.auth.edges">
+                        <span class="cb-left-panel-text">
+                            Edges
+                        </span>
+                    </a>
+                </li>
+                <li ui-sref-active="active" class="cb-left-panel-entry tab">
+                    <a href="/console/system/{{sysKey}}/roles">
+                        <span class="cb-left-panel-text">
+                            Roles
+                        </span>
+                    </a>
+                </li>
+            </uib-tabset>
+        </pageslide>
+
+        <div class="container-fluid">
+
+            <div class="row cb-info-bar">
+                <span ng-click="panelOpen = !panelOpen" class="clickable feedback">
+                    <img src="img/sidebar-collectionsmenu.png" />
+                </span>
+            </div>
+
+            <div class="row" ui-view></div>
+
+        </div>
+
+    </div>
+</div>

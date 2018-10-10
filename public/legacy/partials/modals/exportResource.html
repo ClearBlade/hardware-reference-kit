@@ -1,0 +1,44 @@
+<form name="exportResourceForm" ng-submit="exportResource(fileType, control.shouldExportItemId, control.shouldDownloadFilteredSet)">
+
+    <cb-modal-header close-fn="cancel()">
+        <h2>Export
+            <i>{{modalConfig.modalTitle[0]}}</i> {{modalConfig.modalTitle[1] || ""}}</h2>
+    </cb-modal-header>
+
+    <div class="modal-body">
+
+        <div class="form-horizontal text-center">
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <select class="form-control" ng-model="fileType" ng-options="option for option in fileOptions" required>
+                        <option value=""> --- Choose File Type ---</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <!-- Only display these fields if the resource being exported is a collection or collection list -->
+                <label class="checkbox" ng-show="!!resourceToExport.collectionID || !!resourceToExport.results[0].collectionID">
+                    <input ng-model="control.shouldExportItemId" type="checkbox"> Export 'item_id'?
+                </label>
+                <label class="checkbox" ng-show="(!!resourceToExport.collectionID && resourceToExport.isFiltered)">
+                    <input ng-model="control.shouldDownloadFilteredSet" type="checkbox"> Export filtered set?
+                </label>
+            </div>
+            <div class="form-group">
+                <div ng-show="complete" ng-click="closeModal()">
+                    <span class="glyphicon glyphicon-download-alt"></span>
+                    <a href="/console-api/batch/export/files?fullFileName={{fileAddress}}">
+                        Download Resource
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <input ng-disabled="exportResourceForm.$invalid" type="submit" class="btn btn-success cb-padding" id="exportResource" value="Export Resource">
+        <button class="btn btn-default cb-padding" ng-click="cancel()" type="button">Cancel</button>
+    </div>
+</form>

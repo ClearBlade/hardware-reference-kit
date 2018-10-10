@@ -1,0 +1,28 @@
+function @SERVICE_NAME@ (req, resp) {
+    var messageObject;
+
+    try {
+        var request = JSON.parse(req.params.body);
+        messageObject = request;
+    } catch(e) {
+        messageObject = req.params.body;
+    }
+    
+    if(@CONDITION_TO_CHECK@) {
+        invokeService();
+    }
+
+    function invokeService() {
+        ClearBlade.init({request:req});
+        ClearBlade.Code().execute("@SERVICE_TO_INVOKE@", @SERVICE_PARAMS@, true, function (err, respdata){        
+            if(err) {
+                log("Failure while executing @SERVICE_TO_INVOKE@");
+                resp.error(respdata);
+            } else {
+                log("Successfully executed @SERVICE_TO_INVOKE@");
+                resp.success(respdata);
+            }
+        })
+    }
+    resp.success("success");
+}

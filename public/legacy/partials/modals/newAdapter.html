@@ -1,0 +1,45 @@
+<form name="newAdapterForm">
+    <div class="modal-header">
+        <h2>New Adapter</h2>
+    </div>
+
+    <div class="modal-body" id="blockModal">
+        <strong class="errorMessage">{{errorMessage}}</strong>
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label col-sm-3">Name:</label>
+                <div class="col-sm-7">
+                    <input ng-model="newAdapter[consoleConstants.external.ADAPTER.NAME]" placeholder="Alphanumeric name" class="form-control"
+                           id="adapterName" type="text" required name="adapterName" autofocus/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-3" for="dbTypes">Architecture:</label>
+                <div class="col-sm-7">
+                    <select name="architectures" ng-model="newAdapter[consoleConstants.external.ADAPTER.ARCH]"
+                            ng-options="key as value for (key , value) in Architectures" required class="form-control"></select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-3">Description: </label>
+                <div class="col-sm-7">
+                    <textarea class="form-control" type="textarea" ng-model="newAdapter[consoleConstants.external.ADAPTER.DESCRIPTION]"
+                                name="adapterDesc" placeholder="Description"></textarea>
+                </div>
+            </div>
+
+            <div>
+                <strong class="errorMessage">{{dbError}}</strong>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="controls">
+
+            <input type="submit" ng-click="saveNewAdapter(newAdapter)" class="btn btn-success cb-padding" id="adapterSubmit" value="Submit" ng-disabled="newAdapterForm.$invalid || submitDisabled"/>
+            <input type="button" class="btn btn-default cb-padding" ng-click="close()" value="Cancel"/>
+        </div>
+    </div>
+</form>

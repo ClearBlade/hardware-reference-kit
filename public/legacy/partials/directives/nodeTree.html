@@ -1,0 +1,21 @@
+<div>
+        <uib-accordion close others="oneAtATime" >
+                     <node ng-repeat="node in tree track by $index"  >   
+                         <div uib-accordion-group class="panel-default" is-open="accordionArray[$index]">
+                             <uib-accordion-heading ng-click="toggleSystemAccordion(node, $index);">
+                                 {{node.name}}
+                             </uib-accordion-heading>
+                            <uib-accordion-body>
+                                <div  >
+                                                <ul>
+                                                <node-tree ng-model="node.children"></node-tree>
+                                                </ul>        
+                                </div>
+                            </uib-accordion-body>
+                        </div>
+                    </node>
+                     
+        </uib-accordion>
+</div>
+
+

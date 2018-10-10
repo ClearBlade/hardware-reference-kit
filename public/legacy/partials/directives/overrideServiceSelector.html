@@ -1,0 +1,22 @@
+<div class="form-group override-form">
+    <label class="col-sm-3 control-label">
+        <a href="{{docsUrl}}" target="_blank">
+            {{label}}:
+        </a>
+    </label>
+    <div class="col-sm-9">
+        <ul style="list-style:none;padding-left: 0px;">
+            <li class="input-group">
+                <input class="form-control" ng-model="value" id="{{inputId}}" placeholder="Click to select"
+                       ng-disabled="!isValueEmpty()"
+                       uib-typeahead="dependency for dependency in codeServices | filter:$viewValue:emptyOrMatch"
+                       typeahead-on-select="updateValue($item)"
+                       typeahead-focus
+                       type="text"/>
+                <span class="btn btn-default input-group-addon" ng-if="isValueEmpty()" ng-click="focusInput()">&#43;</span>
+                <span class="btn btn-default input-group-addon" ng-if="!isValueEmpty()"
+                      ng-click="updateValue('')">&times;</span>
+            </li>
+        </ul>
+    </div>
+</div>
