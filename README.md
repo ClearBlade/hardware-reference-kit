@@ -34,7 +34,7 @@ You must have a `ClearBlade Platform System` to which to attach this Edge.
 ```
 ./runConsole.sh
 ```
-Note: If you've executed ./runEdge.sh more than once, you need to run ./reset.sh
+Note: If you've already executed ./runEdge.sh once, you will need to run ./reset.sh to execute ./runEdge.sh again.
 
 2. Open browser to <GATEWAY_IP>:3000/provision 
 
