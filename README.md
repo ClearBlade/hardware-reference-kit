@@ -17,7 +17,7 @@ You must have a `ClearBlade Platform System` to which to attach this Edge.
 
 2. In your pre-existing system, create a service user account with any email account. Example: provisioner@clearblade.com.
 
-3. Grant this user a role with Edge Create permissions.
+3. Grant this user a role with Edge Create and Deployment Read permissions.
 
 4. Configure a Deployment that is applied to 'All Current and Future Edges'
 
