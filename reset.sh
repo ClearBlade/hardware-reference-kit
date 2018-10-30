@@ -1,5 +1,5 @@
 #!/bin/bash
 
 rm -f *.db
-tar -xf ./advanced/dbs
+tar -xf ./advanced/dbs.tar.gz
 

@@ -6,12 +6,7 @@ sequenceDiagram
     participant Platform
     Gateway->>Gateway: Power On
     Gateway->>Edge: Service Mgmt: Start Edge
-    Edge->>Edge: Run Provisioning System
-    Edge->>Edge: Portal available, ex IPADDRESS/provision
-    User->>Portal: Provide Existing System Platform URL/Key/Secret/User/Email
-    Portal->>Edge: Run `RegisterIntoTargetSystem` Code Service
-    Edge->>Platform: Verifies Platform URL, and user authentication
-    User->>Portal: Defines Edge Name
-    Portal->>Edge: Run `checkSystem` 
-    Edge->>Platform: Auths, Creates Edge Entry
+    Edge->>Edge: Enter Mode: PROVISIONING
+    User->>Portal: Press 'Provision'
+    Edge->>Platform: Create developer, system, user, edge, retarget
     Edge->>Edge: Enters RUNTIME mode, and autosync begins
