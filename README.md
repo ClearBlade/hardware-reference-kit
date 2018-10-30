@@ -13,13 +13,15 @@ You must have a `ClearBlade Platform System` to which to attach this Edge.
 
 ## Setup
 
-1. In your pre-existing system, create a service user account with any email account. Example: provisioner@clearblade.com.
+1. Download the latest release here: https://github.com/ClearBlade/clearblade-deployment-kit/releases
 
-2. Grant this user a role with Edge Create permissions.
+2. In your pre-existing system, create a service user account with any email account. Example: provisioner@clearblade.com.
 
-3. Configure a Deployment that is applied to 'All Current and Future Edges'
+3. Grant this user a role with Edge Create and Deployment Read permissions.
 
-4. Download and unzip the release kit for your OS and Architecture (ex. amd64-darwin)
+4. Configure a Deployment that is applied to 'All Current and Future Edges'
+
+5. Download and unzip the release kit for your OS and Architecture (ex. amd64-darwin)
 
 
 ## Usage
@@ -32,6 +34,7 @@ You must have a `ClearBlade Platform System` to which to attach this Edge.
 ```
 ./runConsole.sh
 ```
+Note: If you've already executed ./runEdge.sh once, you will need to run ./reset.sh to execute ./runEdge.sh again.
 
 2. Open browser to <GATEWAY_IP>:3000/provision 
 
