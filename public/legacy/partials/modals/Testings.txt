@@ -1,4 +1,0 @@
-Testings:
-1. Testing the zipping and unzipping
-2. Testing the logic of getting list of files
-3. Testing files gets deleted even after errors
