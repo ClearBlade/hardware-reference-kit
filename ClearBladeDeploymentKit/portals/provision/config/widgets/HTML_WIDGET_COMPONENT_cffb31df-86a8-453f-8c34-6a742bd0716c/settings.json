@@ -1,0 +1,18 @@
+{
+    "html": {
+        "dataType": "DYNAMIC_DATA_TYPE",
+        "force_data": [
+            "STATIC_DATA_TYPE",
+            "DYNAMIC_DATA_TYPE"
+        ],
+        "id": "57bcda39-21e2-46a9-9c7c-4d9b45dd9c58",
+        "incoming_parser": {
+            "isDebugOn": false,
+            "value": {
+                "CSS": "./parsers/html/incoming_parser/index.css",
+                "HTML": "./parsers/html/incoming_parser/index.html",
+                "JavaScript": "./parsers/html/incoming_parser/index.js"
+            }
+        }
+    }
+}

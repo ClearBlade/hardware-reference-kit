@@ -1,0 +1,1 @@
+CB_PORTAL.selectPage("/System/ExistingSystem");

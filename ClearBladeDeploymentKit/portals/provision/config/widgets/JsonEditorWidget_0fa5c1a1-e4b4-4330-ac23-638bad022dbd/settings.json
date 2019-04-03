@@ -1,0 +1,23 @@
+{
+    "htmlId": "final-json",
+    "isReadOnly": false,
+    "textContent": {
+        "dataType": "DYNAMIC_DATA_TYPE",
+        "id": "041319f2-7c6a-4ede-8781-9e329effaeeb",
+        "incoming_parser": {
+            "isDebugOn": false,
+            "value": "./parsers/textContent/incoming_parser/index.js"
+        }
+    },
+    "updateParser": {
+        "dataType": "DYNAMIC_DATA_TYPE",
+        "force_data": [
+            "DYNAMIC_DATA_TYPE"
+        ],
+        "id": "041319f2-7c6a-4ede-8781-9e329effaeeb",
+        "outgoing_parser": {
+            "isDebugOn": false,
+            "value": "./parsers/updateParser/outgoing_parser/index.js"
+        }
+    }
+}

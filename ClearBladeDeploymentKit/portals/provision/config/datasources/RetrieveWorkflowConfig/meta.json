@@ -1,0 +1,12 @@
+{
+    "id": "007081b8-d838-49c3-a6a6-6f56e5102dc7",
+    "name": "RetrieveWorkflowConfig",
+    "settings": {
+        "CALL_ON_LOAD": true,
+        "SUPPRESS_DATASOURCE_ERRORS": false,
+        "code_name": "RetrieveWorkflowConfig",
+        "payload": "{}",
+        "refresh_interval": 0
+    },
+    "type": "CB_CODE_SERVICE"
+}

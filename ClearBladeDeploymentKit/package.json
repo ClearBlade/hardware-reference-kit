@@ -1,0 +1,73 @@
+{
+  "name": "testsys",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --config webpack.config.js --config-name portal",
+    "start:dev": "npm-run-all --parallel start:watch start:server",
+    "start:watch": "webpack --config webpack.config.js --config-name hot-reload",
+    "start:server": "node server.js",
+    "test": "jest",
+    "test:watch": "jest --watchAll"
+  },
+  "author": "",
+  "license": "ISC",
+  "babel": {
+    "presets": [
+      "@babel/preset-react",
+      "@babel/typescript",
+      [
+        "@babel/env",
+        {
+          "modules": false
+        }
+      ]
+    ]
+  },
+  "jest": {
+    "moduleDirectories": [
+      "node_modules",
+      "src"
+    ],
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest",
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "setupFiles": [
+      "./src/setupTests.ts"
+    ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.3.3",
+    "@babel/polyfill": "^7.2.5",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-typescript": "^7.3.3",
+    "@types/clearbladejs-server": "^1.1.1",
+    "@types/jest": "^24.0.6",
+    "@types/node": "^11.9.4",
+    "@types/react": "^16.8.10",
+    "axios": "^0.18.0",
+    "babel-jest": "^24.1.0",
+    "babel-loader": "^8.0.5",
+    "body-parser": "^1.18.3",
+    "chalk": "^2.4.2",
+    "chokidar": "^2.1.5",
+    "express": "^4.16.4",
+    "jest": "^24.1.0",
+    "jest-cli": "^24.1.0",
+    "npm-run-all": "^4.1.5",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "socket.io": "^2.2.0",
+    "source-map-loader": "^0.2.4",
+    "ts-jest": "^24.0.0",
+    "typescript": "^3.3.3",
+    "webpack": "^4.29.4",
+    "webpack-cli": "^3.3.0",
+    "webpack-dev-server": "^3.2.1",
+    "webpack-hot-middleware": "^2.24.3"
+  },
+  "dependencies": {}
+}

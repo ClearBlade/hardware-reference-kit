@@ -1,0 +1,13 @@
+{
+    "auto_balance": false,
+    "auto_restart": false,
+    "concurrency": 0,
+    "dependencies": "log,ClearBladeAdminRESTLib,QPromiseLib",
+    "execution_timeout": 60,
+    "logging_enabled": true,
+    "name": "TestInstallIPM",
+    "params": [
+        "{}"
+    ],
+    "run_user": ""
+}

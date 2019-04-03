@@ -1,0 +1,20 @@
+{
+    "HAS_UNIQUE_STYLE": false,
+    "backgroundColor": "#f5f5f5",
+    "backgroundHoverColor": "#c2c2c2",
+    "borderColor": "#cccccc",
+    "eventTarget": {
+        "dataType": "CALCULATED_DATA_TYPE",
+        "force_data": [
+            "CALCULATED_DATA_TYPE",
+            "DYNAMIC_DATA_TYPE"
+        ],
+        "outgoing_parser": {
+            "isDebugOn": false,
+            "value": "return this.widget;"
+        },
+        "value": "./parsers/eventTarget/outgoing_parser/index.js"
+    },
+    "fontColor": "#000000",
+    "label": "ExistingPlatform"
+}

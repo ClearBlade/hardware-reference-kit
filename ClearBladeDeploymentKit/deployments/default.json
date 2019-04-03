@@ -1,0 +1,65 @@
+{
+    "assets": [
+        {
+            "asset_class": "portals",
+            "asset_id": "provision",
+            "deployment": "default",
+            "member": "default_deployment_edge_group",
+            "sync": false
+        },
+        {
+            "asset_class": "services",
+            "asset_id": "SetupPlatformSystemForEdge",
+            "deployment": "default",
+            "member": "default_deployment_edge_group",
+            "sync": false
+        },
+        {
+            "asset_class": "services",
+            "asset_id": "RetrieveWorkflowConfig",
+            "deployment": "default",
+            "member": "default_deployment_edge_group",
+            "sync": false
+        },
+        {
+            "asset_class": "libraries",
+            "asset_id": "Util",
+            "deployment": "default",
+            "member": "default_deployment_edge_group",
+            "sync": false
+        },
+        {
+            "asset_class": "libraries",
+            "asset_id": "QPromiseLib",
+            "deployment": "default",
+            "member": "default_deployment_edge_group",
+            "sync": false
+        },
+        {
+            "asset_class": "libraries",
+            "asset_id": "chance",
+            "deployment": "default",
+            "member": "default_deployment_edge_group",
+            "sync": false
+        },
+        {
+            "asset_class": "libraries",
+            "asset_id": "ClearBladeAdminRESTLib",
+            "deployment": "default",
+            "member": "default_deployment_edge_group",
+            "sync": false
+        },
+        {
+            "asset_class": "libraries",
+            "asset_id": "Configuration",
+            "deployment": "default",
+            "member": "default_deployment_edge_group",
+            "sync": false
+        }
+    ],
+    "description": "Default deployment",
+    "edges": [
+        "___ALL_EDGES___"
+    ],
+    "name": "default"
+}

@@ -1,0 +1,13 @@
+{
+    "auto_balance": false,
+    "auto_restart": false,
+    "concurrency": 0,
+    "dependencies": "log,QPromiseLib,ClearBladeAdminRESTLib",
+    "execution_timeout": 60,
+    "logging_enabled": true,
+    "name": "TestIPMInstallFull",
+    "params": [
+        "{}"
+    ],
+    "run_user": ""
+}

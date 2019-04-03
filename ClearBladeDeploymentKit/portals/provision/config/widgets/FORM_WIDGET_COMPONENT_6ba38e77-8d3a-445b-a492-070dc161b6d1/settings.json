@@ -1,0 +1,86 @@
+{
+    "HAS_UNIQUE_STYLE": false,
+    "cardBackgroundColor": "#f5f5f5",
+    "displayColumn": "name",
+    "editColumns": {
+        "provEmail": {
+            "dataType": "string",
+            "display": true,
+            "errorText": "Must enter a valid email",
+            "key": "aeb81de5-7e53-4738-b5c3-ada567cba9e2",
+            "label": "Provisioner Email",
+            "name": "provEmail",
+            "orderIdx": 3,
+            "required": true,
+            "validationType": "email",
+            "widthPercent": "50"
+        },
+        "provPassword": {
+            "dataType": "string",
+            "display": true,
+            "inputType": "password",
+            "key": "1151e9e1-22bb-4049-919a-c2bac596c53d",
+            "label": "Password",
+            "name": "provPassword",
+            "orderIdx": 4,
+            "required": true,
+            "widthPercent": "50"
+        },
+        "systemKey": {
+            "dataType": "string",
+            "display": true,
+            "errorText": "Must enter a valid URL",
+            "inputType": "text",
+            "key": "3f4eeddd-3917-4099-9e3d-68d7e878568d",
+            "label": "System Key",
+            "name": "systemKey",
+            "orderIdx": 1,
+            "required": true,
+            "validationType": "",
+            "widthPercent": "100"
+        },
+        "systemSecret": {
+            "dataType": "string",
+            "display": true,
+            "key": "9be3ea76-eb36-4f4f-9347-4b5d62d1dfc9",
+            "label": "System Secret",
+            "name": "systemSecret",
+            "orderIdx": 2,
+            "required": true
+        }
+    },
+    "eventTarget": {
+        "dataType": "CALCULATED_DATA_TYPE",
+        "force_data": [
+            "CALCULATED_DATA_TYPE",
+            "DYNAMIC_DATA_TYPE"
+        ],
+        "outgoing_parser": {
+            "isDebugOn": false,
+            "value": "return this.widget;"
+        },
+        "value": "./parsers/eventTarget/outgoing_parser/index.js"
+    },
+    "fontColor": "#000000",
+    "isReadOnly": false,
+    "listSource": {
+        "dataType": "CALCULATED_DATA_TYPE",
+        "force_data": [
+            "STATIC_DATA_TYPE",
+            "CALCULATED_DATA_TYPE",
+            "DYNAMIC_DATA_TYPE"
+        ],
+        "incoming_parser": {
+            "isDebugOn": false,
+            "value": "return this.datasource;"
+        },
+        "value": "./parsers/listSource/incoming_parser/index.js"
+    },
+    "listTitle": "Enter the details of your existing system below:",
+    "noDataText": "No data",
+    "sliderColor": "#6E8592",
+    "submitText": "Submit",
+    "successNotificationText": "Form Submitted!",
+    "titleColor": "#000000",
+    "toggleColor": "#6E8592"
+}

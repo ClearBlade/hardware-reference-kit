@@ -1,0 +1,59 @@
+{
+    "HAS_UNIQUE_STYLE": false,
+    "cardBackgroundColor": "#f5f5f5",
+    "displayColumn": "name",
+    "editColumns": {
+        "system": {
+            "dataType": "string",
+            "display": true,
+            "dropdownOptions": [
+                "smart-monitoring",
+                "another-template"
+            ],
+            "errorText": "Must enter a valid URL",
+            "inputType": "option",
+            "isReadOnly": false,
+            "key": "3f4eeddd-3917-4099-9e3d-68d7e878568d",
+            "label": "System Template",
+            "name": "system",
+            "orderIdx": 1,
+            "required": false,
+            "validationType": "",
+            "widthPercent": "100"
+        }
+    },
+    "eventTarget": {
+        "dataType": "CALCULATED_DATA_TYPE",
+        "force_data": [
+            "CALCULATED_DATA_TYPE",
+            "DYNAMIC_DATA_TYPE"
+        ],
+        "outgoing_parser": {
+            "isDebugOn": false,
+            "value": "return this.widget;"
+        },
+        "value": "./parsers/eventTarget/outgoing_parser/index.js"
+    },
+    "fontColor": "#000000",
+    "isReadOnly": false,
+    "listSource": {
+        "dataType": "DYNAMIC_DATA_TYPE",
+        "force_data": [
+            "STATIC_DATA_TYPE",
+            "CALCULATED_DATA_TYPE",
+            "DYNAMIC_DATA_TYPE"
+        ],
+        "id": "007081b8-d838-49c3-a6a6-6f56e5102dc7",
+        "incoming_parser": {
+            "isDebugOn": false,
+            "value": "./parsers/listSource/incoming_parser/index.js"
+        }
+    },
+    "listTitle": "Select from the IoT System Template you wish to create:",
+    "noDataText": "No data",
+    "sliderColor": "#6E8592",
+    "submitText": "Submit",
+    "successNotificationText": "Form Submitted!",
+    "titleColor": "#000000",
+    "toggleColor": "#6E8592"
+}

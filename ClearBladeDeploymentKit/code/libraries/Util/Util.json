@@ -1,0 +1,7 @@
+{
+    "api": "",
+    "dependencies": "chance",
+    "description": "Utility methods for CDK",
+    "name": "Util",
+    "visibility": "system"
+}

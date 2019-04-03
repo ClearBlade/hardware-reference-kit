@@ -1,0 +1,57 @@
+{
+    "HAS_UNIQUE_STYLE": false,
+    "buttonColor": "#007bff",
+    "buttonGroupColor": "#007bff",
+    "cardBackgroundColor": "#f5f5f5",
+    "displayColumn": "name",
+    "editColumns": {
+        "platformURL": {
+            "dataType": "string",
+            "display": true,
+            "errorText": "Must enter a valid URL",
+            "inputType": "text",
+            "key": "3f4eeddd-3917-4099-9e3d-68d7e878568d",
+            "label": "Platform URL",
+            "name": "platformURL",
+            "orderIdx": 1,
+            "required": true,
+            "validationType": "url",
+            "widthPercent": "100"
+        }
+    },
+    "eventTarget": {
+        "dataType": "CALCULATED_DATA_TYPE",
+        "force_data": [
+            "CALCULATED_DATA_TYPE",
+            "DYNAMIC_DATA_TYPE"
+        ],
+        "outgoing_parser": {
+            "isDebugOn": false,
+            "value": "return this.widget;"
+        },
+        "value": "./parsers/eventTarget/outgoing_parser/index.js"
+    },
+    "fontColor": "#000000",
+    "isReadOnly": false,
+    "listSource": {
+        "dataType": "CALCULATED_DATA_TYPE",
+        "force_data": [
+            "STATIC_DATA_TYPE",
+            "CALCULATED_DATA_TYPE",
+            "DYNAMIC_DATA_TYPE"
+        ],
+        "incoming_parser": {
+            "isDebugOn": false,
+            "value": "return this.datasource;"
+        },
+        "value": "./parsers/listSource/incoming_parser/index.js"
+    },
+    "listTitle": "Enter the URL to the platform that you're connecting to:",
+    "noDataText": "No data",
+    "sliderColor": "#6E8592",
+    "submitText": "Submit",
+    "successNotificationText": "Form Submitted!",
+    "titleColor": "#000000",
+    "toggleColor": "#6E8592",
+    "typeaheadColor": "#007bff"
+}

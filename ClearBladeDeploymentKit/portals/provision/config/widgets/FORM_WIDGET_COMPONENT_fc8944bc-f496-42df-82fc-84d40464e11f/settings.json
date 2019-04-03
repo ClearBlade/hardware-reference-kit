@@ -1,0 +1,64 @@
+{
+    "HAS_UNIQUE_STYLE": false,
+    "cardBackgroundColor": "#f5f5f5",
+    "displayColumn": "name",
+    "editColumns": {
+        "devEmail": {
+            "dataType": "string",
+            "display": true,
+            "errorText": "Must enter a valid email",
+            "inputType": "text",
+            "key": "3f4eeddd-3917-4099-9e3d-68d7e878568d",
+            "label": "Developer Email",
+            "name": "devEmail",
+            "orderIdx": 1,
+            "required": true,
+            "validationType": "email",
+            "widthPercent": "100"
+        },
+        "devPassword": {
+            "dataType": "string",
+            "display": true,
+            "inputType": "password",
+            "key": "76279930-1e06-4bf9-8cb0-5ed590f9bfcc",
+            "label": "Password",
+            "name": "devPassword",
+            "orderIdx": 2,
+            "required": true
+        }
+    },
+    "eventTarget": {
+        "dataType": "CALCULATED_DATA_TYPE",
+        "force_data": [
+            "CALCULATED_DATA_TYPE",
+            "DYNAMIC_DATA_TYPE"
+        ],
+        "outgoing_parser": {
+            "isDebugOn": false,
+            "value": "return this.widget;"
+        },
+        "value": "./parsers/eventTarget/outgoing_parser/index.js"
+    },
+    "fontColor": "#000000",
+    "isReadOnly": false,
+    "listSource": {
+        "dataType": "CALCULATED_DATA_TYPE",
+        "force_data": [
+            "STATIC_DATA_TYPE",
+            "CALCULATED_DATA_TYPE",
+            "DYNAMIC_DATA_TYPE"
+        ],
+        "incoming_parser": {
+            "isDebugOn": false,
+            "value": "return this.datasource;"
+        },
+        "value": "./parsers/listSource/incoming_parser/index.js"
+    },
+    "listTitle": "Enter your developer email and password below:",
+    "noDataText": "No data",
+    "sliderColor": "#6E8592",
+    "submitText": "Submit",
+    "successNotificationText": "Form Submitted!",
+    "titleColor": "#000000",
+    "toggleColor": "#6E8592"
+}
