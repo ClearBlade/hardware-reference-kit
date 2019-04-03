@@ -15,14 +15,14 @@
   "license": "ISC",
   "babel": {
     "presets": [
-      "@babel/preset-react",
       "@babel/typescript",
       [
         "@babel/env",
         {
           "modules": false
         }
-      ]
+      ],
+      "@babel/preset-react"
     ]
   },
   "jest": {
@@ -69,5 +69,7 @@
     "webpack-dev-server": "^3.2.1",
     "webpack-hot-middleware": "^2.24.3"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@material-ui/core": "^3.9.3"
+  }
 }
