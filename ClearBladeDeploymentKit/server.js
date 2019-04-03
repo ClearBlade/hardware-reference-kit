@@ -12,6 +12,7 @@ const app = express();
 const serverPort = 3002;
 const socketPort = 8000;
 const portalName = process.env.PORTAL;
+const configDir = 'config/'
 
 // parsing middleware
 app.use(bodyParser.json())
@@ -26,7 +27,7 @@ io.on('connection', function (socket) {
   // watch files
   const watcher = chokidar.watch(`./portals/${portalName}/config/`);
   watcher.on('change', (filepath) => {
-    const slicedPath = filepath.slice(17);
+    const slicedPath = filepath.slice(filepath.indexOf(configDir) + configDir.length);
     const thePayload = utils.parseChangedFilePath(slicedPath);
     if (thePayload) {
       console.log(chalk.green(`Reloading ${slicedPath.split('/')[1]}`));

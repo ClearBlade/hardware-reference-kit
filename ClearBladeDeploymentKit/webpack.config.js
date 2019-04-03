@@ -22,6 +22,7 @@ const parserName = process.env.PARSER;
 //   throw new Error("Missing PARSER variable");
 // }
 
+const configDir = "config/"
 function getFilesFromDir(dir, fileTypes) {
   var filesToReturn = [];
   function walkDir(currentPath) {
@@ -41,7 +42,7 @@ function getFilesFromDir(dir, fileTypes) {
 
 const portalFiles = getFilesFromDir(`./src/portals/${portalName}/config`, '.tsx');
 const portalEntries = portalFiles.reduce((allEntries, srcName) => {
-  const resultName = `.${srcName.slice(20)}`.replace('.tsx', '.js');
+  const resultName = `${srcName.slice(srcName.indexOf(configDir)+configDir.length)}`.replace('.tsx', '.js');
   const source = `./${srcName}`;
   allEntries[resultName] = source;
   return allEntries;

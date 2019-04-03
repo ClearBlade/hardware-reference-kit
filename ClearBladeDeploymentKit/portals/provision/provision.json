@@ -18,7 +18,7 @@
             "54517578-ffa6-4e25-8146-1bc73c987bfd": "sm",
             "558d3af5-10ce-495a-80f0-35a19fd10a71": "md",
             "56d7905a-74a0-4b6a-b172-000462247e44": "md",
-            "684045a0-0667-4252-bd95-fe755259e3e0": "xs",
+            "684045a0-0667-4252-bd95-fe755259e3e0": "sm",
             "705c9d69-272c-432a-b906-6ff2812ec933": "lg",
             "72e34be8-d170-45c4-a3a9-025f4cd8fc65": "lg",
             "7fa8581b-0e43-4518-bab8-55b0f920d9c7": "md",
@@ -26,6 +26,7 @@
             "9dda997c-1cfc-41bf-9eab-6f0e36d07c7f": "lg",
             "a398d167-e3ee-4bb7-995b-1909d41394d5": "lg",
             "be1d2001-f07e-43fa-82b0-259a20b85e4c": "md",
+            "d4b8a4a6-6391-4b92-8365-0883c547c4a7": "lg",
             "e00f1fb0-48ad-4c04-b0cc-95be6431cef9": "md"
         },
         "datasources": "./config/datasources",
@@ -71,6 +72,8 @@
                 {
                     "h": 1,
                     "i": "385764a5-3295-4ffd-a207-3c019eec95ce",
+                    "moved": false,
+                    "static": false,
                     "w": 36,
                     "x": 83,
                     "y": 0
@@ -89,6 +92,8 @@
                 {
                     "h": 1,
                     "i": "385764a5-3295-4ffd-a207-3c019eec95ce",
+                    "moved": false,
+                    "static": false,
                     "w": 36,
                     "x": 64,
                     "y": 0
@@ -102,11 +107,13 @@
                     "static": false,
                     "w": 31,
                     "x": 71,
-                    "y": 0
+                    "y": 1
                 },
                 {
                     "h": 1,
                     "i": "385764a5-3295-4ffd-a207-3c019eec95ce",
+                    "moved": false,
+                    "static": false,
                     "w": 36,
                     "x": 40,
                     "y": 0
@@ -163,6 +170,16 @@
                 "isChild": true,
                 "isParam": false,
                 "name": "ExistingPlatform",
+                "path": ""
+            },
+            "21ec0869-455b-41e3-bb6b-9e0e9549346b": {
+                "children": [],
+                "defaultValue": "",
+                "href": "",
+                "id": "21ec0869-455b-41e3-bb6b-9e0e9549346b",
+                "isChild": false,
+                "isParam": false,
+                "name": "Steps",
                 "path": ""
             },
             "3f057d74-36d0-4ba7-9e39-ada29e46cb5d": {
@@ -1286,6 +1303,22 @@
                 "xs": [],
                 "xxs": []
             },
+            "d4b8a4a6-6391-4b92-8365-0883c547c4a7": {
+                "lg": [
+                    {
+                        "h": 9,
+                        "i": "50a1ee29-2dec-4061-a874-4bcce6bed968",
+                        "minH": 3,
+                        "w": 12,
+                        "x": 0,
+                        "y": 0
+                    }
+                ],
+                "md": [],
+                "sm": [],
+                "xs": [],
+                "xxs": []
+            },
             "e00f1fb0-48ad-4c04-b0cc-95be6431cef9": {
                 "lg": [
                     {
@@ -1460,6 +1493,63 @@
                     {
                         "h": 2,
                         "i": "a9bd41f3-391c-49a3-9115-7b4d37f6138c",
+                        "moved": false,
+                        "static": false,
+                        "w": 2,
+                        "x": 0,
+                        "y": 0
+                    }
+                ]
+            },
+            "21ec0869-455b-41e3-bb6b-9e0e9549346b": {
+                "lg": [
+                    {
+                        "h": 5,
+                        "i": "be0e2282-8545-4b40-8ef9-e04b41a4412c",
+                        "moved": false,
+                        "static": false,
+                        "w": 12,
+                        "x": 0,
+                        "y": 0
+                    }
+                ],
+                "md": [
+                    {
+                        "h": 5,
+                        "i": "be0e2282-8545-4b40-8ef9-e04b41a4412c",
+                        "moved": false,
+                        "static": false,
+                        "w": 10,
+                        "x": 0,
+                        "y": 0
+                    }
+                ],
+                "sm": [
+                    {
+                        "h": 5,
+                        "i": "be0e2282-8545-4b40-8ef9-e04b41a4412c",
+                        "moved": false,
+                        "static": false,
+                        "w": 6,
+                        "x": 0,
+                        "y": 0
+                    }
+                ],
+                "xs": [
+                    {
+                        "h": 5,
+                        "i": "be0e2282-8545-4b40-8ef9-e04b41a4412c",
+                        "moved": false,
+                        "static": false,
+                        "w": 4,
+                        "x": 0,
+                        "y": 0
+                    }
+                ],
+                "xxs": [
+                    {
+                        "h": 5,
+                        "i": "be0e2282-8545-4b40-8ef9-e04b41a4412c",
                         "moved": false,
                         "static": false,
                         "w": 2,
@@ -2236,6 +2326,28 @@
                     "tabbed": false
                 },
                 "themeType": "primary"
+            },
+            "be0e2282-8545-4b40-8ef9-e04b41a4412c": {
+                "customPaneId": "",
+                "header": {
+                    "hide": true,
+                    "title": ""
+                },
+                "hiddenBreakpoints": {},
+                "hideBorders": false,
+                "id": "be0e2282-8545-4b40-8ef9-e04b41a4412c",
+                "pageId": "21ec0869-455b-41e3-bb6b-9e0e9549346b",
+                "tabInfo": {
+                    "activeTab": "d4b8a4a6-6391-4b92-8365-0883c547c4a7",
+                    "tabIds": [
+                        "d4b8a4a6-6391-4b92-8365-0883c547c4a7"
+                    ],
+                    "tabTitles": {
+                        "d4b8a4a6-6391-4b92-8365-0883c547c4a7": "Double Click"
+                    },
+                    "tabbed": false
+                },
+                "themeType": "default"
             },
             "c44893dc-6a15-4ed2-828b-741dbc282caf": {
                 "customPaneId": "",
