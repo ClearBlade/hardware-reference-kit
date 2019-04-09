@@ -71,12 +71,12 @@ const CONFIGURATION = {
     PLATFORM: {
       [FLOW.PRECONFIGURED]: function(
         config: WorkflowConfig
-      ): Promise<IClearBladeAdminREST> {
+      ): Q.Promise<IClearBladeAdminREST> {
         // needs nothing
         const platformURL = config.PLATFORM.platformURL;
         log("platform");
         log({ platformURL });
-        const deferred = Q.defer();
+        const deferred = Q.defer<IClearBladeAdminREST>();
         const rest = ClearBladeAdminREST(platformURL);
         deferred.resolve(rest);
         return deferred.promise;
@@ -86,7 +86,7 @@ const CONFIGURATION = {
       [FLOW.NEW]: function(
         rest: IClearBladeAdminREST,
         config: WorkflowConfig
-      ): Promise<IClearBladeAdminREST> {
+      ): Q.Promise<IClearBladeAdminREST> {
         const devAttributes = config.DEVELOPER;
 
         const devEmail = devAttributes.devEmail;
@@ -95,7 +95,7 @@ const CONFIGURATION = {
 
         log("dev");
         log({ devEmail, devPassword });
-        const deferred = Q.defer();
+        const deferred = Q.defer<IClearBladeAdminREST>();
         rest.registerDeveloper(devEmail, devPassword, registrationKey).then(
           () => deferred.resolve(rest),
           err => {
@@ -107,7 +107,7 @@ const CONFIGURATION = {
       [FLOW.EXISTING]: function(
         rest: IClearBladeAdminREST,
         config: WorkflowConfig
-      ): Promise<IClearBladeAdminREST> {
+      ): Q.Promise<IClearBladeAdminREST> {
         const devAttributes = config.DEVELOPER;
 
         const devEmail = devAttributes.devEmail;
@@ -115,7 +115,7 @@ const CONFIGURATION = {
 
         log("dev");
         log({ devEmail, devPassword });
-        const deferred = Q.defer();
+        const deferred = Q.defer<IClearBladeAdminREST>();
         rest
           .initWithCreds(devEmail, devPassword)
           .then(() => deferred.resolve(rest), err => deferred.reject(err));

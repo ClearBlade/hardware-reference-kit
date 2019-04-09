@@ -23,7 +23,7 @@ function ClearBladeAdminREST(url: string) {
   /**
    * Create a System on behalf of the developer
    */
-  function createSystem(systemName: string) {
+  function createSystem(systemName: string): Q.Promise<string> {
     log({ systemName });
     const headers = {
       "ClearBlade-DevToken": token
@@ -42,7 +42,7 @@ function ClearBladeAdminREST(url: string) {
       body
     };
     log(options);
-    const deferred = Q.defer();
+    const deferred = Q.defer<string>();
     http.post(options, function(err, data) {
       try {
         if (err) throw new Error("POST failed: " + err);
@@ -55,7 +55,11 @@ function ClearBladeAdminREST(url: string) {
     return deferred.promise;
   }
 
-  function registerDeveloper(email: string, password: string, key: string) {
+  function registerDeveloper(
+    email: string,
+    password: string,
+    key: string
+  ): Q.Promise<object> {
     const headers = {};
 
     const fname = "self";
@@ -109,9 +113,9 @@ function ClearBladeAdminREST(url: string) {
     repoUser: string,
     repoName: string,
     developerEmail: string
-  ): Promise<SystemDetails> {
+  ): Q.Promise<SystemDetails> {
     log("#installIPMIntoNewSystem");
-    const deferred = Q.defer();
+    const deferred = Q.defer<SystemDetails>();
     prepareInstall(repoUser, repoName)
       .then(function(listOfFilesToImport: string[]) {
         log("Succeeded #prepareInstall");
@@ -144,7 +148,7 @@ function ClearBladeAdminREST(url: string) {
   function prepareInstall(
     repoUser: string,
     repoName: string
-  ): Promise<string[]> {
+  ): Q.Promise<string[]> {
     log("#prepareInstall");
     const headers = {
       "ClearBlade-DevToken": token
@@ -164,7 +168,7 @@ function ClearBladeAdminREST(url: string) {
       body
     };
     log({ options });
-    const deferred = Q.defer();
+    const deferred = Q.defer<string[]>();
     http.get(options, function(err, data) {
       try {
         if (err) throw new Error("#prepareInstall Failed: " + err);
@@ -192,7 +196,7 @@ function ClearBladeAdminREST(url: string) {
     repoName: string,
     developerEmail: string,
     listOfFilesToImport: string[]
-  ): Promise<SystemDetails> {
+  ): Q.Promise<SystemDetails> {
     log("#executeInstall");
     const headers = {
       "ClearBlade-DevToken": token
@@ -222,7 +226,7 @@ function ClearBladeAdminREST(url: string) {
       body
     };
     log(options);
-    const deferred = Q.defer();
+    const deferred = Q.defer<SystemDetails>();
     http.post(options, function(err, data) {
       try {
         if (err) throw new Error("#executeInstall failed: " + err);
@@ -246,7 +250,7 @@ function ClearBladeAdminREST(url: string) {
     systemSecret: string,
     edgeToken: string,
     description: string
-  ): Promise<string> {
+  ): Q.Promise<string> {
     const headers = {
       "ClearBlade-DevToken": token
     };
@@ -264,7 +268,7 @@ function ClearBladeAdminREST(url: string) {
     };
 
     log({ options });
-    const deferred = Q.defer();
+    const deferred = Q.defer<string>();
     http.post(options, function(err, data) {
       if (err) {
         log(err);
@@ -280,7 +284,7 @@ function ClearBladeAdminREST(url: string) {
   /**
    * Initialize admin developer client with credentials
    */
-  function initWithCreds(email: string, password: string) {
+  function initWithCreds(email: string, password: string): Q.Promise<object> {
     const headers = {};
     const body = {
       email,
@@ -342,7 +346,7 @@ function ClearBladeAdminREST(url: string) {
     systemKeyOverride: string,
     edgeName: string,
     edgeCookie: string
-  ) {
+  ): Q.Promise<object> {
     // platformIPOverride must omit protocol
     platformIPOverride = platformIPOverride.replace(/(^\w+:|^)\/\//, "");
     const options = {
@@ -381,7 +385,7 @@ function ClearBladeAdminREST(url: string) {
     systemKey: string,
     systemSecret: string,
     portalName: string
-  ) {
+  ): Q.Promise<object> {
     const headers = {};
     const body = {};
     const qs = [
