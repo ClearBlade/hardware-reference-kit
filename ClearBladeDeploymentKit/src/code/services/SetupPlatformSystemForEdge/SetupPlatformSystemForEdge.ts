@@ -61,10 +61,7 @@ function SetupPlatformSystemForEdge(
 
   function setupPlatform() {
     const flow = provisionConfig.PLATFORM.flow;
-    return flowMap.PLATFORM[flow](
-      provisionConfig,
-      resp
-    );
+    return flowMap.PLATFORM[flow](provisionConfig);
   }
 
   function setupDeveloper(rest: IClearBladeAdminREST) {

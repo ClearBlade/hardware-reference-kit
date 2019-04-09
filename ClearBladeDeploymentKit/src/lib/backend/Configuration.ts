@@ -70,8 +70,7 @@ const CONFIGURATION = {
   WORKFLOW_MAP: {
     PLATFORM: {
       [FLOW.PRECONFIGURED]: function(
-        config: WorkflowConfig,
-        resp: CbServer.Resp
+        config: WorkflowConfig
       ): Promise<IClearBladeAdminREST> {
         // needs nothing
         const platformURL = config.PLATFORM.platformURL;
@@ -97,11 +96,12 @@ const CONFIGURATION = {
         log("dev");
         log({ devEmail, devPassword });
         const deferred = Q.defer();
-        rest
-          .registerDeveloper(devEmail, devPassword, registrationKey)
-          .then(function() {
-            deferred.resolve(rest);
-          });
+        rest.registerDeveloper(devEmail, devPassword, registrationKey).then(
+          () => deferred.resolve(rest),
+          err => {
+            deferred.reject(err);
+          }
+        );
         return deferred.promise;
       },
       [FLOW.EXISTING]: function(
@@ -116,9 +116,9 @@ const CONFIGURATION = {
         log("dev");
         log({ devEmail, devPassword });
         const deferred = Q.defer();
-        rest.initWithCreds(devEmail, devPassword).then(function() {
-          deferred.resolve(rest);
-        });
+        rest
+          .initWithCreds(devEmail, devPassword)
+          .then(() => deferred.resolve(rest), err => deferred.reject(err));
         return deferred.promise;
       }
     },
@@ -134,11 +134,12 @@ const CONFIGURATION = {
         const deferred = Q.defer();
         // Warning: systemDetails contains camelCase and snake_case system keys/secrets.
         // ...the camelCase are the newly created system
-        rest
-          .installIPMIntoNewSystem(repoUser, repoName, devEmail)
-          .then(function(systemDetails) {
+        rest.installIPMIntoNewSystem(repoUser, repoName, devEmail).then(
+          systemDetails => {
             deferred.resolve({ rest, systemDetails, config });
-          });
+          },
+          err => deferred.reject(err)
+        );
         return deferred.promise;
       },
       [FLOW.EXISTING]: function(
@@ -178,16 +179,14 @@ const CONFIGURATION = {
         rest
           .createEdge(edgeID, systemKey, systemSecret, edgeToken, description)
           .then(
-            function(edgeDetailsRaw) {
+            edgeDetailsRaw => {
               // Relying on promise catch
               const edgeDetails = JSON.parse(edgeDetailsRaw);
               // append platformURL to edge details
               edgeDetails.platformURL = config.PLATFORM.platformURL;
               deferred.resolve({ rest, systemDetails, edgeDetails });
             },
-            function(err) {
-              deferred.reject(err);
-            }
+            err => deferred.reject(err)
           );
         return deferred.promise;
       }
