@@ -1,7 +1,0 @@
-{
-    "api": "",
-    "dependencies": "http,QPromiseLib",
-    "description": "ClearBlade REST API for Users",
-    "name": "ClearBladeRESTLib",
-    "visibility": "system"
-}
