@@ -177,13 +177,18 @@ const CONFIGURATION = {
         const rest = response.rest;
         rest
           .createEdge(edgeID, systemKey, systemSecret, edgeToken, description)
-          .then(function(edgeDetailsRaw) {
-            // Relying on promise catch
-            const edgeDetails = JSON.parse(edgeDetailsRaw);
-            // append platformURL to edge details
-            edgeDetails.platformURL = config.PLATFORM.platformURL;
-            deferred.resolve({ rest, systemDetails, edgeDetails });
-          });
+          .then(
+            function(edgeDetailsRaw) {
+              // Relying on promise catch
+              const edgeDetails = JSON.parse(edgeDetailsRaw);
+              // append platformURL to edge details
+              edgeDetails.platformURL = config.PLATFORM.platformURL;
+              deferred.resolve({ rest, systemDetails, edgeDetails });
+            },
+            function(err) {
+              deferred.reject(err);
+            }
+          );
         return deferred.promise;
       }
     }
