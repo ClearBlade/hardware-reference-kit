@@ -77,10 +77,10 @@ const CONFIGURATION = {
         const platformURL = config.PLATFORM.platformURL;
         log("platform");
         log({ platformURL });
-        return new Promise(resolve => {
-          const rest = ClearBladeAdminREST(platformURL);
-          resolve(rest);
-        });
+        const deferred = Q.defer();
+        const rest = ClearBladeAdminREST(platformURL);
+        deferred.resolve(rest);
+        return deferred.promise;
       }
     },
     DEVELOPER: {
@@ -96,13 +96,13 @@ const CONFIGURATION = {
 
         log("dev");
         log({ devEmail, devPassword });
-        return new Promise(resolve => {
-          rest
-            .registerDeveloper(devEmail, devPassword, registrationKey)
-            .then(function() {
-              resolve(rest);
-            });
-        });
+        const deferred = Q.defer();
+        rest
+          .registerDeveloper(devEmail, devPassword, registrationKey)
+          .then(function() {
+            deferred.resolve(rest);
+          });
+        return deferred.promise;
       },
       [FLOW.EXISTING]: function(
         rest: IClearBladeAdminREST,
@@ -115,11 +115,11 @@ const CONFIGURATION = {
 
         log("dev");
         log({ devEmail, devPassword });
-        return new Promise(resolve => {
-          rest.initWithCreds(devEmail, devPassword).then(function() {
-            resolve(rest);
-          });
+        const deferred = Q.defer();
+        rest.initWithCreds(devEmail, devPassword).then(function() {
+          deferred.resolve(rest);
         });
+        return deferred.promise;
       }
     },
     SYSTEM: {
@@ -131,21 +131,21 @@ const CONFIGURATION = {
         const devEmail = "notprovided@gmail.com";
         log("sys");
         log({ repoUser, repoName, devEmail });
-        return new Promise(resolve => {
-          // Warning: systemDetails contains camelCase and snake_case system keys/secrets.
-          // ...the camelCase are the newly created system
-          rest
-            .installIPMIntoNewSystem(repoUser, repoName, devEmail)
-            .then(function(systemDetails) {
-              resolve({ rest, systemDetails, config });
-            });
-        });
+        const deferred = Q.defer();
+        // Warning: systemDetails contains camelCase and snake_case system keys/secrets.
+        // ...the camelCase are the newly created system
+        rest
+          .installIPMIntoNewSystem(repoUser, repoName, devEmail)
+          .then(function(systemDetails) {
+            deferred.resolve({ rest, systemDetails, config });
+          });
+        return deferred.promise;
       },
       [FLOW.EXISTING]: function(
         rest: IClearBladeAdminREST,
         config: WorkflowConfig
       ) {
-        return Promise.resolve({
+        return Q.resolve({
           rest,
           config,
           systemDetails: {
@@ -173,18 +173,18 @@ const CONFIGURATION = {
         const edgeToken = edgeID;
         const description = "no desc";
         log({ edgeID, systemKey, systemSecret, edgeToken, description });
-        return new Promise(resolve => {
-          const rest = response.rest;
-          rest
-            .createEdge(edgeID, systemKey, systemSecret, edgeToken, description)
-            .then(function(edgeDetailsRaw) {
-              // Relying on promise catch
-              const edgeDetails = JSON.parse(edgeDetailsRaw);
-              // append platformURL to edge details
-              edgeDetails.platformURL = config.PLATFORM.platformURL;
-              resolve({ rest, systemDetails, edgeDetails });
-            });
-        });
+        const deferred = Q.defer();
+        const rest = response.rest;
+        rest
+          .createEdge(edgeID, systemKey, systemSecret, edgeToken, description)
+          .then(function(edgeDetailsRaw) {
+            // Relying on promise catch
+            const edgeDetails = JSON.parse(edgeDetailsRaw);
+            // append platformURL to edge details
+            edgeDetails.platformURL = config.PLATFORM.platformURL;
+            deferred.resolve({ rest, systemDetails, edgeDetails });
+          });
+        return deferred.promise;
       }
     }
   }

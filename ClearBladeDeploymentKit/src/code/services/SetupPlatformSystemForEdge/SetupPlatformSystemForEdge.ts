@@ -68,7 +68,6 @@ function SetupPlatformSystemForEdge(
   }
 
   function setupDeveloper(rest: IClearBladeAdminREST) {
-    resp.success("sup setup dev");
     const flow = provisionConfig.DEVELOPER.flow;
     return flowMap.DEVELOPER[flow](
       rest,
@@ -85,33 +84,35 @@ function SetupPlatformSystemForEdge(
   }
 
   function getEntrypointURL(response) {
-    return Promise.resolve(response);
-    log("a");
-    const rest = response.rest;
-    log("a");
-    const systemDetails = response.systemDetails;
-    log("a");
-    const systemKey = systemDetails.systemKey;
-    log("a");
-    const systemSecret = systemDetails.systemSecret;
-    log("a");
-    const portalName = provisionConfig.SYSTEM.entrypoint.portal;
-    log("a");
     const deferred = Q.defer();
-    rest
-      .getEncodedPortalURL(systemKey, systemSecret, portalName)
-      .then(function(raw) {
-        try {
-          json = JSON.parse(raw);
-          log("got url: " + json.url);
-          response.systemDetails.entrypoint = { portal: json.url };
-          deferred.resolve(response);
-        } catch (e) {
-          log("Unable to parse portal url response: " + raw);
-          deferred.reject(e);
-        }
-      });
+    deferred.resolve(response);
     return deferred.promise;
+    // log("a");
+    // const rest = response.rest;
+    // log("a");
+    // const systemDetails = response.systemDetails;
+    // log("a");
+    // const systemKey = systemDetails.systemKey;
+    // log("a");
+    // const systemSecret = systemDetails.systemSecret;
+    // log("a");
+    // const portalName = provisionConfig.SYSTEM.entrypoint.portal;
+    // log("a");
+    // const deferred = Q.defer();
+    // rest
+    //   .getEncodedPortalURL(systemKey, systemSecret, portalName)
+    //   .then(function(raw) {
+    //     try {
+    //       json = JSON.parse(raw);
+    //       log("got url: " + json.url);
+    //       response.systemDetails.entrypoint = { portal: json.url };
+    //       deferred.resolve(response);
+    //     } catch (e) {
+    //       log("Unable to parse portal url response: " + raw);
+    //       deferred.reject(e);
+    //     }
+    //   });
+    // return deferred.promise;
   }
   function setupEdge(edgeRetargetCreds) {
     const flow = provisionConfig.EDGE.flow;
@@ -130,8 +131,8 @@ function SetupPlatformSystemForEdge(
     const edgeID = edgeDetails.name;
     const edgeToken = edgeDetails.token;
     const platformIPOverride = edgeDetails.platformURL;
-    adaptersRootDir = ".";
-    mqttPort = "unused";
+    const adaptersRootDir = ".";
+    const mqttPort = "unused";
     log("About to retarget");
     log("A");
     log(typeof rest.retarget);

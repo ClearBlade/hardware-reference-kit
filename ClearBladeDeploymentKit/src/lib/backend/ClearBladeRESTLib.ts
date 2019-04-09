@@ -4,23 +4,13 @@
  * REST Client for System Users, essentially OpenAPI in a Library
  *
  * Create an Edge within a system via {@link https://docs.clearblade.com/v/3/static/restapi/index.html#/Edge/CreateNewEdge REST Endpoint}
- * @param {string} url url of the clearblade platform, ex. "https://platform.clearblade.com" or "http://localhost:9000"
- * @param {string} systemKey - system key for the system
- * @param {string} systemSecret - system secret for the system
  */
 function ClearBladeREST(url: string, systemKey: string, systemSecret: string) {
   const http = Requests();
   let userToken = "";
 
   /**
-   * memberof ClearBladeREST
-   *
    * Register a new user account
-   *
-   * @param {string} email
-   * @param {string} password
-   * @param {string} anonToken Required for registering
-   * @param {callback} callback TODO Remove
    */
   function register(email: string, password: string, anonToken: string) {
     const headers = {
@@ -38,18 +28,13 @@ function ClearBladeREST(url: string, systemKey: string, systemSecret: string) {
       headers,
       body
     };
-    return new Promise((resolve, reject) => {
-      http.post(options, snagTokenPromise.bind({ resolve, reject }));
-    });
+    const deferred = Q.defer();
+    http.post(options, snagTokenPromise.bind({ deferred }));
+    return deferred.promise;
   }
   /**
-   * @memberof ClearBladeREST
    *
    * Initialize client by logging in with credentials
-   *
-   * @param {string} email
-   * @param {string} password
-   *
    */
   function initWithCreds(email: string, password: string) {
     const headers = {
@@ -67,9 +52,9 @@ function ClearBladeREST(url: string, systemKey: string, systemSecret: string) {
       body
     };
 
-    return new Promise((resolve, reject) => {
-      http.post(options, snagTokenPromise.bind({ resolve, reject }));
-    });
+    const deferred = Q.defer();
+    http.post(options, snagTokenPromise.bind({ deferred }));
+    return deferred.promise;
   }
 
   function initWithToken(t: string) {
@@ -90,14 +75,14 @@ function ClearBladeREST(url: string, systemKey: string, systemSecret: string) {
     };
     log("#executeCode");
     log({ options });
-    return new Promise((resolve, reject) => {
-      http.post(options, function(err, data) {
-        if (err) {
-          reject(err);
-        }
-        resolve(data);
-      });
+    const deferred = Q.defer();
+    http.post(options, function(err, data) {
+      if (err) {
+        deferred.reject(err);
+      }
+      deferred.resolve(data);
     });
+    return deferred.promise;
   }
 
   // TODO Remove callback, remove snagToken
@@ -125,15 +110,11 @@ function ClearBladeREST(url: string, systemKey: string, systemSecret: string) {
     };
     log({ options });
 
-    return new Promise((resolve, reject) => {
-      http.post(options, snagTokenPromise.bind({ resolve, reject }));
-    });
+    const deferred = Q.defer();
+    http.post(options, snagTokenPromise.bind({ deferred }));
+    return deferred.promise;
   }
 
-  /**
-   * @memberof ClearBladeREST
-   *
-   */
   function authAnon() {
     const headers = {
       "ClearBlade-SystemKey": systemKey,
@@ -147,16 +128,16 @@ function ClearBladeREST(url: string, systemKey: string, systemSecret: string) {
       body
     };
 
-    return new Promise((resolve, reject) => {
-      http.post(options, snagTokenPromise.bind({ resolve, reject }));
-    });
+    const deferred = Q.defer();
+    http.post(options, snagTokenPromise.bind({ deferred }));
+    return deferred.promise;
   }
 
   /**
    * Helper method for retrieving user token from auth requests
    */
   function snagTokenPromise(
-    this: { resolve: (data: object) => void; reject: (msg: string) => void },
+    this: { deferred: Q.Deferred<any> },
     err: any,
     data: string
   ) {
@@ -167,11 +148,11 @@ function ClearBladeREST(url: string, systemKey: string, systemSecret: string) {
       log("snagging token");
       userToken = parsed.user_token;
       log({ userToken });
-      this.resolve(parsed);
+      this.deferred.resolve(parsed);
     } catch (e) {
       const msg = "POST Failed: " + JSON.stringify(err);
       log(msg);
-      this.reject(msg);
+      this.deferred.reject(msg);
     }
   }
 
