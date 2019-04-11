@@ -1,6 +1,7 @@
 import ClearBladeAdminREST, {
   IClearBladeAdminREST,
-  SystemDetails
+  SystemSetupInfo,
+  EdgeSetupInfo
 } from "./ClearBladeAdminRESTLib";
 
 export type WorkflowConfig = typeof WORKFLOW_CONFIGURATION;
@@ -123,7 +124,10 @@ const CONFIGURATION = {
       }
     },
     SYSTEM: {
-      [FLOW.IPM]: function(rest: IClearBladeAdminREST, config: WorkflowConfig) {
+      [FLOW.IPM]: function(
+        rest: IClearBladeAdminREST,
+        config: WorkflowConfig
+      ): Q.Promise<SystemSetupInfo> {
         const systemAttributes = config.SYSTEM;
         const repoUser = CONFIGURATION.TARGET.IPM_REPO_USER;
         const repoName = CONFIGURATION.TARGET.IPM_REPO_NAME;
@@ -131,7 +135,7 @@ const CONFIGURATION = {
         const devEmail = "notprovided@gmail.com";
         log("sys");
         log({ repoUser, repoName, devEmail });
-        const deferred = Q.defer();
+        const deferred = Q.defer<SystemSetupInfo>();
         // Warning: systemDetails contains camelCase and snake_case system keys/secrets.
         // ...the camelCase are the newly created system
         rest.installIPMIntoNewSystem(repoUser, repoName, devEmail).then(
@@ -145,7 +149,7 @@ const CONFIGURATION = {
       [FLOW.EXISTING]: function(
         rest: IClearBladeAdminREST,
         config: WorkflowConfig
-      ) {
+      ): Q.Promise<SystemSetupInfo> {
         return Q.resolve({
           rest,
           config,
@@ -158,9 +162,9 @@ const CONFIGURATION = {
     },
     EDGE: {
       [FLOW.NEW]: function(
-        response: { systemDetails: SystemDetails; rest: IClearBladeAdminREST },
+        response: SystemSetupInfo,
         config: WorkflowConfig
-      ) {
+      ): Q.Promise<EdgeSetupInfo> {
         const edgeID = config.EDGE.edgeID;
         log("edge");
 
@@ -174,7 +178,7 @@ const CONFIGURATION = {
         const edgeToken = edgeID;
         const description = "no desc";
         log({ edgeID, systemKey, systemSecret, edgeToken, description });
-        const deferred = Q.defer();
+        const deferred = Q.defer<EdgeSetupInfo>();
         const rest = response.rest;
         rest
           .createEdge(edgeID, systemKey, systemSecret, edgeToken, description)

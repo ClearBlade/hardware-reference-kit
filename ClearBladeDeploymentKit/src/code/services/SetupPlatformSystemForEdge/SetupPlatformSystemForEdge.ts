@@ -2,7 +2,10 @@ import "@babel/polyfill";
 import CONFIGURATION, { WorkflowConfig } from "lib/backend/Configuration";
 import {
   IClearBladeAdminREST,
-  SystemDetails
+  SystemDetails,
+  EdgeDetails,
+  SystemSetupInfo,
+  EdgeSetupInfo
 } from "lib/backend/ClearBladeAdminRESTLib";
 
 const DEBUG = {
@@ -61,12 +64,14 @@ function SetupPlatformSystemForEdge(
 
   function setupPlatform() {
     const flow = provisionConfig.PLATFORM.flow;
-    return flowMap.PLATFORM[flow](provisionConfig);
+    return flowMap.PLATFORM[flow as keyof typeof flowMap.PLATFORM](
+      provisionConfig
+    );
   }
 
   function setupDeveloper(rest: IClearBladeAdminREST) {
     const flow = provisionConfig.DEVELOPER.flow;
-    return flowMap.DEVELOPER[flow](
+    return flowMap.DEVELOPER[flow as keyof typeof flowMap.DEVELOPER](
       rest,
       provisionConfig
     );
@@ -74,14 +79,16 @@ function SetupPlatformSystemForEdge(
 
   function setupSystem(rest: IClearBladeAdminREST) {
     const flow = provisionConfig.SYSTEM.flow;
-    return flowMap.SYSTEM[flow](
+    return flowMap.SYSTEM[flow as keyof typeof flowMap.SYSTEM](
       rest,
       provisionConfig
     );
   }
 
-  function getEntrypointURL(response) {
-    const deferred = Q.defer();
+  function getEntrypointURL(
+    response: SystemSetupInfo
+  ): Q.Promise<SystemSetupInfo> {
+    const deferred = Q.defer<SystemSetupInfo>();
     deferred.resolve(response);
     return deferred.promise;
     // log("a");
@@ -111,15 +118,17 @@ function SetupPlatformSystemForEdge(
     //   });
     // return deferred.promise;
   }
-  function setupEdge(edgeRetargetCreds) {
+  function setupEdge(edgeRetargetCreds: SystemSetupInfo) {
     const flow = provisionConfig.EDGE.flow;
-    return flowMap.EDGE[flow](
+    return flowMap.EDGE[flow as keyof typeof flowMap.EDGE](
       edgeRetargetCreds,
       provisionConfig
     );
   }
 
-  function retarget(edgeRetargetCreds) {
+  function retarget(
+    edgeRetargetCreds: EdgeSetupInfo
+  ): Q.Promise<SystemDetails> {
     log({ edgeRetargetCreds });
     const rest = edgeRetargetCreds.rest;
     const edgeDetails = edgeRetargetCreds.edgeDetails;
@@ -128,15 +137,13 @@ function SetupPlatformSystemForEdge(
     const edgeID = edgeDetails.name;
     const edgeToken = edgeDetails.token;
     const platformIPOverride = edgeDetails.platformURL;
-    const adaptersRootDir = ".";
-    const mqttPort = "unused";
     log("About to retarget");
     log("A");
     log(typeof rest.retarget);
     log("A");
-    const deferred = Q.defer();
+    const deferred = Q.defer<SystemDetails>();
     log("A");
-    const cb = ClearBlade.init({ request: req });
+    ClearBlade.init({ request: req });
     log("A");
     if (!ClearBlade.isEdge()) {
       log("A");
@@ -147,15 +154,8 @@ function SetupPlatformSystemForEdge(
     log("A");
     log("Proceeding as Edge");
     rest
-      .retarget(
-        platformIPOverride,
-        systemKeyOverride,
-        edgeID,
-        edgeToken,
-        adaptersRootDir,
-        mqttPort
-      )
-      .then(function(err, data) {
+      .retarget(platformIPOverride, systemKeyOverride, edgeID, edgeToken)
+      .then(function() {
         deferred.resolve(systemDetails);
       })
       .catch(function() {

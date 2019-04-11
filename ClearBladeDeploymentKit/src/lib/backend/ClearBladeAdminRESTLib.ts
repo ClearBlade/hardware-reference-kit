@@ -1,10 +1,12 @@
+import { WorkflowConfig } from "./Configuration";
+
 export interface SystemDetails {
-  name: string;
+  name?: string;
   systemKey: string;
   systemSecret: string;
 }
 
-interface EdgeDetails {
+export interface EdgeDetails {
   description: string;
   edge_key: string;
   name: string;
@@ -12,7 +14,18 @@ interface EdgeDetails {
   system_key: string;
   system_secret: string;
   token: string;
+  platformURL: string;
 }
+
+export interface SystemSetupInfo {
+  rest: IClearBladeAdminREST;
+  systemDetails: SystemDetails;
+  config: WorkflowConfig;
+}
+
+export type EdgeSetupInfo = SystemSetupInfo & {
+  edgeDetails: EdgeDetails;
+};
 
 export type IClearBladeAdminREST = ReturnType<typeof ClearBladeAdminREST>;
 

@@ -165,3 +165,5 @@ function ClearBladeREST(url: string, systemKey: string, systemSecret: string) {
     createEdge
   };
 }
+
+export default ClearBladeREST;
