@@ -1,5 +1,5 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
@@ -9,10 +9,10 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 
 function getSteps() {
-  return ["hello Bill", "Create an ad group", "Create an ad"];
+  return ["Step 1", "Create an ad group", "Create an ad"];
 }
 
-function getStepContent(step) {
+function getStepContent(step: number) {
   switch (step) {
     case 0:
       return `For each ad campaign that you create, you can control how much
@@ -56,6 +56,14 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
       activeStep: 0
     });
   };
+
+  componentDidMount() {
+    console.log("DID MOUNT!");
+  }
+
+  componentWillUnmount() {
+    console.log("WILL UNMOUNT!");
+  }
 
   render() {
     const steps = getSteps();

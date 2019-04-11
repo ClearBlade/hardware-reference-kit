@@ -3954,7 +3954,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 function getSteps() {
-  return ["hello Bill", "Create an ad group", "Create an ad"];
+  return ["Step 1", "Create an ad group", "Create an ad"];
 }
 
 function getStepContent(step) {
@@ -4021,39 +4021,49 @@ function (_React$Component) {
   }
 
   _createClass(VerticalLinearStepper, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      console.log("DID MOUNT!");
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      console.log("WILL UNMOUNT!");
+    }
+  }, {
     key: "render",
     value: function render() {
       var _this2 = this;
 
       var steps = getSteps();
       var activeStep = this.state.activeStep;
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Stepper__WEBPACK_IMPORTED_MODULE_2___default.a, {
+      return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_material_ui_core_Stepper__WEBPACK_IMPORTED_MODULE_2___default.a, {
         activeStep: activeStep,
         orientation: "vertical"
       }, steps.map(function (label, index) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Step__WEBPACK_IMPORTED_MODULE_3___default.a, {
+        return react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_material_ui_core_Step__WEBPACK_IMPORTED_MODULE_3___default.a, {
           key: label
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_StepLabel__WEBPACK_IMPORTED_MODULE_4___default.a, null, label), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_StepContent__WEBPACK_IMPORTED_MODULE_5___default.a, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_8___default.a, null, getStepContent(index)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_6___default.a, {
+        }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_material_ui_core_StepLabel__WEBPACK_IMPORTED_MODULE_4___default.a, null, label), react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_material_ui_core_StepContent__WEBPACK_IMPORTED_MODULE_5___default.a, null, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_8___default.a, null, getStepContent(index)), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_6___default.a, {
           disabled: activeStep === 0,
           onClick: _this2.handleBack
-        }, "Hello"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_6___default.a, {
+        }, "Hello"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_6___default.a, {
           variant: "contained",
           color: "primary",
           onClick: _this2.handleNext
         }, activeStep === steps.length - 1 ? "Finish" : "Next")))));
-      })), activeStep === steps.length && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_7___default.a, {
+      })), activeStep === steps.length && react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_7___default.a, {
         square: true,
         elevation: 0
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_8___default.a, null, "All steps completed - you're finished"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_6___default.a, {
+      }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_8___default.a, null, "All steps completed - you're finished"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_6___default.a, {
         onClick: this.handleReset
       }, "Reset")));
     }
   }]);
 
   return VerticalLinearStepper;
-}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
-react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(VerticalLinearStepper, null), document.getElementById("deployment-kit-stepper"));
+react_dom__WEBPACK_IMPORTED_MODULE_1__["render"](react__WEBPACK_IMPORTED_MODULE_0__["createElement"](VerticalLinearStepper, null), document.getElementById("deployment-kit-stepper"));
 
 /***/ }),
 /* 60 */

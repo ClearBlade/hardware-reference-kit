@@ -14,6 +14,8 @@ const parserType = "parserType";
 const service = "service";
 const library = "library";
 const messagePort = "messagePort";
+const noSSL = "noSSL";
+const caPath = "caPath";
 
 const mapEntityToWebpackConfig = entity => {
   switch (entity) {
@@ -29,13 +31,15 @@ const mapEntityToWebpackConfig = entity => {
     case library:
       return ["library"];
     default:
-      // used for messagePort because they have defaults to fall back to in server.js
+      // used for messagePort, noSSL, and caPath because they have defaults to fall back to in clearblade-hot-reload
       return [];
   }
 };
 
 const getFlagValue = entity => {
-  const val = process.env[`${npmFlag}${entity}`.toLowerCase()];
+  const val =
+    process.env[`${npmFlag}${entity}`] ||
+    process.env[`${npmFlag}${entity}`.toLowerCase()];
   if (mapEntityToWebpackConfig(entity).indexOf(configName) > -1 && !val) {
     console.error(chalk.red(`Missing ${entity} flag`));
     throw new Error();
@@ -52,6 +56,9 @@ module.exports = {
   service: getFlagValue(service),
   library: getFlagValue(library),
   messagePort: getFlagValue(messagePort),
+  noSSL: getFlagValue(noSSL),
+  caPath: getFlagValue(caPath),
+
   portalEntries: () => {
     if (module.exports.portal && configName === "clearblade-hot-reload") {
       const configPath = `./src/portals/${module.exports.portal}/config`;
