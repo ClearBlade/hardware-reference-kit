@@ -11,10 +11,13 @@ import { FormattedMessage, IntlProvider } from "react-intl";
 
 import messages from "../../../../../../../../lib/frontend/stepper/messages";
 import StepOne from "../../../../../../../../lib/frontend/stepper/steps/StepOne";
+import StepTwo from "../../../../../../../../lib/frontend/stepper/steps/StepTwo";
 import {
   FLOW,
   TARGET_CONFIGURATION,
-  Configuration
+  Configuration,
+  PlatformConfiguration,
+  DeveloperConfiguration
 } from "../../../../../../../../lib/backend/Configuration";
 
 /*
@@ -131,7 +134,15 @@ function getStepContent(step: number, state: IState, handlers: SubmitHandlers) {
         />
       );
     case 1:
-      return "An ad group contains one or more ads which target a shared set of keywords.";
+      return (
+        <StepTwo
+          flow={state.workflowConfig.DEVELOPER.flow}
+          devEmail={state.workflowConfig.DEVELOPER.devEmail}
+          devPassword={state.workflowConfig.DEVELOPER.devPassword}
+          key={state.workflowConfig.DEVELOPER.key}
+          onSubmit={handlers.stepTwo}
+        />
+      );
     case 2:
       return `Try out different ad text to see what brings in the most customers,
                 and learn how to enhance your ads using features like ad extensions.
@@ -144,6 +155,7 @@ function getStepContent(step: number, state: IState, handlers: SubmitHandlers) {
 
 interface SubmitHandlers {
   stepOne: VerticalLinearStepper["submitStepOne"];
+  stepTwo: VerticalLinearStepper["submitStepTwo"];
 }
 
 interface IState {
@@ -209,13 +221,24 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
     });
   };
 
-  submitStepOne = (config: Configuration["PLATFORM"]) => {
+  submitStepOne = (config: PlatformConfiguration) => {
     this.setState(state => ({
       ...state,
       activeStep: state.activeStep + 1,
       workflowConfig: {
         ...state.workflowConfig,
         PLATFORM: config
+      }
+    }));
+  };
+
+  submitStepTwo = (config: DeveloperConfiguration) => {
+    this.setState(state => ({
+      ...state,
+      activeStep: state.activeStep + 1,
+      workflowConfig: {
+        ...state.workflowConfig,
+        DEVELOPER: config
       }
     }));
   };
@@ -246,7 +269,8 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
                 </StepButton>
                 <StepContent>
                   {getStepContent(index, this.state, {
-                    stepOne: this.submitStepOne
+                    stepOne: this.submitStepOne,
+                    stepTwo: this.submitStepTwo
                   })}
                 </StepContent>
               </Step>

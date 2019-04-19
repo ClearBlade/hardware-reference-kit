@@ -9,14 +9,16 @@ export interface PlatformConfiguration {
   platformURL: string;
 }
 
+export interface DeveloperConfiguration {
+  flow: FLOW;
+  devEmail: string;
+  devPassword: string;
+  key: string;
+}
+
 export interface Configuration {
   PLATFORM: PlatformConfiguration;
-  DEVELOPER: {
-    flow: FLOW;
-    devEmail: string;
-    devPassword: string;
-    key: string;
-  };
+  DEVELOPER: DeveloperConfiguration;
   SYSTEM: {
     flow: FLOW;
     systemName: string;

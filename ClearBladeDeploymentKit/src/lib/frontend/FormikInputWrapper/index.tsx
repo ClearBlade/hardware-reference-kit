@@ -5,7 +5,6 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import Radio from "@material-ui/core/Radio";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormLabel from "@material-ui/core/FormLabel";
-import { FLOW } from "../../../lib/backend/Configuration";
 
 export enum FieldTypes {
   TEXT,
@@ -40,6 +39,7 @@ function FormikInputWrapper<T extends FieldTypes>(props: IProps<T>) {
   const fieldError = errors[field.name];
   switch (type) {
     case FieldTypes.TEXT:
+    case FieldTypes.PASSWORD:
       return (
         <TextField
           {...field}
@@ -47,6 +47,7 @@ function FormikInputWrapper<T extends FieldTypes>(props: IProps<T>) {
           helperText={fieldTouched && fieldError}
           label={label}
           margin="normal"
+          type={type === FieldTypes.PASSWORD ? "password" : "text"}
         />
       );
     case FieldTypes.RADIO_GROUP:

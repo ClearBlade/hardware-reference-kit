@@ -40,5 +40,33 @@ export default defineMessages({
   preconfiguredPlatform: {
     id: "app.components.stepper.preconfiguredPlatform",
     defaultMessage: "Preconfigured Platform"
+  },
+  invalidEmail: {
+    id: "app.components.stepper.invalidEmail",
+    defaultMessage: "Invalid Email"
+  },
+  newDeveloper: {
+    id: "app.components.stepper.newDeveloper",
+    defaultMessage: "New Developer"
+  },
+  existingDeveloper: {
+    id: "app.components.stepper.existingDeveloper",
+    defaultMessage: "Existing Developer"
+  },
+  password: {
+    id: "app.components.stepper.password",
+    defaultMessage: "Password"
+  },
+  email: {
+    id: "app.components.stepper.email",
+    defaultMessage: "Email"
+  },
+  confirm: {
+    id: "app.components.stepper.confirm",
+    defaultMessage: "Confirm"
+  },
+  passwordsMustMatch: {
+    id: "app.components.stepper.passwordsMustMatch",
+    defaultMessage: "Passwords must match"
   }
 });

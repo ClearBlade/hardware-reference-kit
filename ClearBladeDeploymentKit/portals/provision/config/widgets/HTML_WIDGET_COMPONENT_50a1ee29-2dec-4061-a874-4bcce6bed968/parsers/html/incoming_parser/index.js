@@ -33897,6 +33897,34 @@ addLocaleData(locale_data_ignored_default.a);
   preconfiguredPlatform: {
     id: "app.components.stepper.preconfiguredPlatform",
     defaultMessage: "Preconfigured Platform"
+  },
+  invalidEmail: {
+    id: "app.components.stepper.invalidEmail",
+    defaultMessage: "Invalid Email"
+  },
+  newDeveloper: {
+    id: "app.components.stepper.newDeveloper",
+    defaultMessage: "New Developer"
+  },
+  existingDeveloper: {
+    id: "app.components.stepper.existingDeveloper",
+    defaultMessage: "Existing Developer"
+  },
+  password: {
+    id: "app.components.stepper.password",
+    defaultMessage: "Password"
+  },
+  email: {
+    id: "app.components.stepper.email",
+    defaultMessage: "Email"
+  },
+  confirm: {
+    id: "app.components.stepper.confirm",
+    defaultMessage: "Confirm"
+  },
+  passwordsMustMatch: {
+    id: "app.components.stepper.passwordsMustMatch",
+    defaultMessage: "Passwords must match"
   }
 }));
 // CONCATENATED MODULE: ./node_modules/tslib/tslib.es6.js
@@ -39210,11 +39238,13 @@ function FormikInputWrapper(props) {
 
   switch (type) {
     case FieldTypes.TEXT:
+    case FieldTypes.PASSWORD:
       return external_React_["createElement"](TextField_default.a, FormikInputWrapper_extends({}, field, {
         error: fieldTouched && fieldError ? true : false,
         helperText: fieldTouched && fieldError,
         label: label,
-        margin: "normal"
+        margin: "normal",
+        type: type === FieldTypes.PASSWORD ? "password" : "text"
       }));
 
     case FieldTypes.RADIO_GROUP:
@@ -39311,6 +39341,110 @@ var StepOne_StepOne = function StepOne(props) {
 };
 
 /* harmony default export */ var steps_StepOne = (injectIntl(StepOne_StepOne));
+// CONCATENATED MODULE: ./src/lib/frontend/stepper/steps/StepTwo.tsx
+
+
+
+
+
+
+
+
+
+
+
+var StepTwo_StepTwo = function StepTwo(props) {
+  var developerOptions = [{
+    value: FLOW.NEW,
+    label: props.intl.formatMessage(stepper_messages.newDeveloper)
+  }, {
+    value: FLOW.EXISTING,
+    label: props.intl.formatMessage(stepper_messages.existingDeveloper)
+  }];
+  return external_React_["createElement"](formik_esm_Formik, {
+    validateOnBlur: true,
+    initialValues: {
+      devEmail: props.devEmail,
+      flow: props.flow,
+      devPassword: props.devPassword,
+      devPasswordConfirm: props.devPassword,
+      key: props.key
+    },
+    validationSchema: yup_lib["object"]().shape({
+      devEmail: yup_lib["string"]().required(props.intl.formatMessage(stepper_messages.required)).matches(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i, props.intl.formatMessage(stepper_messages.invalidEmail)),
+      devPassword: yup_lib["string"]().required(props.intl.formatMessage(stepper_messages.required)),
+      devPasswordConfirm: yup_lib["string"]().when("flow", {
+        is: FLOW.NEW,
+        then: yup_lib["string"]().oneOf([yup_lib["ref"]("devPassword"), null], props.intl.formatMessage(stepper_messages.passwordsMustMatch)).required(props.intl.formatMessage(stepper_messages.required))
+      })
+    }),
+    onSubmit: function onSubmit(values) {
+      props.onSubmit(values);
+    }
+  }, function (_ref) {
+    var handleSubmit = _ref.handleSubmit,
+        values = _ref.values;
+    return external_React_["createElement"](Form, null, external_React_["createElement"](FormGroup_default.a, null, external_React_["createElement"](FormControl_default.a, {
+      component: "fieldset"
+    }, external_React_["createElement"](Field, {
+      name: "flow",
+      render: function render(_ref2) {
+        var field = _ref2.field,
+            form = _ref2.form;
+        return external_React_["createElement"](frontend_FormikInputWrapper, {
+          type: FieldTypes.RADIO_GROUP,
+          field: field,
+          form: form,
+          label: props.intl.formatMessage(stepper_messages.developer),
+          options: developerOptions
+        });
+      }
+    })), external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Field, {
+      name: "devEmail",
+      render: function render(_ref3) {
+        var field = _ref3.field,
+            form = _ref3.form;
+        return external_React_["createElement"](frontend_FormikInputWrapper, {
+          type: FieldTypes.TEXT,
+          field: field,
+          form: form,
+          label: props.intl.formatMessage(stepper_messages.email)
+        });
+      }
+    })), external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Field, {
+      name: "devPassword",
+      render: function render(_ref4) {
+        var field = _ref4.field,
+            form = _ref4.form;
+        return external_React_["createElement"](frontend_FormikInputWrapper, {
+          type: FieldTypes.PASSWORD,
+          field: field,
+          form: form,
+          label: props.intl.formatMessage(stepper_messages.password)
+        });
+      }
+    })), values.flow === FLOW.NEW && external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Field, {
+      name: "devPasswordConfirm",
+      render: function render(_ref5) {
+        var field = _ref5.field,
+            form = _ref5.form;
+        return external_React_["createElement"](frontend_FormikInputWrapper, {
+          type: FieldTypes.PASSWORD,
+          field: field,
+          form: form,
+          label: props.intl.formatMessage(stepper_messages.confirm)
+        });
+      }
+    })), external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Button_default.a, {
+      variant: "contained",
+      color: "primary",
+      type: "submit",
+      onSubmit: handleSubmit
+    }, "Continue"))));
+  });
+};
+
+/* harmony default export */ var steps_StepTwo = (injectIntl(StepTwo_StepTwo));
 // CONCATENATED MODULE: ./src/portals/provision/config/widgets/HTML_WIDGET_COMPONENT_50a1ee29-2dec-4061-a874-4bcce6bed968/parsers/html/incoming_parser/index.tsx
 function incoming_parser_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { incoming_parser_typeof = function _typeof(obj) { return typeof obj; }; } else { incoming_parser_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return incoming_parser_typeof(obj); }
 
@@ -39333,6 +39467,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 function incoming_parser_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -39450,7 +39585,13 @@ function getStepContent(step, state, handlers) {
       });
 
     case 1:
-      return "An ad group contains one or more ads which target a shared set of keywords.";
+      return external_React_["createElement"](steps_StepTwo, {
+        flow: state.workflowConfig.DEVELOPER.flow,
+        devEmail: state.workflowConfig.DEVELOPER.devEmail,
+        devPassword: state.workflowConfig.DEVELOPER.devPassword,
+        key: state.workflowConfig.DEVELOPER.key,
+        onSubmit: handlers.stepTwo
+      });
 
     case 2:
       return "Try out different ad text to see what brings in the most customers,\n                and learn how to enhance your ads using features like ad extensions.\n                If you run into any problems with your ads, find out how to tell if\n                they're running and how to resolve approval issues.";
@@ -39549,6 +39690,17 @@ function (_React$Component) {
       });
     });
 
+    incoming_parser_defineProperty(_assertThisInitialized(_this), "submitStepTwo", function (config) {
+      _this.setState(function (state) {
+        return _objectSpread({}, state, {
+          activeStep: state.activeStep + 1,
+          workflowConfig: _objectSpread({}, state.workflowConfig, {
+            DEVELOPER: config
+          })
+        });
+      });
+    });
+
     return _this;
   }
 
@@ -39581,7 +39733,8 @@ function (_React$Component) {
           } // completed={this.state.completed[index]}
 
         }, msg), external_React_["createElement"](StepContent_default.a, null, getStepContent(index, _this2.state, {
-          stepOne: _this2.submitStepOne
+          stepOne: _this2.submitStepOne,
+          stepTwo: _this2.submitStepTwo
         })));
       })), activeStep === steps.length && external_React_["createElement"](Paper_default.a, {
         square: true,
