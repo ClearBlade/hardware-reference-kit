@@ -32067,9 +32067,9 @@ var Stepper_default = /*#__PURE__*/__webpack_require__.n(Stepper);
 var Step = __webpack_require__(184);
 var Step_default = /*#__PURE__*/__webpack_require__.n(Step);
 
-// EXTERNAL MODULE: ./node_modules/@material-ui/core/StepLabel/index.js
-var StepLabel = __webpack_require__(185);
-var StepLabel_default = /*#__PURE__*/__webpack_require__.n(StepLabel);
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/StepButton/index.js
+var StepButton = __webpack_require__(494);
+var StepButton_default = /*#__PURE__*/__webpack_require__.n(StepButton);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/StepContent/index.js
 var StepContent = __webpack_require__(186);
@@ -38569,15 +38569,665 @@ connect(formik_esm_ErrorMessageImpl);
 
 
 
-// EXTERNAL MODULE: ./node_modules/@material-ui/core/TextField/index.js
-var TextField = __webpack_require__(181);
-var TextField_default = /*#__PURE__*/__webpack_require__.n(TextField);
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/FormControl/index.js
+var FormControl = __webpack_require__(405);
+var FormControl_default = /*#__PURE__*/__webpack_require__.n(FormControl);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/FormGroup/index.js
+var FormGroup = __webpack_require__(485);
+var FormGroup_default = /*#__PURE__*/__webpack_require__.n(FormGroup);
 
 // EXTERNAL MODULE: ./node_modules/yup/lib/index.js
 var yup_lib = __webpack_require__(107);
 
+// CONCATENATED MODULE: ./src/lib/backend/ClearBladeAdminRESTLib.ts
+function ClearBladeAdminREST(url) {
+  var http = Requests();
+  var token = "";
+  /**
+   * Create a System on behalf of the developer
+   */
+
+  function createSystem(systemName) {
+    log({
+      systemName: systemName
+    });
+    var headers = {
+      "ClearBlade-DevToken": token
+    };
+    var name = new String(+new Date());
+    var description = "";
+    var body = {
+      name: name,
+      description: description
+    };
+    var uri = url + "/admin/systemmanagement";
+    var options = {
+      uri: uri,
+      headers: headers,
+      body: body
+    };
+    log(options);
+    var deferred = Q.defer();
+    http.post(options, function (err, data) {
+      try {
+        if (err) throw new Error("POST failed: " + err);
+        var json = JSON.parse(data);
+        deferred.resolve(json.appID);
+      } catch (e) {
+        deferred.reject(data);
+      }
+    });
+    return deferred.promise;
+  }
+
+  function registerDeveloper(email, password, key) {
+    var headers = {};
+    var fname = "self";
+    var lname = "self";
+    var org = "self";
+    var body = {
+      email: email,
+      password: password,
+      fname: fname,
+      lname: lname,
+      org: org,
+      key: key
+    };
+    var uri = url + "/admin/reg";
+    var options = {
+      uri: uri,
+      headers: headers,
+      body: body
+    };
+    log({
+      options: options
+    });
+    var deferred = Q.defer();
+    http.post(options, function (err, data) {
+      log("snagging token");
+      log({
+        err: err,
+        data: data
+      });
+
+      try {
+        if (err) {
+          log("err block hit: " + JSON.stringify(err));
+          throw new Error("Error while auth'ing: " + JSON.stringify(err));
+        }
+
+        var parsed = JSON.parse(data);
+        log(parsed);
+        token = parsed.dev_token;
+        log({
+          token: token
+        });
+        deferred.resolve({});
+      } catch (e) {
+        var msg = "Failed to auth: " + JSON.stringify(e);
+        log(msg);
+        throw new Error(msg);
+        log(msg);
+        deferred.reject(msg);
+      }
+    });
+    return deferred.promise;
+  }
+  /**
+   * Install an IPM Package into a new system
+   */
+
+
+  function installIPMIntoNewSystem(repoUser, repoName, developerEmail) {
+    log("#installIPMIntoNewSystem");
+    var deferred = Q.defer();
+    prepareInstall(repoUser, repoName).then(function (listOfFilesToImport) {
+      log("Succeeded #prepareInstall");
+      return executeInstall(repoUser, repoName, developerEmail, listOfFilesToImport);
+    }).then(function (newSystemDetails) {
+      log("Suceeded #executeInstall");
+      deferred.resolve(newSystemDetails);
+    })["catch"](function (e) {
+      var msg = "Unable to complete IPM Install: " + JSON.stringify(e);
+      log(msg);
+      deferred.reject(msg);
+    });
+    return deferred.promise;
+  }
+  /**
+   * Prepare IPM Install, step 1 of 2
+   *
+   * @param {string} repoUser Github username, ex "clearblade, representing the user github.com/clearblade
+   * @param {string} repoName Github repo name, ex "smart-monitoring" representing github.com/clearblade/smart-monitoring
+   * @return {string[]} listOfFilesToImport list of assets to import, ex ["REPO_NAME-master/code/services/serviceA/serviceA.js",...]
+   */
+
+
+  function prepareInstall(repoUser, repoName) {
+    log("#prepareInstall");
+    var headers = {
+      "ClearBlade-DevToken": token
+    };
+    var body = {};
+    var uri = url + "/console-api/systemStructureFromGithub?branch=master&systemRepoName=" + repoName + "&username=" + repoUser;
+    var options = {
+      uri: uri,
+      headers: headers,
+      body: body
+    };
+    log({
+      options: options
+    });
+    var deferred = Q.defer();
+    http.get(options, function (err, data) {
+      try {
+        if (err) throw new Error("#prepareInstall Failed: " + err);
+        var json = JSON.parse(data);
+        var rawFiles = json.tree;
+        var files = formatFiles(repoName, rawFiles);
+        log({
+          files: files
+        });
+        deferred.resolve(files);
+      } catch (e) {
+        log("Error Encountered while preparing ipm install: " + JSON.stringify(e));
+        log({
+          data: data
+        });
+        deferred.reject(data);
+      }
+    });
+    return deferred.promise;
+  }
+  /**
+   * Execute IPM Package install, step 2 of 2
+   */
+
+
+  function executeInstall(repoUser, repoName, developerEmail, listOfFilesToImport) {
+    log("#executeInstall");
+    var headers = {
+      "ClearBlade-DevToken": token
+    };
+    var repoDownloadURL = ["https://github.com", repoUser, repoName, "archive/master.zip"].join("/");
+    var body = {
+      repoURL: repoDownloadURL,
+      developerEmail: developerEmail,
+      listOfFilesToImport: listOfFilesToImport,
+      systemName: repoName,
+      importFullSystem: false,
+      importIntoExistingSystem: false
+    };
+    var uri = url + "/console-api/importAssetsIntoNewSystem";
+    var options = {
+      uri: uri,
+      headers: headers,
+      body: body
+    };
+    log(options);
+    var deferred = Q.defer();
+    http.post(options, function (err, data) {
+      try {
+        if (err) throw new Error("#executeInstall failed: " + err);
+        var json = JSON.parse(data);
+        deferred.resolve(json);
+      } catch (e) {
+        log(err);
+        log(data);
+        deferred.reject(data);
+      }
+    });
+    return deferred.promise;
+  }
+  /**
+   * Create Edge entry in system
+   */
+
+
+  function createEdge(name, systemKey, systemSecret, edgeToken, description) {
+    var headers = {
+      "ClearBlade-DevToken": token
+    };
+    var body = {
+      description: description,
+      token: edgeToken,
+      system_key: systemKey,
+      system_secret: systemSecret
+    };
+    var uri = [url, "admin/edges", systemKey, name].join("/");
+    var options = {
+      uri: uri,
+      headers: headers,
+      body: body
+    };
+    log({
+      options: options
+    });
+    var deferred = Q.defer();
+    http.post(options, function (err, data) {
+      if (err) {
+        log(err);
+        deferred.reject(err);
+      } else {
+        log({
+          "edge response": data
+        });
+        deferred.resolve(data);
+      }
+    });
+    return deferred.promise;
+  }
+  /**
+   * Initialize admin developer client with credentials
+   */
+
+
+  function initWithCreds(email, password) {
+    var headers = {};
+    var body = {
+      email: email,
+      password: password
+    };
+    var uri = url + "/admin/auth";
+    var options = {
+      uri: uri,
+      headers: headers,
+      body: body
+    };
+    var deferred = Q.defer();
+    http.post(options, function (err, data) {
+      log("snagging token");
+      log({
+        err: err,
+        data: data
+      });
+
+      try {
+        if (err) {
+          log("err block hit: " + JSON.stringify(err));
+          throw new Error("Error while auth'ing: " + JSON.stringify(err));
+        }
+
+        var parsed = JSON.parse(data);
+        log(parsed);
+        token = parsed.dev_token;
+        log({
+          token: token
+        });
+        deferred.resolve({});
+      } catch (e) {
+        var msg = "Failed to auth: " + JSON.stringify(e);
+        log(msg);
+        throw new Error(msg);
+      }
+    });
+    return deferred.promise;
+  }
+  /**
+   * Initialize session with token
+   */
+
+
+  function initWithToken(t) {
+    token = t;
+  }
+
+  function formatFiles(repoName, rawFiles) {
+    var rootFolder = repoName + "-master";
+    var output = [];
+    rawFiles.forEach(function (entity) {
+      if (entity.type == "blob") {
+        output.push("".concat(rootFolder, "/").concat(entity.path));
+      }
+    });
+    return output;
+  }
+
+  function retarget(platformIPOverride, systemKeyOverride, edgeName, edgeCookie) {
+    // platformIPOverride must omit protocol
+    platformIPOverride = platformIPOverride.replace(/(^\w+:|^)\/\//, "");
+    var options = {
+      body: {
+        platformIP: platformIPOverride,
+        systemKey: systemKeyOverride,
+        edgeName: edgeName,
+        edgeCookie: edgeCookie,
+        adaptersRootDir: "./"
+      },
+      uri: ["http://localhost:9000", "admin/edgemode/runtime"].join("/")
+    }; // MQTT Port needs to be omitted or else it fails. This is a bug mkay.
+    // JIRA https://clearblade.atlassian.net/browse/MONSOON-4240
+    //delete options.body.mqttPort
+
+    log({
+      options: options
+    });
+    var deferred = Q.defer();
+    http.post(options, function (err, data) {
+      log({
+        err: err,
+        data: data
+      });
+
+      if (err) {
+        deferred.reject(err);
+        log("proceeding to unknown");
+      } else {
+        deferred.resolve(data);
+      }
+    });
+    return deferred.promise;
+  }
+  /**
+   * Note: Asking platform to encode, rather than edge
+   * Asking edge leads to uncertainty about cb_console's local port
+   */
+
+
+  function getEncodedPortalURL(systemKey, systemSecret, portalName) {
+    var headers = {};
+    var body = {};
+    var qs = ["?systemKey=", systemKey, "&systemSecret=", systemSecret, "&name=", portalName].join("");
+    var uri = [url, "console-api/portal/createURL", qs].join("/");
+    var options = {
+      uri: uri,
+      headers: headers,
+      body: body
+    };
+    log(options);
+    var deferred = Q.defer();
+    http.get(options, function (err, data) {
+      if (err) {
+        deferred.reject(err);
+      } else {
+        deferred.resolve(data);
+      }
+    });
+    return deferred.promise;
+  }
+
+  return {
+    registerDeveloper: registerDeveloper,
+    initWithToken: initWithToken,
+    initWithCreds: initWithCreds,
+    createSystem: createSystem,
+    installIPMIntoNewSystem: installIPMIntoNewSystem,
+    getEncodedPortalURL: getEncodedPortalURL,
+    createEdge: createEdge,
+    retarget: retarget
+  };
+}
+
+/* harmony default export */ var ClearBladeAdminRESTLib = (ClearBladeAdminREST);
+// CONCATENATED MODULE: ./src/lib/backend/Configuration.ts
+var _DEVELOPER, _SYSTEM;
+
+function Configuration_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Configuration_typeof = function _typeof(obj) { return typeof obj; }; } else { Configuration_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Configuration_typeof(obj); }
+
+function Configuration_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+var FLOW;
+
+(function (FLOW) {
+  FLOW["NEW"] = "NEW";
+  FLOW["EXISTING"] = "EXISTING";
+  FLOW["IPM"] = "IPM";
+  FLOW["PRECONFIGURED"] = "PRECONFIGURED";
+})(FLOW || (FLOW = {}));
+
+var TARGET_CONFIGURATION = {
+  URL: "https://amd.clearblade.com",
+  REGISTRATION_KEY: "AMDBlade",
+  IPM_REPO_USER: "aalcott14",
+  IPM_REPO_NAME: "dev-smart-monitoring",
+  IPM_ENTRYPOINT: {
+    portal: "smart_monitoring"
+  },
+  PROVISIONER_USER_EMAIL: "provisioner@clearblade.com"
+};
+var PORTAL_CONFIGURATION = {
+  AUTOROUTE: false
+};
+var WORKFLOW_CONFIGURATION = {
+  AUTOROUTE: PORTAL_CONFIGURATION.AUTOROUTE,
+  PLATFORM: {
+    route:  true && PORTAL_CONFIGURATION.AUTOROUTE,
+    flow: FLOW.PRECONFIGURED,
+    platformURL: TARGET_CONFIGURATION.URL
+  },
+  DEVELOPER: {
+    route:  false && false,
+    flow: FLOW.NEW,
+    devEmail: "",
+    devPassword: "",
+    key: TARGET_CONFIGURATION.REGISTRATION_KEY
+  },
+  SYSTEM: {
+    route:  true && PORTAL_CONFIGURATION.AUTOROUTE,
+    flow: FLOW.IPM,
+    systemName: "",
+    systemKey: "",
+    systemSecret: "",
+    provEmail: "provisioner@clearblade.com",
+    provPassword: "clearblade",
+    repoUser: TARGET_CONFIGURATION.IPM_REPO_USER,
+    repoName: TARGET_CONFIGURATION.IPM_REPO_NAME,
+    entrypoint: TARGET_CONFIGURATION.IPM_ENTRYPOINT
+  },
+  EDGE: {
+    route:  true && PORTAL_CONFIGURATION.AUTOROUTE,
+    flow: FLOW.NEW,
+    edgeID: "",
+    edgeToken: ""
+  }
+};
+/**
+ *
+ * TODO Append uid to email to allow multiple provisioners per system
+ */
+
+var CONFIGURATION = {
+  TARGET: TARGET_CONFIGURATION,
+  PORTAL: PORTAL_CONFIGURATION,
+  WORKFLOW: WORKFLOW_CONFIGURATION,
+  WORKFLOW_MAP: {
+    PLATFORM: Configuration_defineProperty({}, FLOW.PRECONFIGURED, function (config) {
+      // needs nothing
+      var platformURL = config.PLATFORM.platformURL;
+      log("platform");
+      log({
+        platformURL: platformURL
+      });
+      var deferred = Q.defer();
+      var rest = ClearBladeAdminRESTLib(platformURL);
+      deferred.resolve(rest);
+      return deferred.promise;
+    }),
+    DEVELOPER: (_DEVELOPER = {}, Configuration_defineProperty(_DEVELOPER, FLOW.NEW, function (rest, config) {
+      var devAttributes = config.DEVELOPER;
+      var devEmail = devAttributes.devEmail;
+      var devPassword = devAttributes.devPassword;
+      var registrationKey = devAttributes.key;
+      log("dev");
+      log({
+        devEmail: devEmail,
+        devPassword: devPassword
+      });
+      var deferred = Q.defer();
+      rest.registerDeveloper(devEmail, devPassword, registrationKey).then(function () {
+        return deferred.resolve(rest);
+      }, function (err) {
+        deferred.reject(err);
+      });
+      return deferred.promise;
+    }), Configuration_defineProperty(_DEVELOPER, FLOW.EXISTING, function (rest, config) {
+      var devAttributes = config.DEVELOPER;
+      var devEmail = devAttributes.devEmail;
+      var devPassword = devAttributes.devPassword;
+      log("dev");
+      log({
+        devEmail: devEmail,
+        devPassword: devPassword
+      });
+      var deferred = Q.defer();
+      rest.initWithCreds(devEmail, devPassword).then(function () {
+        return deferred.resolve(rest);
+      }, function (err) {
+        return deferred.reject(err);
+      });
+      return deferred.promise;
+    }), _DEVELOPER),
+    SYSTEM: (_SYSTEM = {}, Configuration_defineProperty(_SYSTEM, FLOW.IPM, function (rest, config) {
+      var systemAttributes = config.SYSTEM;
+      var repoUser = CONFIGURATION.TARGET.IPM_REPO_USER;
+      var repoName = CONFIGURATION.TARGET.IPM_REPO_NAME; // RR: Not willing to implement devEmail
+
+      var devEmail = "notprovided@gmail.com";
+      log("sys");
+      log({
+        repoUser: repoUser,
+        repoName: repoName,
+        devEmail: devEmail
+      });
+      var deferred = Q.defer(); // Warning: systemDetails contains camelCase and snake_case system keys/secrets.
+      // ...the camelCase are the newly created system
+
+      rest.installIPMIntoNewSystem(repoUser, repoName, devEmail).then(function (systemDetails) {
+        deferred.resolve({
+          rest: rest,
+          systemDetails: systemDetails,
+          config: config
+        });
+      }, function (err) {
+        return deferred.reject(err);
+      });
+      return deferred.promise;
+    }), Configuration_defineProperty(_SYSTEM, FLOW.EXISTING, function (rest, config) {
+      return Q.resolve({
+        rest: rest,
+        config: config,
+        systemDetails: {
+          systemKey: config.SYSTEM.systemKey,
+          systemSecret: config.SYSTEM.systemSecret
+        }
+      });
+    }), _SYSTEM),
+    EDGE: Configuration_defineProperty({}, FLOW.NEW, function (response, config) {
+      var edgeID = config.EDGE.edgeID;
+      log("edge"); // TODO Implemented
+
+      var systemDetails = response.systemDetails;
+      var systemKey = systemDetails.systemKey;
+      var systemSecret = systemDetails.systemSecret;
+      log(systemDetails);
+      log(Configuration_typeof(systemDetails));
+      var edgeToken = edgeID;
+      var description = "no desc";
+      log({
+        edgeID: edgeID,
+        systemKey: systemKey,
+        systemSecret: systemSecret,
+        edgeToken: edgeToken,
+        description: description
+      });
+      var deferred = Q.defer();
+      var rest = response.rest;
+      rest.createEdge(edgeID, systemKey, systemSecret, edgeToken, description).then(function (edgeDetailsRaw) {
+        // Relying on promise catch
+        var edgeDetails = JSON.parse(edgeDetailsRaw); // append platformURL to edge details
+
+        edgeDetails.platformURL = config.PLATFORM.platformURL;
+        deferred.resolve({
+          rest: rest,
+          systemDetails: systemDetails,
+          edgeDetails: edgeDetails
+        });
+      }, function (err) {
+        return deferred.reject(err);
+      });
+      return deferred.promise;
+    })
+  }
+};
+/* harmony default export */ var Configuration = (CONFIGURATION);
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/TextField/index.js
+var TextField = __webpack_require__(181);
+var TextField_default = /*#__PURE__*/__webpack_require__.n(TextField);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/RadioGroup/index.js
+var RadioGroup = __webpack_require__(483);
+var RadioGroup_default = /*#__PURE__*/__webpack_require__.n(RadioGroup);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/Radio/index.js
+var Radio = __webpack_require__(482);
+var Radio_default = /*#__PURE__*/__webpack_require__.n(Radio);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/FormControlLabel/index.js
+var FormControlLabel = __webpack_require__(481);
+var FormControlLabel_default = /*#__PURE__*/__webpack_require__.n(FormControlLabel);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/FormLabel/index.js
+var FormLabel = __webpack_require__(403);
+var FormLabel_default = /*#__PURE__*/__webpack_require__.n(FormLabel);
+
+// CONCATENATED MODULE: ./src/lib/frontend/FormikInputWrapper/index.tsx
+function FormikInputWrapper_extends() { FormikInputWrapper_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return FormikInputWrapper_extends.apply(this, arguments); }
+
+
+
+
+
+
+
+var FieldTypes;
+
+(function (FieldTypes) {
+  FieldTypes[FieldTypes["TEXT"] = 0] = "TEXT";
+  FieldTypes[FieldTypes["PASSWORD"] = 1] = "PASSWORD";
+  FieldTypes[FieldTypes["RADIO_GROUP"] = 2] = "RADIO_GROUP";
+  FieldTypes[FieldTypes["SELECT"] = 3] = "SELECT";
+})(FieldTypes || (FieldTypes = {}));
+
+function FormikInputWrapper(props) {
+  var type = props.type,
+      field = props.field,
+      _props$form = props.form,
+      touched = _props$form.touched,
+      errors = _props$form.errors,
+      label = props.label;
+  var fieldTouched = touched[field.name];
+  var fieldError = errors[field.name];
+
+  switch (type) {
+    case FieldTypes.TEXT:
+      return external_React_["createElement"](TextField_default.a, FormikInputWrapper_extends({}, field, {
+        error: fieldTouched && fieldError ? true : false,
+        helperText: fieldTouched && fieldError,
+        label: label,
+        margin: "normal"
+      }));
+
+    case FieldTypes.RADIO_GROUP:
+      var options = props.options;
+      return external_React_["createElement"](RadioGroup_default.a, field, external_React_["createElement"](FormLabel_default.a, {
+        component: "legend"
+      }, label), options.map(function (o) {
+        return external_React_["createElement"](FormControlLabel_default.a, {
+          key: o.value,
+          value: o.value,
+          control: external_React_["createElement"](Radio_default.a, null),
+          label: o.label
+        });
+      }));
+  }
+
+  return null;
+}
+
+/* harmony default export */ var frontend_FormikInputWrapper = (FormikInputWrapper);
 // CONCATENATED MODULE: ./src/lib/frontend/stepper/steps/StepOne.tsx
-function StepOne_extends() { StepOne_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return StepOne_extends.apply(this, arguments); }
 
 
 
@@ -38585,49 +39235,74 @@ function StepOne_extends() { StepOne_extends = Object.assign || function (target
 
 
 
+
+
+
+var platformOptions = [{
+  value: FLOW.PRECONFIGURED,
+  label: "pre"
+}, {
+  value: FLOW.EXISTING,
+  label: "eexist"
+}];
 
 var StepOne_StepOne = function StepOne(props) {
-  console.log("step one");
   return external_React_["createElement"](formik_esm_Formik, {
     validateOnBlur: true,
     initialValues: {
-      email: "",
-      password: ""
+      platformURL: props.platformURL,
+      flow: props.flow
     },
     validationSchema: yup_lib["object"]().shape({
-      email: yup_lib["string"]().required(props.intl.formatMessage(stepper_messages.required)).matches(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/, props.intl.formatMessage(stepper_messages.invalidUrl))
+      platformURL: yup_lib["string"]().required(props.intl.formatMessage(stepper_messages.required)) // todo: make this work with IPs
+      .matches(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/, props.intl.formatMessage(stepper_messages.invalidUrl))
     }),
-    onSubmit: function onSubmit(values, _ref) {
-      var setSubmitting = _ref.setSubmitting;
-      setTimeout(function () {
-        setSubmitting(false);
-        props.onComplete();
-      }, 400);
+    onSubmit: function onSubmit(values) {
+      props.onSubmit(values);
     }
-  }, function (_ref2) {
-    var errors = _ref2.errors;
-    return external_React_["createElement"](Form, null, external_React_["createElement"](Field, {
-      name: "email",
+  }, function (_ref) {
+    var handleSubmit = _ref.handleSubmit;
+    return external_React_["createElement"](Form, null, external_React_["createElement"](FormGroup_default.a, null, external_React_["createElement"](FormControl_default.a, {
+      component: "fieldset"
+    }, external_React_["createElement"](Field, {
+      name: "flow",
+      render: function render(_ref2) {
+        var field = _ref2.field,
+            form = _ref2.form;
+        return external_React_["createElement"](frontend_FormikInputWrapper, {
+          type: FieldTypes.RADIO_GROUP,
+          field: field,
+          form: form,
+          label: props.intl.formatMessage(stepper_messages.platform),
+          options: platformOptions
+        });
+      }
+    })), external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Field, {
+      name: "platformURL",
       render: function render(_ref3) {
         var field = _ref3.field,
-            _ref3$form = _ref3.form,
-            touched = _ref3$form.touched,
-            error = _ref3$form.error,
-            errors = _ref3$form.errors;
-        return external_React_["createElement"](TextField_default.a, StepOne_extends({}, field, {
-          error: touched.email && errors.email ? true : false,
-          helperText: touched.email && errors.email,
-          label: props.intl.formatMessage(stepper_messages.platformURL),
-          margin: "normal"
-        }));
+            form = _ref3.form;
+        return external_React_["createElement"](frontend_FormikInputWrapper, {
+          type: FieldTypes.TEXT,
+          field: field,
+          form: form,
+          label: props.intl.formatMessage(stepper_messages.platformURL)
+        });
       }
-    }));
+    })), external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Button_default.a, {
+      variant: "contained",
+      color: "primary",
+      type: "submit",
+      onSubmit: handleSubmit
+    }, "Continue"))));
   });
 };
 
 /* harmony default export */ var steps_StepOne = (injectIntl(StepOne_StepOne));
 // CONCATENATED MODULE: ./src/portals/provision/config/widgets/HTML_WIDGET_COMPONENT_50a1ee29-2dec-4061-a874-4bcce6bed968/parsers/html/incoming_parser/index.tsx
 function incoming_parser_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { incoming_parser_typeof = function _typeof(obj) { return typeof obj; }; } else { incoming_parser_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return incoming_parser_typeof(obj); }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { incoming_parser_defineProperty(target, key, source[key]); }); } return target; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -38748,14 +39423,19 @@ some steps can get into states where they don't require any user input (e.g., pr
 	"success": true
 }
 */
+
 function getSteps() {
   return [external_React_["createElement"](index_es_FormattedMessage, stepper_messages.platform), external_React_["createElement"](index_es_FormattedMessage, stepper_messages.developer), external_React_["createElement"](index_es_FormattedMessage, stepper_messages.system), external_React_["createElement"](index_es_FormattedMessage, stepper_messages.edge)];
 }
 
-function getStepContent(step, props) {
+function getStepContent(step, state, handlers) {
   switch (step) {
     case 0:
-      return external_React_["createElement"](steps_StepOne, props);
+      return external_React_["createElement"](steps_StepOne, {
+        flow: state.workflowConfig.PLATFORM.flow,
+        platformURL: state.workflowConfig.PLATFORM.platformURL,
+        onSubmit: handlers.stepOne
+      });
 
     case 1:
       return "An ad group contains one or more ads which target a shared set of keywords.";
@@ -38787,7 +39467,41 @@ function (_React$Component) {
     _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(VerticalLinearStepper)).call.apply(_getPrototypeOf2, [this].concat(args)));
 
     incoming_parser_defineProperty(_assertThisInitialized(_this), "state", {
-      activeStep: 0
+      activeStep: 0,
+      workflowConfig: {
+        PLATFORM: {
+          flow: FLOW.EXISTING,
+          platformURL: ""
+        },
+        DEVELOPER: {
+          flow: FLOW.NEW,
+          devEmail: "",
+          devPassword: "",
+          key: ""
+        },
+        SYSTEM: {
+          flow: FLOW.IPM,
+          systemName: "",
+          systemKey: "",
+          systemSecret: "",
+          provEmail: "provisioner@clearblade.com",
+          provPassword: "clearblade",
+          repoUser: TARGET_CONFIGURATION.IPM_REPO_USER,
+          repoName: TARGET_CONFIGURATION.IPM_REPO_NAME,
+          entrypoint: TARGET_CONFIGURATION.IPM_ENTRYPOINT
+        },
+        EDGE: {
+          flow: FLOW.NEW,
+          edgeID: "",
+          edgeToken: ""
+        }
+      }
+    });
+
+    incoming_parser_defineProperty(_assertThisInitialized(_this), "jumpToStep", function (idx) {
+      _this.setState(_objectSpread({}, _this.state, {
+        activeStep: idx
+      }));
     });
 
     incoming_parser_defineProperty(_assertThisInitialized(_this), "handleNext", function () {
@@ -38809,6 +39523,17 @@ function (_React$Component) {
     incoming_parser_defineProperty(_assertThisInitialized(_this), "handleReset", function () {
       _this.setState({
         activeStep: 0
+      });
+    });
+
+    incoming_parser_defineProperty(_assertThisInitialized(_this), "submitStepOne", function (config) {
+      _this.setState(function (state) {
+        return _objectSpread({}, state, {
+          activeStep: state.activeStep + 1,
+          workflowConfig: _objectSpread({}, state.workflowConfig, {
+            PLATFORM: config
+          })
+        });
       });
     });
 
@@ -38838,18 +39563,14 @@ function (_React$Component) {
       }, steps.map(function (msg, index) {
         return external_React_["createElement"](Step_default.a, {
           key: index
-        }, external_React_["createElement"](StepLabel_default.a, null, msg), external_React_["createElement"](StepContent_default.a, null, getStepContent(index, {
-          onComplete: function onComplete() {
-            return console.log("complete");
-          }
-        }), external_React_["createElement"]("div", null, external_React_["createElement"]("div", null, external_React_["createElement"](Button_default.a, {
-          disabled: activeStep === 0,
-          onClick: _this2.handleBack
-        }, "Hello"), external_React_["createElement"](Button_default.a, {
-          variant: "contained",
-          color: "primary",
-          onClick: _this2.handleNext
-        }, activeStep === steps.length - 1 ? "Finish" : "Next")))));
+        }, external_React_["createElement"](StepButton_default.a, {
+          onClick: function onClick() {
+            return _this2.jumpToStep(index);
+          } // completed={this.state.completed[index]}
+
+        }, msg), external_React_["createElement"](StepContent_default.a, null, getStepContent(index, _this2.state, {
+          stepOne: _this2.submitStepOne
+        })));
       })), activeStep === steps.length && external_React_["createElement"](Paper_default.a, {
         square: true,
         elevation: 0
@@ -38862,7 +39583,1120 @@ function (_React$Component) {
   return VerticalLinearStepper;
 }(external_React_["Component"]);
 
-external_ReactDOM_["render"](external_React_["createElement"](incoming_parser_VerticalLinearStepper, null), document.getElementById("deployment-kit-stepper"));
+var MOUNT_NODE = document.getElementById("deployment-kit-stepper");
+external_ReactDOM_["unmountComponentAtNode"](MOUNT_NODE);
+external_ReactDOM_["render"](external_React_["createElement"](incoming_parser_VerticalLinearStepper, null), MOUNT_NODE);
+
+/***/ }),
+/* 480 */,
+/* 481 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(0);
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function get() {
+    return _FormControlLabel.default;
+  }
+});
+
+var _FormControlLabel = _interopRequireDefault(__webpack_require__(487));
+
+/***/ }),
+/* 482 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(0);
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function get() {
+    return _Radio.default;
+  }
+});
+
+var _Radio = _interopRequireDefault(__webpack_require__(488));
+
+/***/ }),
+/* 483 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(0);
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function get() {
+    return _RadioGroup.default;
+  }
+});
+
+var _RadioGroup = _interopRequireDefault(__webpack_require__(484));
+
+/***/ }),
+/* 484 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(0);
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(__webpack_require__(3));
+
+var _objectWithoutProperties2 = _interopRequireDefault(__webpack_require__(4));
+
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(9));
+
+var _createClass2 = _interopRequireDefault(__webpack_require__(10));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(11));
+
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(12));
+
+var _inherits2 = _interopRequireDefault(__webpack_require__(13));
+
+var _react = _interopRequireDefault(__webpack_require__(1));
+
+var _propTypes = _interopRequireDefault(__webpack_require__(2));
+
+var _warning = _interopRequireDefault(__webpack_require__(14));
+
+var _FormGroup = _interopRequireDefault(__webpack_require__(485));
+
+var _helpers = __webpack_require__(27);
+
+// @inheritedComponent FormGroup
+var RadioGroup =
+/*#__PURE__*/
+function (_React$Component) {
+  (0, _inherits2.default)(RadioGroup, _React$Component);
+
+  function RadioGroup(props) {
+    var _this;
+
+    (0, _classCallCheck2.default)(this, RadioGroup);
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(RadioGroup).call(this));
+    _this.radios = [];
+
+    _this.focus = function () {
+      if (!_this.radios || !_this.radios.length) {
+        return;
+      }
+
+      var focusRadios = _this.radios.filter(function (n) {
+        return !n.disabled;
+      });
+
+      if (!focusRadios.length) {
+        return;
+      }
+
+      var selectedRadio = (0, _helpers.find)(focusRadios, function (n) {
+        return n.checked;
+      });
+
+      if (selectedRadio) {
+        selectedRadio.focus();
+        return;
+      }
+
+      focusRadios[0].focus();
+    };
+
+    _this.handleChange = function (event) {
+      if (!_this.isControlled) {
+        _this.setState({
+          value: event.target.value
+        });
+      }
+
+      if (_this.props.onChange) {
+        _this.props.onChange(event, event.target.value);
+      }
+    };
+
+    _this.isControlled = props.value != null;
+
+    if (!_this.isControlled) {
+      _this.state = {
+        value: props.defaultValue
+      };
+    }
+
+    return _this;
+  }
+
+  (0, _createClass2.default)(RadioGroup, [{
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      var _this$props = this.props,
+          children = _this$props.children,
+          name = _this$props.name,
+          valueProp = _this$props.value,
+          onChange = _this$props.onChange,
+          other = (0, _objectWithoutProperties2.default)(_this$props, ["children", "name", "value", "onChange"]);
+      var value = this.isControlled ? valueProp : this.state.value;
+      this.radios = [];
+      return _react.default.createElement(_FormGroup.default, (0, _extends2.default)({
+        role: "radiogroup"
+      }, other), _react.default.Children.map(children, function (child) {
+        if (!_react.default.isValidElement(child)) {
+          return null;
+        }
+
+         false ? undefined : void 0;
+        return _react.default.cloneElement(child, {
+          name: name,
+          inputRef: function inputRef(node) {
+            if (node) {
+              _this2.radios.push(node);
+            }
+          },
+          checked: value === child.props.value,
+          onChange: (0, _helpers.createChainedFunction)(child.props.onChange, _this2.handleChange)
+        });
+      }));
+    }
+  }]);
+  return RadioGroup;
+}(_react.default.Component);
+
+ false ? undefined : void 0;
+var _default = RadioGroup;
+exports.default = _default;
+
+/***/ }),
+/* 485 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(0);
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function get() {
+    return _FormGroup.default;
+  }
+});
+
+var _FormGroup = _interopRequireDefault(__webpack_require__(486));
+
+/***/ }),
+/* 486 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(0);
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(__webpack_require__(3));
+
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(5));
+
+var _objectWithoutProperties2 = _interopRequireDefault(__webpack_require__(4));
+
+var _react = _interopRequireDefault(__webpack_require__(1));
+
+var _propTypes = _interopRequireDefault(__webpack_require__(2));
+
+var _classnames = _interopRequireDefault(__webpack_require__(7));
+
+var _withStyles = _interopRequireDefault(__webpack_require__(8));
+
+var styles = {
+  /* Styles applied to the root element. */
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexWrap: 'wrap'
+  },
+
+  /* Styles applied to the root element if `row={true}`. */
+  row: {
+    flexDirection: 'row'
+  }
+};
+/**
+ * `FormGroup` wraps controls such as `Checkbox` and `Switch`.
+ * It provides compact row layout.
+ * For the `Radio`, you should be using the `RadioGroup` component instead of this one.
+ */
+
+exports.styles = styles;
+
+function FormGroup(props) {
+  var classes = props.classes,
+      className = props.className,
+      children = props.children,
+      row = props.row,
+      other = (0, _objectWithoutProperties2.default)(props, ["classes", "className", "children", "row"]);
+  return _react.default.createElement("div", (0, _extends2.default)({
+    className: (0, _classnames.default)(classes.root, (0, _defineProperty2.default)({}, classes.row, row), className)
+  }, other), children);
+}
+
+ false ? undefined : void 0;
+FormGroup.defaultProps = {
+  row: false
+};
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiFormGroup'
+})(FormGroup);
+
+exports.default = _default;
+
+/***/ }),
+/* 487 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(0);
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(__webpack_require__(3));
+
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(5));
+
+var _objectWithoutProperties2 = _interopRequireDefault(__webpack_require__(4));
+
+var _react = _interopRequireDefault(__webpack_require__(1));
+
+var _propTypes = _interopRequireDefault(__webpack_require__(2));
+
+var _classnames = _interopRequireDefault(__webpack_require__(7));
+
+var _withFormControlContext = _interopRequireDefault(__webpack_require__(38));
+
+var _withStyles = _interopRequireDefault(__webpack_require__(8));
+
+var _Typography = _interopRequireDefault(__webpack_require__(105));
+
+var _helpers = __webpack_require__(27);
+
+var styles = function styles(theme) {
+  return {
+    /* Styles applied to the root element. */
+    root: {
+      display: 'inline-flex',
+      alignItems: 'center',
+      cursor: 'pointer',
+      // For correct alignment with the text.
+      verticalAlign: 'middle',
+      // Remove grey highlight
+      WebkitTapHighlightColor: 'transparent',
+      marginLeft: -14,
+      marginRight: 16,
+      // used for row presentation of radio/checkbox
+      '&$disabled': {
+        cursor: 'default'
+      }
+    },
+
+    /* Styles applied to the root element if `labelPlacement="start"`. */
+    labelPlacementStart: {
+      flexDirection: 'row-reverse',
+      marginLeft: 16,
+      // used for row presentation of radio/checkbox
+      marginRight: -14
+    },
+
+    /* Styles applied to the root element if `labelPlacement="top"`. */
+    labelPlacementTop: {
+      flexDirection: 'column-reverse',
+      marginLeft: 16
+    },
+
+    /* Styles applied to the root element if `labelPlacement="bottom"`. */
+    labelPlacementBottom: {
+      flexDirection: 'column',
+      marginLeft: 16
+    },
+
+    /* Styles applied to the root element if `disabled={true}`. */
+    disabled: {},
+
+    /* Styles applied to the label's Typography component. */
+    label: {
+      '&$disabled': {
+        color: theme.palette.text.disabled
+      }
+    }
+  };
+};
+/**
+ * Drop in replacement of the `Radio`, `Switch` and `Checkbox` component.
+ * Use this component if you want to display an extra label.
+ */
+
+
+exports.styles = styles;
+
+function FormControlLabel(props) {
+  var _classNames;
+
+  var checked = props.checked,
+      classes = props.classes,
+      classNameProp = props.className,
+      control = props.control,
+      disabledProp = props.disabled,
+      inputRef = props.inputRef,
+      label = props.label,
+      labelPlacement = props.labelPlacement,
+      muiFormControl = props.muiFormControl,
+      name = props.name,
+      onChange = props.onChange,
+      value = props.value,
+      other = (0, _objectWithoutProperties2.default)(props, ["checked", "classes", "className", "control", "disabled", "inputRef", "label", "labelPlacement", "muiFormControl", "name", "onChange", "value"]);
+  var disabled = disabledProp;
+
+  if (typeof disabled === 'undefined' && typeof control.props.disabled !== 'undefined') {
+    disabled = control.props.disabled;
+  }
+
+  if (typeof disabled === 'undefined' && muiFormControl) {
+    disabled = muiFormControl.disabled;
+  }
+
+  var controlProps = {
+    disabled: disabled
+  };
+  ['checked', 'name', 'onChange', 'value', 'inputRef'].forEach(function (key) {
+    if (typeof control.props[key] === 'undefined' && typeof props[key] !== 'undefined') {
+      controlProps[key] = props[key];
+    }
+  });
+  return _react.default.createElement("label", (0, _extends2.default)({
+    className: (0, _classnames.default)(classes.root, (_classNames = {}, (0, _defineProperty2.default)(_classNames, classes["labelPlacement".concat((0, _helpers.capitalize)(labelPlacement))], labelPlacement !== 'end'), (0, _defineProperty2.default)(_classNames, classes.disabled, disabled), _classNames), classNameProp)
+  }, other), _react.default.cloneElement(control, controlProps), _react.default.createElement(_Typography.default, {
+    component: "span",
+    className: (0, _classnames.default)(classes.label, (0, _defineProperty2.default)({}, classes.disabled, disabled))
+  }, label));
+}
+
+ false ? undefined : void 0;
+FormControlLabel.defaultProps = {
+  labelPlacement: 'end'
+};
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiFormControlLabel'
+})((0, _withFormControlContext.default)(FormControlLabel));
+
+exports.default = _default;
+
+/***/ }),
+/* 488 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(0);
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(__webpack_require__(3));
+
+var _objectWithoutProperties2 = _interopRequireDefault(__webpack_require__(4));
+
+var _react = _interopRequireDefault(__webpack_require__(1));
+
+var _propTypes = _interopRequireDefault(__webpack_require__(2));
+
+var _classnames = _interopRequireDefault(__webpack_require__(7));
+
+var _SwitchBase = _interopRequireDefault(__webpack_require__(489));
+
+var _RadioButtonUnchecked = _interopRequireDefault(__webpack_require__(492));
+
+var _RadioButtonChecked = _interopRequireDefault(__webpack_require__(493));
+
+var _helpers = __webpack_require__(27);
+
+var _withStyles = _interopRequireDefault(__webpack_require__(8));
+
+var styles = function styles(theme) {
+  return {
+    /* Styles applied to the root element. */
+    root: {
+      color: theme.palette.text.secondary
+    },
+
+    /* Styles applied to the root element if `checked={true}`. */
+    checked: {},
+
+    /* Styles applied to the root element if `disabled={true}`. */
+    disabled: {},
+
+    /* Styles applied to the root element if `color="primary"`. */
+    colorPrimary: {
+      '&$checked': {
+        color: theme.palette.primary.main
+      },
+      '&$disabled': {
+        color: theme.palette.action.disabled
+      }
+    },
+
+    /* Styles applied to the root element if `color="secondary"`. */
+    colorSecondary: {
+      '&$checked': {
+        color: theme.palette.secondary.main
+      },
+      '&$disabled': {
+        color: theme.palette.action.disabled
+      }
+    }
+  };
+};
+
+exports.styles = styles;
+
+var _ref = _react.default.createElement(_RadioButtonUnchecked.default, null);
+
+var _ref2 = _react.default.createElement(_RadioButtonChecked.default, null);
+
+function Radio(props) {
+  var classes = props.classes,
+      color = props.color,
+      other = (0, _objectWithoutProperties2.default)(props, ["classes", "color"]);
+  return _react.default.createElement(_SwitchBase.default, (0, _extends2.default)({
+    type: "radio",
+    icon: _ref,
+    checkedIcon: _ref2,
+    classes: {
+      root: (0, _classnames.default)(classes.root, classes["color".concat((0, _helpers.capitalize)(color))]),
+      checked: classes.checked,
+      disabled: classes.disabled
+    }
+  }, other));
+}
+
+ false ? undefined : void 0;
+Radio.defaultProps = {
+  color: 'secondary'
+};
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiRadio'
+})(Radio);
+
+exports.default = _default;
+
+/***/ }),
+/* 489 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(0);
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(__webpack_require__(3));
+
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(5));
+
+var _objectWithoutProperties2 = _interopRequireDefault(__webpack_require__(4));
+
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(9));
+
+var _createClass2 = _interopRequireDefault(__webpack_require__(10));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(11));
+
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(12));
+
+var _inherits2 = _interopRequireDefault(__webpack_require__(13));
+
+var _react = _interopRequireDefault(__webpack_require__(1));
+
+var _propTypes = _interopRequireDefault(__webpack_require__(2));
+
+var _classnames = _interopRequireDefault(__webpack_require__(7));
+
+var _withFormControlContext = _interopRequireDefault(__webpack_require__(38));
+
+var _withStyles = _interopRequireDefault(__webpack_require__(8));
+
+var _IconButton = _interopRequireDefault(__webpack_require__(490));
+
+// @inheritedComponent IconButton
+var styles = {
+  root: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    transition: 'none',
+    '&:hover': {
+      // Disable the hover effect for the IconButton.
+      backgroundColor: 'transparent'
+    }
+  },
+  checked: {},
+  disabled: {},
+  input: {
+    cursor: 'inherit',
+    position: 'absolute',
+    opacity: 0,
+    width: '100%',
+    height: '100%',
+    top: 0,
+    left: 0,
+    margin: 0,
+    padding: 0
+  }
+};
+/**
+ * @ignore - internal component.
+ */
+
+exports.styles = styles;
+
+var SwitchBase =
+/*#__PURE__*/
+function (_React$Component) {
+  (0, _inherits2.default)(SwitchBase, _React$Component);
+
+  function SwitchBase(props) {
+    var _this;
+
+    (0, _classCallCheck2.default)(this, SwitchBase);
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(SwitchBase).call(this));
+
+    _this.handleFocus = function (event) {
+      if (_this.props.onFocus) {
+        _this.props.onFocus(event);
+      }
+
+      var muiFormControl = _this.props.muiFormControl;
+
+      if (muiFormControl && muiFormControl.onFocus) {
+        muiFormControl.onFocus(event);
+      }
+    };
+
+    _this.handleBlur = function (event) {
+      if (_this.props.onBlur) {
+        _this.props.onBlur(event);
+      }
+
+      var muiFormControl = _this.props.muiFormControl;
+
+      if (muiFormControl && muiFormControl.onBlur) {
+        muiFormControl.onBlur(event);
+      }
+    };
+
+    _this.handleInputChange = function (event) {
+      var checked = event.target.checked;
+
+      if (!_this.isControlled) {
+        _this.setState({
+          checked: checked
+        });
+      }
+
+      if (_this.props.onChange) {
+        _this.props.onChange(event, checked);
+      }
+    };
+
+    _this.isControlled = props.checked != null;
+    _this.state = {};
+
+    if (!_this.isControlled) {
+      // not controlled, use internal state
+      _this.state.checked = props.defaultChecked !== undefined ? props.defaultChecked : false;
+    }
+
+    return _this;
+  }
+
+  (0, _createClass2.default)(SwitchBase, [{
+    key: "render",
+    value: function render() {
+      var _classNames;
+
+      var _this$props = this.props,
+          autoFocus = _this$props.autoFocus,
+          checkedProp = _this$props.checked,
+          checkedIcon = _this$props.checkedIcon,
+          classes = _this$props.classes,
+          classNameProp = _this$props.className,
+          defaultChecked = _this$props.defaultChecked,
+          disabledProp = _this$props.disabled,
+          icon = _this$props.icon,
+          id = _this$props.id,
+          inputProps = _this$props.inputProps,
+          inputRef = _this$props.inputRef,
+          muiFormControl = _this$props.muiFormControl,
+          name = _this$props.name,
+          onBlur = _this$props.onBlur,
+          onChange = _this$props.onChange,
+          onFocus = _this$props.onFocus,
+          readOnly = _this$props.readOnly,
+          required = _this$props.required,
+          tabIndex = _this$props.tabIndex,
+          type = _this$props.type,
+          value = _this$props.value,
+          other = (0, _objectWithoutProperties2.default)(_this$props, ["autoFocus", "checked", "checkedIcon", "classes", "className", "defaultChecked", "disabled", "icon", "id", "inputProps", "inputRef", "muiFormControl", "name", "onBlur", "onChange", "onFocus", "readOnly", "required", "tabIndex", "type", "value"]);
+      var disabled = disabledProp;
+
+      if (muiFormControl) {
+        if (typeof disabled === 'undefined') {
+          disabled = muiFormControl.disabled;
+        }
+      }
+
+      var checked = this.isControlled ? checkedProp : this.state.checked;
+      var hasLabelFor = type === 'checkbox' || type === 'radio';
+      return _react.default.createElement(_IconButton.default, (0, _extends2.default)({
+        component: "span",
+        className: (0, _classnames.default)(classes.root, (_classNames = {}, (0, _defineProperty2.default)(_classNames, classes.checked, checked), (0, _defineProperty2.default)(_classNames, classes.disabled, disabled), _classNames), classNameProp),
+        disabled: disabled,
+        tabIndex: null,
+        role: undefined,
+        onFocus: this.handleFocus,
+        onBlur: this.handleBlur
+      }, other), checked ? checkedIcon : icon, _react.default.createElement("input", (0, _extends2.default)({
+        autoFocus: autoFocus,
+        checked: checkedProp,
+        defaultChecked: defaultChecked,
+        className: classes.input,
+        disabled: disabled,
+        id: hasLabelFor && id,
+        name: name,
+        onChange: this.handleInputChange,
+        readOnly: readOnly,
+        ref: inputRef,
+        required: required,
+        tabIndex: tabIndex,
+        type: type,
+        value: value
+      }, inputProps)));
+    }
+  }]);
+  return SwitchBase;
+}(_react.default.Component); // NB: If changed, please update Checkbox, Switch and Radio
+// so that the API documentation is updated.
+
+
+ false ? undefined : void 0;
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiPrivateSwitchBase'
+})((0, _withFormControlContext.default)(SwitchBase));
+
+exports.default = _default;
+
+/***/ }),
+/* 490 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(0);
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function get() {
+    return _IconButton.default;
+  }
+});
+
+var _IconButton = _interopRequireDefault(__webpack_require__(491));
+
+/***/ }),
+/* 491 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(0);
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(__webpack_require__(3));
+
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(5));
+
+var _objectWithoutProperties2 = _interopRequireDefault(__webpack_require__(4));
+
+var _react = _interopRequireDefault(__webpack_require__(1));
+
+var _propTypes = _interopRequireDefault(__webpack_require__(2));
+
+var _classnames = _interopRequireDefault(__webpack_require__(7));
+
+var _utils = __webpack_require__(6);
+
+var _withStyles = _interopRequireDefault(__webpack_require__(8));
+
+var _colorManipulator = __webpack_require__(161);
+
+var _ButtonBase = _interopRequireDefault(__webpack_require__(469));
+
+var _helpers = __webpack_require__(27);
+
+// @inheritedComponent ButtonBase
+var styles = function styles(theme) {
+  return {
+    /* Styles applied to the root element. */
+    root: {
+      textAlign: 'center',
+      flex: '0 0 auto',
+      fontSize: theme.typography.pxToRem(24),
+      padding: 12,
+      borderRadius: '50%',
+      overflow: 'visible',
+      // Explicitly set the default value to solve a bug on IE 11.
+      color: theme.palette.action.active,
+      transition: theme.transitions.create('background-color', {
+        duration: theme.transitions.duration.shortest
+      }),
+      '&:hover': {
+        backgroundColor: (0, _colorManipulator.fade)(theme.palette.action.active, theme.palette.action.hoverOpacity),
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          backgroundColor: 'transparent'
+        },
+        '&$disabled': {
+          backgroundColor: 'transparent'
+        }
+      },
+      '&$disabled': {
+        color: theme.palette.action.disabled
+      }
+    },
+
+    /* Styles applied to the root element if `color="inherit"`. */
+    colorInherit: {
+      color: 'inherit'
+    },
+
+    /* Styles applied to the root element if `color="primary"`. */
+    colorPrimary: {
+      color: theme.palette.primary.main,
+      '&:hover': {
+        backgroundColor: (0, _colorManipulator.fade)(theme.palette.primary.main, theme.palette.action.hoverOpacity),
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          backgroundColor: 'transparent'
+        }
+      }
+    },
+
+    /* Styles applied to the root element if `color="secondary"`. */
+    colorSecondary: {
+      color: theme.palette.secondary.main,
+      '&:hover': {
+        backgroundColor: (0, _colorManipulator.fade)(theme.palette.secondary.main, theme.palette.action.hoverOpacity),
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          backgroundColor: 'transparent'
+        }
+      }
+    },
+
+    /* Styles applied to the root element if `disabled={true}`. */
+    disabled: {},
+
+    /* Styles applied to the children container element. */
+    label: {
+      width: '100%',
+      display: 'flex',
+      alignItems: 'inherit',
+      justifyContent: 'inherit'
+    }
+  };
+};
+/**
+ * Refer to the [Icons](/style/icons/) section of the documentation
+ * regarding the available icon options.
+ */
+
+
+exports.styles = styles;
+
+function IconButton(props) {
+  var _classNames;
+
+  var children = props.children,
+      classes = props.classes,
+      className = props.className,
+      color = props.color,
+      disabled = props.disabled,
+      other = (0, _objectWithoutProperties2.default)(props, ["children", "classes", "className", "color", "disabled"]);
+  return _react.default.createElement(_ButtonBase.default, (0, _extends2.default)({
+    className: (0, _classnames.default)(classes.root, (_classNames = {}, (0, _defineProperty2.default)(_classNames, classes["color".concat((0, _helpers.capitalize)(color))], color !== 'default'), (0, _defineProperty2.default)(_classNames, classes.disabled, disabled), _classNames), className),
+    centerRipple: true,
+    focusRipple: true,
+    disabled: disabled
+  }, other), _react.default.createElement("span", {
+    className: classes.label
+  }, children));
+}
+
+ false ? undefined : void 0;
+IconButton.defaultProps = {
+  color: 'default',
+  disabled: false
+};
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiIconButton'
+})(IconButton);
+
+exports.default = _default;
+
+/***/ }),
+/* 492 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(0);
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(__webpack_require__(1));
+
+var _pure = _interopRequireDefault(__webpack_require__(104));
+
+var _SvgIcon = _interopRequireDefault(__webpack_require__(65));
+
+var _ref = _react.default.createElement("path", {
+  d: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"
+});
+
+/**
+ * @ignore - internal component.
+ */
+var RadioButtonUnchecked = function RadioButtonUnchecked(props) {
+  return _react.default.createElement(_SvgIcon.default, props, _ref);
+};
+
+RadioButtonUnchecked = (0, _pure.default)(RadioButtonUnchecked);
+RadioButtonUnchecked.muiName = 'SvgIcon';
+var _default = RadioButtonUnchecked;
+exports.default = _default;
+
+/***/ }),
+/* 493 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(0);
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(__webpack_require__(1));
+
+var _pure = _interopRequireDefault(__webpack_require__(104));
+
+var _SvgIcon = _interopRequireDefault(__webpack_require__(65));
+
+var _ref = _react.default.createElement("path", {
+  d: "M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"
+});
+
+/**
+ * @ignore - internal component.
+ */
+var RadioButtonChecked = function RadioButtonChecked(props) {
+  return _react.default.createElement(_SvgIcon.default, props, _ref);
+};
+
+RadioButtonChecked = (0, _pure.default)(RadioButtonChecked);
+RadioButtonChecked.muiName = 'SvgIcon';
+var _default = RadioButtonChecked;
+exports.default = _default;
+
+/***/ }),
+/* 494 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(0);
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function get() {
+    return _StepButton.default;
+  }
+});
+
+var _StepButton = _interopRequireDefault(__webpack_require__(495));
+
+/***/ }),
+/* 495 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(0);
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(__webpack_require__(3));
+
+var _objectWithoutProperties2 = _interopRequireDefault(__webpack_require__(4));
+
+var _react = _interopRequireDefault(__webpack_require__(1));
+
+var _propTypes = _interopRequireDefault(__webpack_require__(2));
+
+var _classnames = _interopRequireDefault(__webpack_require__(7));
+
+var _withStyles = _interopRequireDefault(__webpack_require__(8));
+
+var _ButtonBase = _interopRequireDefault(__webpack_require__(469));
+
+var _StepLabel = _interopRequireDefault(__webpack_require__(185));
+
+var _reactHelpers = __webpack_require__(46);
+
+// @inheritedComponent ButtonBase
+var styles = {
+  /* Styles applied to the root element. */
+  root: {
+    width: '100%',
+    padding: '24px 16px',
+    margin: '-24px -16px',
+    boxSizing: 'content-box'
+  },
+
+  /* Styles applied to the root element if `orientation="horizontal"`. */
+  horizontal: {},
+
+  /* Styles applied to the root element if `orientation="vertical"`. */
+  vertical: {
+    justifyContent: 'flex-start'
+  },
+
+  /* Styles applied to the `ButtonBase` touch-ripple. */
+  touchRipple: {
+    color: 'rgba(0, 0, 0, 0.3)'
+  }
+};
+exports.styles = styles;
+
+function StepButton(props) {
+  var active = props.active,
+      alternativeLabel = props.alternativeLabel,
+      children = props.children,
+      classes = props.classes,
+      classNameProp = props.className,
+      completed = props.completed,
+      disabled = props.disabled,
+      icon = props.icon,
+      last = props.last,
+      optional = props.optional,
+      orientation = props.orientation,
+      other = (0, _objectWithoutProperties2.default)(props, ["active", "alternativeLabel", "children", "classes", "className", "completed", "disabled", "icon", "last", "optional", "orientation"]);
+  var childProps = {
+    active: active,
+    alternativeLabel: alternativeLabel,
+    completed: completed,
+    disabled: disabled,
+    icon: icon,
+    optional: optional,
+    orientation: orientation
+  };
+  var child = (0, _reactHelpers.isMuiElement)(children, ['StepLabel']) ? _react.default.cloneElement(children, childProps) : _react.default.createElement(_StepLabel.default, childProps, children);
+  return _react.default.createElement(_ButtonBase.default, (0, _extends2.default)({
+    disabled: disabled,
+    TouchRippleProps: {
+      className: classes.touchRipple
+    },
+    className: (0, _classnames.default)(classes.root, classes[orientation], classNameProp)
+  }, other), child);
+}
+
+ false ? undefined : void 0;
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiStepButton'
+})(StepButton);
+
+exports.default = _default;
 
 /***/ })
 /******/ ]);

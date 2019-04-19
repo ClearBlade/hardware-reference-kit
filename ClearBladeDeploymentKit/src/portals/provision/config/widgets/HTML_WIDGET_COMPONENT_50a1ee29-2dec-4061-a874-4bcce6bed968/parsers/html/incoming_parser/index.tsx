@@ -2,7 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
-import StepLabel from "@material-ui/core/StepLabel";
+import StepButton from "@material-ui/core/StepButton";
 import StepContent from "@material-ui/core/StepContent";
 import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
@@ -11,7 +11,11 @@ import { FormattedMessage, IntlProvider } from "react-intl";
 
 import messages from "../../../../../../../../lib/frontend/stepper/messages";
 import StepOne from "../../../../../../../../lib/frontend/stepper/steps/StepOne";
-import { IStepProps } from "../../../../../../../../lib/frontend/stepper/steps/shared";
+import {
+  FLOW,
+  TARGET_CONFIGURATION,
+  Configuration
+} from "../../../../../../../../lib/backend/Configuration";
 
 /*
 so we have this concept of steps
@@ -116,10 +120,16 @@ function getSteps() {
   ];
 }
 
-function getStepContent(step: number, props: IStepProps) {
+function getStepContent(step: number, state: IState, handlers: SubmitHandlers) {
   switch (step) {
     case 0:
-      return <StepOne {...props} />;
+      return (
+        <StepOne
+          flow={state.workflowConfig.PLATFORM.flow}
+          platformURL={state.workflowConfig.PLATFORM.platformURL}
+          onSubmit={handlers.stepOne}
+        />
+      );
     case 1:
       return "An ad group contains one or more ads which target a shared set of keywords.";
     case 2:
@@ -132,13 +142,53 @@ function getStepContent(step: number, props: IStepProps) {
   }
 }
 
+interface SubmitHandlers {
+  stepOne: VerticalLinearStepper["submitStepOne"];
+}
+
 interface IState {
+  workflowConfig: Configuration;
   activeStep: number;
 }
 
 class VerticalLinearStepper extends React.Component<{}, IState> {
   state = {
-    activeStep: 0
+    activeStep: 0,
+    workflowConfig: {
+      PLATFORM: {
+        flow: FLOW.EXISTING,
+        platformURL: ""
+      },
+      DEVELOPER: {
+        flow: FLOW.NEW,
+        devEmail: "",
+        devPassword: "",
+        key: ""
+      },
+      SYSTEM: {
+        flow: FLOW.IPM,
+        systemName: "",
+        systemKey: "",
+        systemSecret: "",
+        provEmail: "provisioner@clearblade.com",
+        provPassword: "clearblade",
+        repoUser: TARGET_CONFIGURATION.IPM_REPO_USER,
+        repoName: TARGET_CONFIGURATION.IPM_REPO_NAME,
+        entrypoint: TARGET_CONFIGURATION.IPM_ENTRYPOINT
+      },
+      EDGE: {
+        flow: FLOW.NEW,
+        edgeID: "",
+        edgeToken: ""
+      }
+    }
+  };
+
+  jumpToStep = (idx: number) => {
+    this.setState({
+      ...this.state,
+      activeStep: idx
+    });
   };
 
   handleNext = () => {
@@ -159,6 +209,17 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
     });
   };
 
+  submitStepOne = (config: Configuration["PLATFORM"]) => {
+    this.setState(state => ({
+      ...state,
+      activeStep: state.activeStep + 1,
+      workflowConfig: {
+        ...state.workflowConfig,
+        PLATFORM: config
+      }
+    }));
+  };
+
   componentDidMount() {
     console.log("DID MOUNT!");
   }
@@ -177,28 +238,16 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
           <Stepper activeStep={activeStep} orientation="vertical">
             {steps.map((msg, index) => (
               <Step key={index}>
-                <StepLabel>{msg}</StepLabel>
+                <StepButton
+                  onClick={() => this.jumpToStep(index)}
+                  // completed={this.state.completed[index]}
+                >
+                  {msg}
+                </StepButton>
                 <StepContent>
-                  {getStepContent(index, {
-                    onComplete: () => console.log("complete")
+                  {getStepContent(index, this.state, {
+                    stepOne: this.submitStepOne
                   })}
-                  <div>
-                    <div>
-                      <Button
-                        disabled={activeStep === 0}
-                        onClick={this.handleBack}
-                      >
-                        Hello
-                      </Button>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={this.handleNext}
-                      >
-                        {activeStep === steps.length - 1 ? "Finish" : "Next"}
-                      </Button>
-                    </div>
-                  </div>
                 </StepContent>
               </Step>
             ))}
@@ -217,7 +266,7 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
   }
 }
 
-ReactDOM.render(
-  <VerticalLinearStepper />,
-  document.getElementById("deployment-kit-stepper")
-);
+const MOUNT_NODE = document.getElementById("deployment-kit-stepper");
+ReactDOM.unmountComponentAtNode(MOUNT_NODE as HTMLElement);
+
+ReactDOM.render(<VerticalLinearStepper />, MOUNT_NODE);

@@ -4,16 +4,60 @@ import ClearBladeAdminREST, {
   EdgeSetupInfo
 } from "./ClearBladeAdminRESTLib";
 
-export type WorkflowConfig = typeof WORKFLOW_CONFIGURATION;
+export interface PlatformConfiguration {
+  flow: FLOW;
+  platformURL: string;
+}
 
-enum FLOW {
+export interface Configuration {
+  PLATFORM: PlatformConfiguration;
+  DEVELOPER: {
+    flow: FLOW;
+    devEmail: string;
+    devPassword: string;
+    key: string;
+  };
+  SYSTEM: {
+    flow: FLOW;
+    systemName: string;
+    systemKey: string;
+    systemSecret: string;
+    provEmail: string;
+    provPassword: string;
+    repoUser: string;
+    repoName: string;
+    entrypoint: { portal: string };
+  };
+  EDGE: {
+    flow: FLOW;
+    edgeID: string;
+    edgeToken: string;
+  };
+}
+export interface WorkflowConfig extends Configuration {
+  AUTOROUTE: boolean;
+  PLATFORM: Configuration["PLATFORM"] & {
+    route: boolean;
+  };
+  DEVELOPER: Configuration["DEVELOPER"] & {
+    route: boolean;
+  };
+  SYSTEM: Configuration["SYSTEM"] & {
+    route: boolean;
+  };
+  EDGE: Configuration["EDGE"] & {
+    route: boolean;
+  };
+}
+
+export enum FLOW {
   NEW = "NEW",
   EXISTING = "EXISTING",
   IPM = "IPM",
   PRECONFIGURED = "PRECONFIGURED"
 }
 
-const TARGET_CONFIGURATION = {
+export const TARGET_CONFIGURATION = {
   URL: "https://amd.clearblade.com",
   REGISTRATION_KEY: "AMDBlade",
   IPM_REPO_USER: "aalcott14",
@@ -26,7 +70,7 @@ const PORTAL_CONFIGURATION = {
   AUTOROUTE: false
 };
 
-const WORKFLOW_CONFIGURATION = {
+const WORKFLOW_CONFIGURATION: WorkflowConfig = {
   AUTOROUTE: PORTAL_CONFIGURATION.AUTOROUTE,
   PLATFORM: {
     route: true && PORTAL_CONFIGURATION.AUTOROUTE,
