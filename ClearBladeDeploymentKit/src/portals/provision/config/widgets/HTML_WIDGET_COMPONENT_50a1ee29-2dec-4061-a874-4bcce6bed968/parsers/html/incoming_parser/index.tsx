@@ -12,25 +12,15 @@ import { FormattedMessage, IntlProvider } from "react-intl";
 import messages from "../../../../../../../../lib/frontend/stepper/messages";
 import StepOne from "../../../../../../../../lib/frontend/stepper/steps/StepOne";
 import StepTwo from "../../../../../../../../lib/frontend/stepper/steps/StepTwo";
+import StepThree from "../../../../../../../../lib/frontend/stepper/steps/StepThree";
 import {
   FLOW,
   TARGET_CONFIGURATION,
   Configuration,
   PlatformConfiguration,
-  DeveloperConfiguration
+  DeveloperConfiguration,
+  SystemConfiguration
 } from "../../../../../../../../lib/backend/Configuration";
-
-/*
-so we have this concept of steps
-what is a step?
-a step generally asks users to input some data, select from a list, etc.
-some steps can get into states where they don't require any user input (e.g., preconfigured platform)
-- each "configuration" step has at least two options
-- each "configuration" step should have validation 
-  - question is...who is responsible for determining that a step is valid?
-  should it be the substeps job? I think so since each substep will have it's own formik form it will need to alert the parent when it is valid
-  maybe we could do the render prop thing for the step buttons
-*/
 
 // existing vs preconfigured platform
 // existing -> enter platform URL - TEXT
@@ -128,26 +118,24 @@ function getStepContent(step: number, state: IState, handlers: SubmitHandlers) {
     case 0:
       return (
         <StepOne
-          flow={state.workflowConfig.PLATFORM.flow}
-          platformURL={state.workflowConfig.PLATFORM.platformURL}
+          {...state.workflowConfig.PLATFORM}
           onSubmit={handlers.stepOne}
         />
       );
     case 1:
       return (
         <StepTwo
-          flow={state.workflowConfig.DEVELOPER.flow}
-          devEmail={state.workflowConfig.DEVELOPER.devEmail}
-          devPassword={state.workflowConfig.DEVELOPER.devPassword}
-          key={state.workflowConfig.DEVELOPER.key}
+          {...state.workflowConfig.DEVELOPER}
           onSubmit={handlers.stepTwo}
         />
       );
     case 2:
-      return `Try out different ad text to see what brings in the most customers,
-                and learn how to enhance your ads using features like ad extensions.
-                If you run into any problems with your ads, find out how to tell if
-                they're running and how to resolve approval issues.`;
+      return (
+        <StepThree
+          {...state.workflowConfig.SYSTEM}
+          onSubmit={handlers.stepThree}
+        />
+      );
     default:
       return "Unknown step";
   }
@@ -156,6 +144,7 @@ function getStepContent(step: number, state: IState, handlers: SubmitHandlers) {
 interface SubmitHandlers {
   stepOne: VerticalLinearStepper["submitStepOne"];
   stepTwo: VerticalLinearStepper["submitStepTwo"];
+  stepThree: VerticalLinearStepper["submitStepThree"];
 }
 
 interface IState {
@@ -243,12 +232,19 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
     }));
   };
 
+  submitStepThree = (config: SystemConfiguration) => {
+    this.setState(state => ({
+      ...state,
+      activeStep: state.activeStep + 1,
+      workflowConfig: {
+        ...state.workflowConfig,
+        SYSTEM: config
+      }
+    }));
+  };
+
   componentDidMount() {
     console.log("DID MOUNT!");
-  }
-
-  componentWillUnmount() {
-    console.log("WILL UNMOUNT!");
   }
 
   render() {
@@ -270,7 +266,8 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
                 <StepContent>
                   {getStepContent(index, this.state, {
                     stepOne: this.submitStepOne,
-                    stepTwo: this.submitStepTwo
+                    stepTwo: this.submitStepTwo,
+                    stepThree: this.submitStepThree
                   })}
                 </StepContent>
               </Step>

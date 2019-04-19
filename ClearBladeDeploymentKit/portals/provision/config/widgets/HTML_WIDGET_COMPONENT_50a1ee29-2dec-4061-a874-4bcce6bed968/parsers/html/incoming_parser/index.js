@@ -33925,6 +33925,38 @@ addLocaleData(locale_data_ignored_default.a);
   passwordsMustMatch: {
     id: "app.components.stepper.passwordsMustMatch",
     defaultMessage: "Passwords must match"
+  },
+  newSystemFromIpm: {
+    id: "app.components.stepper.newSystemFromIpm",
+    defaultMessage: "IPM System"
+  },
+  emptySystem: {
+    id: "app.components.stepper.emptySystem",
+    defaultMessage: "Empty System"
+  },
+  existingSystem: {
+    id: "app.components.stepper.existingSystem",
+    defaultMessage: "Existing System"
+  },
+  systemKey: {
+    id: "app.components.stepper.systemKey",
+    defaultMessage: "System Key"
+  },
+  systemSecret: {
+    id: "app.components.stepper.systemSecret",
+    defaultMessage: "System Secret"
+  },
+  provisionerEmail: {
+    id: "app.components.stepper.provisionerEmail",
+    defaultMessage: "Provision User Email"
+  },
+  provisionerPassword: {
+    id: "app.components.stepper.provisionerPassword",
+    defaultMessage: "Provision User Password"
+  },
+  systemName: {
+    id: "app.components.stepper.systemName",
+    defaultMessage: "System Name"
   }
 }));
 // CONCATENATED MODULE: ./node_modules/tslib/tslib.es6.js
@@ -39259,6 +39291,9 @@ function FormikInputWrapper(props) {
           label: o.label
         });
       }));
+
+    case FieldTypes.SELECT:
+      return external_React_["createElement"]("div", null, "select");
   }
 
   return null;
@@ -39445,6 +39480,176 @@ var StepTwo_StepTwo = function StepTwo(props) {
 };
 
 /* harmony default export */ var steps_StepTwo = (injectIntl(StepTwo_StepTwo));
+// CONCATENATED MODULE: ./src/lib/frontend/stepper/steps/StepThree.tsx
+
+
+
+
+
+
+
+
+
+
+
+var StepThree_StepTwo = function StepTwo(props) {
+  var systemOptions = [{
+    value: FLOW.NEW,
+    label: props.intl.formatMessage(stepper_messages.emptySystem)
+  }, {
+    value: FLOW.EXISTING,
+    label: props.intl.formatMessage(stepper_messages.existingSystem)
+  }, {
+    value: FLOW.IPM,
+    label: props.intl.formatMessage(stepper_messages.newSystemFromIpm)
+  }];
+  return external_React_["createElement"](formik_esm_Formik, {
+    validateOnBlur: true,
+    initialValues: {
+      flow: props.flow,
+      systemName: props.systemName,
+      systemKey: props.systemKey,
+      systemSecret: props.systemSecret,
+      provEmail: props.provEmail,
+      provPassword: props.provPassword,
+      repoUser: props.repoUser,
+      repoName: props.repoName,
+      entrypoint: props.entrypoint
+    },
+    validationSchema: yup_lib["object"]().shape({
+      systemName: yup_lib["string"]().when("flow", {
+        is: FLOW.NEW,
+        then: yup_lib["string"]().required(props.intl.formatMessage(stepper_messages.required))
+      }),
+      systemKey: yup_lib["string"]().when("flow", {
+        is: FLOW.EXISTING,
+        then: yup_lib["string"]().required(props.intl.formatMessage(stepper_messages.required))
+      }),
+      systemSecret: yup_lib["string"]().when("flow", {
+        is: FLOW.EXISTING,
+        then: yup_lib["string"]().required(props.intl.formatMessage(stepper_messages.required))
+      }),
+      provEmail: yup_lib["string"]().when("flow", {
+        is: FLOW.EXISTING,
+        then: yup_lib["string"]().required(props.intl.formatMessage(stepper_messages.required)).matches(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i, props.intl.formatMessage(stepper_messages.invalidEmail))
+      }),
+      provPassword: yup_lib["string"]().when("flow", {
+        is: FLOW.EXISTING,
+        then: yup_lib["string"]().required(props.intl.formatMessage(stepper_messages.required))
+      }),
+      repoUser: yup_lib["string"]().when("flow", {
+        is: FLOW.IPM,
+        then: yup_lib["string"]().required(props.intl.formatMessage(stepper_messages.required))
+      }),
+      repoName: yup_lib["string"]().when("flow", {
+        is: FLOW.IPM,
+        then: yup_lib["string"]().required(props.intl.formatMessage(stepper_messages.required))
+      })
+    }),
+    onSubmit: function onSubmit(values) {
+      props.onSubmit(values);
+    }
+  }, function (_ref) {
+    var handleSubmit = _ref.handleSubmit,
+        values = _ref.values;
+    return external_React_["createElement"](Form, null, external_React_["createElement"](FormGroup_default.a, null, external_React_["createElement"](FormControl_default.a, {
+      component: "fieldset"
+    }, external_React_["createElement"](Field, {
+      name: "flow",
+      render: function render(_ref2) {
+        var field = _ref2.field,
+            form = _ref2.form;
+        return external_React_["createElement"](frontend_FormikInputWrapper, {
+          type: FieldTypes.RADIO_GROUP,
+          field: field,
+          form: form,
+          label: props.intl.formatMessage(stepper_messages.system),
+          options: systemOptions
+        });
+      }
+    })), values.flow === FLOW.EXISTING && external_React_["createElement"](external_React_["Fragment"], null, external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Field, {
+      name: "systemKey",
+      render: function render(_ref3) {
+        var field = _ref3.field,
+            form = _ref3.form;
+        return external_React_["createElement"](frontend_FormikInputWrapper, {
+          type: FieldTypes.TEXT,
+          field: field,
+          form: form,
+          label: props.intl.formatMessage(stepper_messages.systemKey)
+        });
+      }
+    })), external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Field, {
+      name: "systemSecret",
+      render: function render(_ref4) {
+        var field = _ref4.field,
+            form = _ref4.form;
+        return external_React_["createElement"](frontend_FormikInputWrapper, {
+          type: FieldTypes.TEXT,
+          field: field,
+          form: form,
+          label: props.intl.formatMessage(stepper_messages.systemSecret)
+        });
+      }
+    })), external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Field, {
+      name: "provEmail",
+      render: function render(_ref5) {
+        var field = _ref5.field,
+            form = _ref5.form;
+        return external_React_["createElement"](frontend_FormikInputWrapper, {
+          type: FieldTypes.TEXT,
+          field: field,
+          form: form,
+          label: props.intl.formatMessage(stepper_messages.provisionerEmail)
+        });
+      }
+    })), external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Field, {
+      name: "provPassword",
+      render: function render(_ref6) {
+        var field = _ref6.field,
+            form = _ref6.form;
+        return external_React_["createElement"](frontend_FormikInputWrapper, {
+          type: FieldTypes.PASSWORD,
+          field: field,
+          form: form,
+          label: props.intl.formatMessage(stepper_messages.provisionerPassword)
+        });
+      }
+    }))), values.flow === FLOW.NEW && external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Field, {
+      name: "systemName",
+      render: function render(_ref7) {
+        var field = _ref7.field,
+            form = _ref7.form;
+        return external_React_["createElement"](frontend_FormikInputWrapper, {
+          type: FieldTypes.TEXT,
+          field: field,
+          form: form,
+          label: props.intl.formatMessage(stepper_messages.systemName)
+        });
+      }
+    })), values.flow === FLOW.IPM && external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Field, {
+      name: "devPassword",
+      render: function render(_ref8) {
+        var field = _ref8.field,
+            form = _ref8.form;
+        return external_React_["createElement"](frontend_FormikInputWrapper, {
+          type: FieldTypes.SELECT,
+          options: [],
+          field: field,
+          form: form,
+          label: props.intl.formatMessage(stepper_messages.password)
+        });
+      }
+    })), external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Button_default.a, {
+      variant: "contained",
+      color: "primary",
+      type: "submit",
+      onSubmit: handleSubmit
+    }, "Continue"))));
+  });
+};
+
+/* harmony default export */ var StepThree = (injectIntl(StepThree_StepTwo));
 // CONCATENATED MODULE: ./src/portals/provision/config/widgets/HTML_WIDGET_COMPONENT_50a1ee29-2dec-4061-a874-4bcce6bed968/parsers/html/incoming_parser/index.tsx
 function incoming_parser_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { incoming_parser_typeof = function _typeof(obj) { return typeof obj; }; } else { incoming_parser_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return incoming_parser_typeof(obj); }
 
@@ -39468,6 +39673,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function incoming_parser_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function incoming_parser_extends() { incoming_parser_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return incoming_parser_extends.apply(this, arguments); }
 
 
 
@@ -39482,18 +39688,8 @@ function incoming_parser_defineProperty(obj, key, value) { if (key in obj) { Obj
 
 
 
-/*
-so we have this concept of steps
-what is a step?
-a step generally asks users to input some data, select from a list, etc.
-some steps can get into states where they don't require any user input (e.g., preconfigured platform)
-- each "configuration" step has at least two options
-- each "configuration" step should have validation 
-  - question is...who is responsible for determining that a step is valid?
-  should it be the substeps job? I think so since each substep will have it's own formik form it will need to alert the parent when it is valid
-  maybe we could do the render prop thing for the step buttons
-*/
-// existing vs preconfigured platform
+
+ // existing vs preconfigured platform
 // existing -> enter platform URL - TEXT
 // preconfigured -> continue
 // new developer vs existing developer
@@ -39578,23 +39774,19 @@ function getSteps() {
 function getStepContent(step, state, handlers) {
   switch (step) {
     case 0:
-      return external_React_["createElement"](steps_StepOne, {
-        flow: state.workflowConfig.PLATFORM.flow,
-        platformURL: state.workflowConfig.PLATFORM.platformURL,
+      return external_React_["createElement"](steps_StepOne, incoming_parser_extends({}, state.workflowConfig.PLATFORM, {
         onSubmit: handlers.stepOne
-      });
+      }));
 
     case 1:
-      return external_React_["createElement"](steps_StepTwo, {
-        flow: state.workflowConfig.DEVELOPER.flow,
-        devEmail: state.workflowConfig.DEVELOPER.devEmail,
-        devPassword: state.workflowConfig.DEVELOPER.devPassword,
-        key: state.workflowConfig.DEVELOPER.key,
+      return external_React_["createElement"](steps_StepTwo, incoming_parser_extends({}, state.workflowConfig.DEVELOPER, {
         onSubmit: handlers.stepTwo
-      });
+      }));
 
     case 2:
-      return "Try out different ad text to see what brings in the most customers,\n                and learn how to enhance your ads using features like ad extensions.\n                If you run into any problems with your ads, find out how to tell if\n                they're running and how to resolve approval issues.";
+      return external_React_["createElement"](StepThree, incoming_parser_extends({}, state.workflowConfig.SYSTEM, {
+        onSubmit: handlers.stepThree
+      }));
 
     default:
       return "Unknown step";
@@ -39701,6 +39893,17 @@ function (_React$Component) {
       });
     });
 
+    incoming_parser_defineProperty(_assertThisInitialized(_this), "submitStepThree", function (config) {
+      _this.setState(function (state) {
+        return _objectSpread({}, state, {
+          activeStep: state.activeStep + 1,
+          workflowConfig: _objectSpread({}, state.workflowConfig, {
+            SYSTEM: config
+          })
+        });
+      });
+    });
+
     return _this;
   }
 
@@ -39708,11 +39911,6 @@ function (_React$Component) {
     key: "componentDidMount",
     value: function componentDidMount() {
       console.log("DID MOUNT!");
-    }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      console.log("WILL UNMOUNT!");
     }
   }, {
     key: "render",
@@ -39734,7 +39932,8 @@ function (_React$Component) {
 
         }, msg), external_React_["createElement"](StepContent_default.a, null, getStepContent(index, _this2.state, {
           stepOne: _this2.submitStepOne,
-          stepTwo: _this2.submitStepTwo
+          stepTwo: _this2.submitStepTwo,
+          stepThree: _this2.submitStepThree
         })));
       })), activeStep === steps.length && external_React_["createElement"](Paper_default.a, {
         square: true,

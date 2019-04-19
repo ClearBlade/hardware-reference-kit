@@ -22,7 +22,7 @@ type IProps<T extends FieldTypes> = {
   type: T;
   label: string;
 } & FieldProps &
-  (T extends FieldTypes.RADIO_GROUP
+  (T extends FieldTypes.RADIO_GROUP | FieldTypes.SELECT
     ? {
         options: Option[];
       }
@@ -65,6 +65,8 @@ function FormikInputWrapper<T extends FieldTypes>(props: IProps<T>) {
           ))}
         </RadioGroup>
       );
+    case FieldTypes.SELECT:
+      return <div>select</div>;
   }
   return null;
 }

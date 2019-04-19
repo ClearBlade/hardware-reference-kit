@@ -16,20 +16,22 @@ export interface DeveloperConfiguration {
   key: string;
 }
 
+export interface SystemConfiguration {
+  flow: FLOW;
+  systemName: string;
+  systemKey: string;
+  systemSecret: string;
+  provEmail: string;
+  provPassword: string;
+  repoUser: string;
+  repoName: string;
+  entrypoint: { portal: string };
+}
+
 export interface Configuration {
   PLATFORM: PlatformConfiguration;
   DEVELOPER: DeveloperConfiguration;
-  SYSTEM: {
-    flow: FLOW;
-    systemName: string;
-    systemKey: string;
-    systemSecret: string;
-    provEmail: string;
-    provPassword: string;
-    repoUser: string;
-    repoName: string;
-    entrypoint: { portal: string };
-  };
+  SYSTEM: SystemConfiguration;
   EDGE: {
     flow: FLOW;
     edgeID: string;

@@ -68,5 +68,37 @@ export default defineMessages({
   passwordsMustMatch: {
     id: "app.components.stepper.passwordsMustMatch",
     defaultMessage: "Passwords must match"
+  },
+  newSystemFromIpm: {
+    id: "app.components.stepper.newSystemFromIpm",
+    defaultMessage: "IPM System"
+  },
+  emptySystem: {
+    id: "app.components.stepper.emptySystem",
+    defaultMessage: "Empty System"
+  },
+  existingSystem: {
+    id: "app.components.stepper.existingSystem",
+    defaultMessage: "Existing System"
+  },
+  systemKey: {
+    id: "app.components.stepper.systemKey",
+    defaultMessage: "System Key"
+  },
+  systemSecret: {
+    id: "app.components.stepper.systemSecret",
+    defaultMessage: "System Secret"
+  },
+  provisionerEmail: {
+    id: "app.components.stepper.provisionerEmail",
+    defaultMessage: "Provision User Email"
+  },
+  provisionerPassword: {
+    id: "app.components.stepper.provisionerPassword",
+    defaultMessage: "Provision User Password"
+  },
+  systemName: {
+    id: "app.components.stepper.systemName",
+    defaultMessage: "System Name"
   }
 });
