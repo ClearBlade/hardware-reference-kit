@@ -9,9 +9,9 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import { FormattedMessage, IntlProvider } from "react-intl";
 
-import messages from "./messages";
-import StepOne from "./steps/StepOne";
-import { IStepProps } from "./steps/shared";
+import messages from "../../../../../../../../lib/frontend/stepper/messages";
+import StepOne from "../../../../../../../../lib/frontend/stepper/steps/StepOne";
+import { IStepProps } from "../../../../../../../../lib/frontend/stepper/steps/shared";
 
 /*
 so we have this concept of steps
