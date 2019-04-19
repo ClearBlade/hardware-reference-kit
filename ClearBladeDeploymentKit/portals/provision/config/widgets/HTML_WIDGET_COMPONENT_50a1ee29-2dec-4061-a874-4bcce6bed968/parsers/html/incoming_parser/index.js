@@ -33889,6 +33889,14 @@ addLocaleData(locale_data_ignored_default.a);
   invalidUrl: {
     id: "app.components.stepper.invalidUrl",
     defaultMessage: "Invalid URL"
+  },
+  existingPlatform: {
+    id: "app.components.stepper.existingPlatform",
+    defaultMessage: "Existing Platform"
+  },
+  preconfiguredPlatform: {
+    id: "app.components.stepper.preconfiguredPlatform",
+    defaultMessage: "Preconfigured Platform"
   }
 }));
 // CONCATENATED MODULE: ./node_modules/tslib/tslib.es6.js
@@ -39238,15 +39246,15 @@ function FormikInputWrapper(props) {
 
 
 
-var platformOptions = [{
-  value: FLOW.PRECONFIGURED,
-  label: "pre"
-}, {
-  value: FLOW.EXISTING,
-  label: "eexist"
-}];
 
 var StepOne_StepOne = function StepOne(props) {
+  var platformOptions = [{
+    value: FLOW.PRECONFIGURED,
+    label: props.intl.formatMessage(stepper_messages.preconfiguredPlatform)
+  }, {
+    value: FLOW.EXISTING,
+    label: props.intl.formatMessage(stepper_messages.existingPlatform)
+  }];
   return external_React_["createElement"](formik_esm_Formik, {
     validateOnBlur: true,
     initialValues: {
@@ -39254,14 +39262,18 @@ var StepOne_StepOne = function StepOne(props) {
       flow: props.flow
     },
     validationSchema: yup_lib["object"]().shape({
-      platformURL: yup_lib["string"]().required(props.intl.formatMessage(stepper_messages.required)) // todo: make this work with IPs
-      .matches(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/, props.intl.formatMessage(stepper_messages.invalidUrl))
+      platformURL: yup_lib["string"]().when("flow", {
+        is: FLOW.EXISTING,
+        then: yup_lib["string"]().required(props.intl.formatMessage(stepper_messages.required)) // todo: make this work with IPs
+        .matches(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/, props.intl.formatMessage(stepper_messages.invalidUrl))
+      })
     }),
     onSubmit: function onSubmit(values) {
       props.onSubmit(values);
     }
   }, function (_ref) {
-    var handleSubmit = _ref.handleSubmit;
+    var handleSubmit = _ref.handleSubmit,
+        values = _ref.values;
     return external_React_["createElement"](Form, null, external_React_["createElement"](FormGroup_default.a, null, external_React_["createElement"](FormControl_default.a, {
       component: "fieldset"
     }, external_React_["createElement"](Field, {
@@ -39277,7 +39289,7 @@ var StepOne_StepOne = function StepOne(props) {
           options: platformOptions
         });
       }
-    })), external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Field, {
+    })), values.flow === FLOW.EXISTING && external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Field, {
       name: "platformURL",
       render: function render(_ref3) {
         var field = _ref3.field,

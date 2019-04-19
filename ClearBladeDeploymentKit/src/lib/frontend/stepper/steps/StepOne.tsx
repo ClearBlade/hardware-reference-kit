@@ -16,34 +16,42 @@ import FormikInputWrapper, {
   Option
 } from "../../../../lib/frontend/FormikInputWrapper";
 
-const platformOptions: Option<FLOW>[] = [
-  { value: FLOW.PRECONFIGURED, label: "pre" },
-  { value: FLOW.EXISTING, label: "eexist" }
-];
-
 interface IProps extends PlatformConfiguration, InjectedIntlProps {
   onSubmit: (config: PlatformConfiguration) => void;
 }
 
 const StepOne = (props: IProps) => {
+  const platformOptions: Option<FLOW>[] = [
+    {
+      value: FLOW.PRECONFIGURED,
+      label: props.intl.formatMessage(messages.preconfiguredPlatform)
+    },
+    {
+      value: FLOW.EXISTING,
+      label: props.intl.formatMessage(messages.existingPlatform)
+    }
+  ];
   return (
     <Formik
       validateOnBlur
       initialValues={{ platformURL: props.platformURL, flow: props.flow }}
       validationSchema={Yup.object().shape({
-        platformURL: Yup.string()
-          .required(props.intl.formatMessage(messages.required))
-          // todo: make this work with IPs
-          .matches(
-            /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/,
-            props.intl.formatMessage(messages.invalidUrl)
-          )
+        platformURL: Yup.string().when("flow", {
+          is: FLOW.EXISTING,
+          then: Yup.string()
+            .required(props.intl.formatMessage(messages.required))
+            // todo: make this work with IPs
+            .matches(
+              /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/,
+              props.intl.formatMessage(messages.invalidUrl)
+            )
+        })
       })}
       onSubmit={values => {
         props.onSubmit(values);
       }}
     >
-      {({ handleSubmit }) => (
+      {({ handleSubmit, values }) => (
         <Form>
           <FormGroup>
             <FormControl component="fieldset">
@@ -62,21 +70,23 @@ const StepOne = (props: IProps) => {
                 }}
               />
             </FormControl>
-            <FormControl>
-              <Field
-                name="platformURL"
-                render={({ field, form }: FieldProps) => {
-                  return (
-                    <FormikInputWrapper
-                      type={FieldTypes.TEXT}
-                      field={field}
-                      form={form}
-                      label={props.intl.formatMessage(messages.platformURL)}
-                    />
-                  );
-                }}
-              />
-            </FormControl>
+            {values.flow === FLOW.EXISTING && (
+              <FormControl>
+                <Field
+                  name="platformURL"
+                  render={({ field, form }: FieldProps) => {
+                    return (
+                      <FormikInputWrapper
+                        type={FieldTypes.TEXT}
+                        field={field}
+                        form={form}
+                        label={props.intl.formatMessage(messages.platformURL)}
+                      />
+                    );
+                  }}
+                />
+              </FormControl>
+            )}
             <FormControl>
               <Button
                 variant="contained"

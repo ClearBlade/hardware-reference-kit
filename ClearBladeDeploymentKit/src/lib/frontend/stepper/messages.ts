@@ -32,5 +32,13 @@ export default defineMessages({
   invalidUrl: {
     id: "app.components.stepper.invalidUrl",
     defaultMessage: "Invalid URL"
+  },
+  existingPlatform: {
+    id: "app.components.stepper.existingPlatform",
+    defaultMessage: "Existing Platform"
+  },
+  preconfiguredPlatform: {
+    id: "app.components.stepper.preconfiguredPlatform",
+    defaultMessage: "Preconfigured Platform"
   }
 });
