@@ -9,15 +9,15 @@ import * as Yup from "yup";
 import FormikInputWrapper, {
   FieldTypes,
   Option
-} from "../../../../lib/frontend/FormikInputWrapper";
-import { FLOW, EdgeConfiguration } from "../../../../lib/backend/Configuration";
+} from "../../FormikInputWrapper";
+import { FLOW, EdgeConfiguration } from "../../../backend/Configuration";
 import messages from "../messages";
 
 interface IProps extends EdgeConfiguration, InjectedIntlProps {
   onSubmit: (config: EdgeConfiguration) => void;
 }
 
-const StepFour = (props: IProps) => {
+const EdgeConfigurationStep = (props: IProps) => {
   const edgeOptions: Option[] = [
     { value: FLOW.NEW, label: props.intl.formatMessage(messages.newEdge) },
     {
@@ -118,4 +118,4 @@ const StepFour = (props: IProps) => {
   );
 };
 
-export default injectIntl(StepFour);
+export default injectIntl(EdgeConfigurationStep);

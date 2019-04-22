@@ -7,20 +7,17 @@ import { injectIntl, InjectedIntlProps } from "react-intl";
 import * as Yup from "yup";
 
 import messages from "../messages";
-import {
-  PlatformConfiguration,
-  FLOW
-} from "../../../../lib/backend/Configuration";
+import { PlatformConfiguration, FLOW } from "../../../backend/Configuration";
 import FormikInputWrapper, {
   FieldTypes,
   Option
-} from "../../../../lib/frontend/FormikInputWrapper";
+} from "../../FormikInputWrapper";
 
 interface IProps extends PlatformConfiguration, InjectedIntlProps {
   onSubmit: (config: PlatformConfiguration) => void;
 }
 
-const StepOne = (props: IProps) => {
+const PlatformConfigurationStep = (props: IProps) => {
   const platformOptions: Option<FLOW>[] = [
     {
       value: FLOW.PRECONFIGURED,
@@ -109,4 +106,4 @@ const StepOne = (props: IProps) => {
   );
 };
 
-export default injectIntl(StepOne);
+export default injectIntl(PlatformConfigurationStep);

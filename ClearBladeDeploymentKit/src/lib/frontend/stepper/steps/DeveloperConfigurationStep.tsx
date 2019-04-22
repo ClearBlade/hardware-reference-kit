@@ -9,18 +9,15 @@ import * as Yup from "yup";
 import FormikInputWrapper, {
   FieldTypes,
   Option
-} from "../../../../lib/frontend/FormikInputWrapper";
-import {
-  DeveloperConfiguration,
-  FLOW
-} from "../../../../lib/backend/Configuration";
+} from "../../FormikInputWrapper";
+import { DeveloperConfiguration, FLOW } from "../../../backend/Configuration";
 import messages from "../messages";
 
 interface IProps extends DeveloperConfiguration, InjectedIntlProps {
   onSubmit: (config: DeveloperConfiguration) => void;
 }
 
-const StepTwo = (props: IProps) => {
+const DeveloperConfigurationStep = (props: IProps) => {
   const developerOptions: Option[] = [
     { value: FLOW.NEW, label: props.intl.formatMessage(messages.newDeveloper) },
     {
@@ -147,4 +144,4 @@ const StepTwo = (props: IProps) => {
   );
 };
 
-export default injectIntl(StepTwo);
+export default injectIntl(DeveloperConfigurationStep);

@@ -10,10 +10,10 @@ import Typography from "@material-ui/core/Typography";
 import { FormattedMessage, IntlProvider } from "react-intl";
 
 import messages from "../../../../../../../../lib/frontend/stepper/messages";
-import StepOne from "../../../../../../../../lib/frontend/stepper/steps/StepOne";
-import StepTwo from "../../../../../../../../lib/frontend/stepper/steps/StepTwo";
-import StepThree from "../../../../../../../../lib/frontend/stepper/steps/StepThree";
-import StepFour from "../../../../../../../../lib/frontend/stepper/steps/StepFour";
+import PlatformConfigurationStep from "../../../../../../../../lib/frontend/stepper/steps/PlatformConfigurationStep";
+import DeveloperConfigurationStep from "../../../../../../../../lib/frontend/stepper/steps/DeveloperConfigurationStep";
+import SystemConfigurationStep from "../../../../../../../../lib/frontend/stepper/steps/SystemConfigurationStep";
+import EdgeConfigurationStep from "../../../../../../../../lib/frontend/stepper/steps/EdgeConfigurationStep";
 import {
   FLOW,
   TARGET_CONFIGURATION,
@@ -119,28 +119,31 @@ function getStepContent(step: number, state: IState, handlers: SubmitHandlers) {
   switch (step) {
     case 0:
       return (
-        <StepOne
+        <PlatformConfigurationStep
           {...state.workflowConfig.PLATFORM}
-          onSubmit={handlers.stepOne}
+          onSubmit={handlers.platformConfiguration}
         />
       );
     case 1:
       return (
-        <StepTwo
+        <DeveloperConfigurationStep
           {...state.workflowConfig.DEVELOPER}
-          onSubmit={handlers.stepTwo}
+          onSubmit={handlers.developerConfiguration}
         />
       );
     case 2:
       return (
-        <StepThree
+        <SystemConfigurationStep
           {...state.workflowConfig.SYSTEM}
-          onSubmit={handlers.stepThree}
+          onSubmit={handlers.systemConfiguration}
         />
       );
     case 3:
       return (
-        <StepFour {...state.workflowConfig.EDGE} onSubmit={handlers.stepFour} />
+        <EdgeConfigurationStep
+          {...state.workflowConfig.EDGE}
+          onSubmit={handlers.edgeConfiguration}
+        />
       );
     default:
       return "Unknown step";
@@ -148,10 +151,10 @@ function getStepContent(step: number, state: IState, handlers: SubmitHandlers) {
 }
 
 interface SubmitHandlers {
-  stepOne: VerticalLinearStepper["submitStepOne"];
-  stepTwo: VerticalLinearStepper["submitStepTwo"];
-  stepThree: VerticalLinearStepper["submitStepThree"];
-  stepFour: VerticalLinearStepper["submitStepFour"];
+  platformConfiguration: VerticalLinearStepper["submitPlatformConfiguration"];
+  developerConfiguration: VerticalLinearStepper["submitDeveloperConfiguration"];
+  systemConfiguration: VerticalLinearStepper["submitSystemConfiguration"];
+  edgeConfiguration: VerticalLinearStepper["submitEdgeConfiguration"];
 }
 
 interface IState {
@@ -217,7 +220,7 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
     });
   };
 
-  submitStepOne = (config: PlatformConfiguration) => {
+  submitPlatformConfiguration = (config: PlatformConfiguration) => {
     this.setState(state => ({
       ...state,
       activeStep: state.activeStep + 1,
@@ -228,7 +231,7 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
     }));
   };
 
-  submitStepTwo = (config: DeveloperConfiguration) => {
+  submitDeveloperConfiguration = (config: DeveloperConfiguration) => {
     this.setState(state => ({
       ...state,
       activeStep: state.activeStep + 1,
@@ -239,7 +242,7 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
     }));
   };
 
-  submitStepThree = (config: SystemConfiguration) => {
+  submitSystemConfiguration = (config: SystemConfiguration) => {
     this.setState(state => ({
       ...state,
       activeStep: state.activeStep + 1,
@@ -250,7 +253,7 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
     }));
   };
 
-  submitStepFour = (config: EdgeConfiguration) => {
+  submitEdgeConfiguration = (config: EdgeConfiguration) => {
     this.setState(state => ({
       ...state,
       activeStep: state.activeStep + 1,
@@ -283,10 +286,10 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
                 </StepButton>
                 <StepContent>
                   {getStepContent(index, this.state, {
-                    stepOne: this.submitStepOne,
-                    stepTwo: this.submitStepTwo,
-                    stepThree: this.submitStepThree,
-                    stepFour: this.submitStepFour
+                    platformConfiguration: this.submitPlatformConfiguration,
+                    developerConfiguration: this.submitDeveloperConfiguration,
+                    systemConfiguration: this.submitSystemConfiguration,
+                    edgeConfiguration: this.submitEdgeConfiguration
                   })}
                 </StepContent>
               </Step>

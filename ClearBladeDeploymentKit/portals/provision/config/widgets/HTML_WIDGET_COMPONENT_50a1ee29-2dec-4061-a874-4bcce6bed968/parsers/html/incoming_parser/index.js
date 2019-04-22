@@ -40443,7 +40443,7 @@ function FormikInputWrapper(props) {
 }
 
 /* harmony default export */ var frontend_FormikInputWrapper = (FormikInputWrapper);
-// CONCATENATED MODULE: ./src/lib/frontend/stepper/steps/StepOne.tsx
+// CONCATENATED MODULE: ./src/lib/frontend/stepper/steps/PlatformConfigurationStep.tsx
 
 
 
@@ -40455,7 +40455,7 @@ function FormikInputWrapper(props) {
 
 
 
-var StepOne_StepOne = function StepOne(props) {
+var PlatformConfigurationStep_PlatformConfigurationStep = function PlatformConfigurationStep(props) {
   var platformOptions = [{
     value: FLOW.PRECONFIGURED,
     label: props.intl.formatMessage(stepper_messages.preconfiguredPlatform)
@@ -40518,8 +40518,8 @@ var StepOne_StepOne = function StepOne(props) {
   });
 };
 
-/* harmony default export */ var steps_StepOne = (injectIntl(StepOne_StepOne));
-// CONCATENATED MODULE: ./src/lib/frontend/stepper/steps/StepTwo.tsx
+/* harmony default export */ var steps_PlatformConfigurationStep = (injectIntl(PlatformConfigurationStep_PlatformConfigurationStep));
+// CONCATENATED MODULE: ./src/lib/frontend/stepper/steps/DeveloperConfigurationStep.tsx
 
 
 
@@ -40531,7 +40531,7 @@ var StepOne_StepOne = function StepOne(props) {
 
 
 
-var StepTwo_StepTwo = function StepTwo(props) {
+var DeveloperConfigurationStep_DeveloperConfigurationStep = function DeveloperConfigurationStep(props) {
   var developerOptions = [{
     value: FLOW.NEW,
     label: props.intl.formatMessage(stepper_messages.newDeveloper)
@@ -40622,8 +40622,8 @@ var StepTwo_StepTwo = function StepTwo(props) {
   });
 };
 
-/* harmony default export */ var steps_StepTwo = (injectIntl(StepTwo_StepTwo));
-// CONCATENATED MODULE: ./src/lib/frontend/stepper/steps/StepThree.tsx
+/* harmony default export */ var steps_DeveloperConfigurationStep = (injectIntl(DeveloperConfigurationStep_DeveloperConfigurationStep));
+// CONCATENATED MODULE: ./src/lib/frontend/stepper/steps/SystemConfigurationStep.tsx
 
 
 
@@ -40635,7 +40635,7 @@ var StepTwo_StepTwo = function StepTwo(props) {
 
 
 
-var StepThree_StepThree = function StepThree(props) {
+var SystemConfigurationStep_SystemConfigurationStep = function SystemConfigurationStep(props) {
   var systemOptions = [{
     value: FLOW.NEW,
     label: props.intl.formatMessage(stepper_messages.emptySystem)
@@ -40798,8 +40798,8 @@ var StepThree_StepThree = function StepThree(props) {
   });
 };
 
-/* harmony default export */ var steps_StepThree = (injectIntl(StepThree_StepThree));
-// CONCATENATED MODULE: ./src/lib/frontend/stepper/steps/StepFour.tsx
+/* harmony default export */ var steps_SystemConfigurationStep = (injectIntl(SystemConfigurationStep_SystemConfigurationStep));
+// CONCATENATED MODULE: ./src/lib/frontend/stepper/steps/EdgeConfigurationStep.tsx
 
 
 
@@ -40811,7 +40811,7 @@ var StepThree_StepThree = function StepThree(props) {
 
 
 
-var StepFour_StepFour = function StepFour(props) {
+var EdgeConfigurationStep_EdgeConfigurationStep = function EdgeConfigurationStep(props) {
   var edgeOptions = [{
     value: FLOW.NEW,
     label: props.intl.formatMessage(stepper_messages.newEdge)
@@ -40887,7 +40887,7 @@ var StepFour_StepFour = function StepFour(props) {
   });
 };
 
-/* harmony default export */ var steps_StepFour = (injectIntl(StepFour_StepFour));
+/* harmony default export */ var steps_EdgeConfigurationStep = (injectIntl(EdgeConfigurationStep_EdgeConfigurationStep));
 // CONCATENATED MODULE: ./src/portals/provision/config/widgets/HTML_WIDGET_COMPONENT_50a1ee29-2dec-4061-a874-4bcce6bed968/parsers/html/incoming_parser/index.tsx
 function incoming_parser_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { incoming_parser_typeof = function _typeof(obj) { return typeof obj; }; } else { incoming_parser_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return incoming_parser_typeof(obj); }
 
@@ -41013,23 +41013,23 @@ function getSteps() {
 function getStepContent(step, state, handlers) {
   switch (step) {
     case 0:
-      return external_React_["createElement"](steps_StepOne, incoming_parser_extends({}, state.workflowConfig.PLATFORM, {
-        onSubmit: handlers.stepOne
+      return external_React_["createElement"](steps_PlatformConfigurationStep, incoming_parser_extends({}, state.workflowConfig.PLATFORM, {
+        onSubmit: handlers.platformConfiguration
       }));
 
     case 1:
-      return external_React_["createElement"](steps_StepTwo, incoming_parser_extends({}, state.workflowConfig.DEVELOPER, {
-        onSubmit: handlers.stepTwo
+      return external_React_["createElement"](steps_DeveloperConfigurationStep, incoming_parser_extends({}, state.workflowConfig.DEVELOPER, {
+        onSubmit: handlers.developerConfiguration
       }));
 
     case 2:
-      return external_React_["createElement"](steps_StepThree, incoming_parser_extends({}, state.workflowConfig.SYSTEM, {
-        onSubmit: handlers.stepThree
+      return external_React_["createElement"](steps_SystemConfigurationStep, incoming_parser_extends({}, state.workflowConfig.SYSTEM, {
+        onSubmit: handlers.systemConfiguration
       }));
 
     case 3:
-      return external_React_["createElement"](steps_StepFour, incoming_parser_extends({}, state.workflowConfig.EDGE, {
-        onSubmit: handlers.stepFour
+      return external_React_["createElement"](steps_EdgeConfigurationStep, incoming_parser_extends({}, state.workflowConfig.EDGE, {
+        onSubmit: handlers.edgeConfiguration
       }));
 
     default:
@@ -41115,7 +41115,7 @@ function (_React$Component) {
       });
     });
 
-    incoming_parser_defineProperty(_assertThisInitialized(_this), "submitStepOne", function (config) {
+    incoming_parser_defineProperty(_assertThisInitialized(_this), "submitPlatformConfiguration", function (config) {
       _this.setState(function (state) {
         return _objectSpread({}, state, {
           activeStep: state.activeStep + 1,
@@ -41126,7 +41126,7 @@ function (_React$Component) {
       });
     });
 
-    incoming_parser_defineProperty(_assertThisInitialized(_this), "submitStepTwo", function (config) {
+    incoming_parser_defineProperty(_assertThisInitialized(_this), "submitDeveloperConfiguration", function (config) {
       _this.setState(function (state) {
         return _objectSpread({}, state, {
           activeStep: state.activeStep + 1,
@@ -41137,7 +41137,7 @@ function (_React$Component) {
       });
     });
 
-    incoming_parser_defineProperty(_assertThisInitialized(_this), "submitStepThree", function (config) {
+    incoming_parser_defineProperty(_assertThisInitialized(_this), "submitSystemConfiguration", function (config) {
       _this.setState(function (state) {
         return _objectSpread({}, state, {
           activeStep: state.activeStep + 1,
@@ -41148,7 +41148,7 @@ function (_React$Component) {
       });
     });
 
-    incoming_parser_defineProperty(_assertThisInitialized(_this), "submitStepFour", function (config) {
+    incoming_parser_defineProperty(_assertThisInitialized(_this), "submitEdgeConfiguration", function (config) {
       _this.setState(function (state) {
         return _objectSpread({}, state, {
           activeStep: state.activeStep + 1,
@@ -41186,10 +41186,10 @@ function (_React$Component) {
           } // completed={this.state.completed[index]}
 
         }, msg), external_React_["createElement"](StepContent_default.a, null, getStepContent(index, _this2.state, {
-          stepOne: _this2.submitStepOne,
-          stepTwo: _this2.submitStepTwo,
-          stepThree: _this2.submitStepThree,
-          stepFour: _this2.submitStepFour
+          platformConfiguration: _this2.submitPlatformConfiguration,
+          developerConfiguration: _this2.submitDeveloperConfiguration,
+          systemConfiguration: _this2.submitSystemConfiguration,
+          edgeConfiguration: _this2.submitEdgeConfiguration
         })));
       })), activeStep === steps.length && external_React_["createElement"](Paper_default.a, {
         square: true,

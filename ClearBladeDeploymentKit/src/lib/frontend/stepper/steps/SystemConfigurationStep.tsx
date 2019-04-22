@@ -9,18 +9,15 @@ import * as Yup from "yup";
 import FormikInputWrapper, {
   FieldTypes,
   Option
-} from "../../../../lib/frontend/FormikInputWrapper";
-import {
-  FLOW,
-  SystemConfiguration
-} from "../../../../lib/backend/Configuration";
+} from "../../FormikInputWrapper";
+import { FLOW, SystemConfiguration } from "../../../backend/Configuration";
 import messages from "../messages";
 
 interface IProps extends SystemConfiguration, InjectedIntlProps {
   onSubmit: (config: SystemConfiguration) => void;
 }
 
-const StepThree = (props: IProps) => {
+const SystemConfigurationStep = (props: IProps) => {
   const systemOptions: Option[] = [
     { value: FLOW.NEW, label: props.intl.formatMessage(messages.emptySystem) },
     {
@@ -248,4 +245,4 @@ const StepThree = (props: IProps) => {
   );
 };
 
-export default injectIntl(StepThree);
+export default injectIntl(SystemConfigurationStep);
