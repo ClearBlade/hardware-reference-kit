@@ -63,7 +63,7 @@ const StepOne = (props: IProps) => {
                       type={FieldTypes.RADIO_GROUP}
                       field={field}
                       form={form}
-                      label={props.intl.formatMessage(messages.platform)}
+                      label=""
                       options={platformOptions}
                     />
                   );

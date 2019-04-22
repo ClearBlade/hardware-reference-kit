@@ -74,7 +74,7 @@ const StepTwo = (props: IProps) => {
                       type={FieldTypes.RADIO_GROUP}
                       field={field}
                       form={form}
-                      label={props.intl.formatMessage(messages.developer)}
+                      label=""
                       options={developerOptions}
                     />
                   );
