@@ -72,7 +72,9 @@ function FormikInputWrapper<T extends FieldTypes>(props: IProps<T>) {
       return (
         <Select native {...field}>
           {options.map(o => (
-            <option value={o.value}>{o.label}</option>
+            <option key={`option-${JSON.stringify(o.value)}`} value={o.value}>
+              {o.label}
+            </option>
           ))}
         </Select>
       );

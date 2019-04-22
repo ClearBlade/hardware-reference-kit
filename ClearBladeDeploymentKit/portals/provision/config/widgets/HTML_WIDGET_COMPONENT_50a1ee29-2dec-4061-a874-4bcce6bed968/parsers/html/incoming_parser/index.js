@@ -40432,6 +40432,7 @@ function FormikInputWrapper(props) {
           "native": true
         }, field), _options.map(function (o) {
           return external_React_["createElement"]("option", {
+            key: "option-".concat(JSON.stringify(o.value)),
             value: o.value
           }, o.label);
         }));
