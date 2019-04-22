@@ -40350,8 +40350,13 @@ var FormControlLabel_default = /*#__PURE__*/__webpack_require__.n(FormControlLab
 var FormLabel = __webpack_require__(111);
 var FormLabel_default = /*#__PURE__*/__webpack_require__.n(FormLabel);
 
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/Select/index.js
+var Select = __webpack_require__(414);
+var Select_default = /*#__PURE__*/__webpack_require__.n(Select);
+
 // CONCATENATED MODULE: ./src/lib/frontend/FormikInputWrapper/index.tsx
 function FormikInputWrapper_extends() { FormikInputWrapper_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return FormikInputWrapper_extends.apply(this, arguments); }
+
 
 
 
@@ -40390,20 +40395,31 @@ function FormikInputWrapper(props) {
       }));
 
     case FieldTypes.RADIO_GROUP:
-      var options = props.options;
-      return external_React_["createElement"](RadioGroup_default.a, field, external_React_["createElement"](FormLabel_default.a, {
-        component: "legend"
-      }, label), options.map(function (o) {
-        return external_React_["createElement"](FormControlLabel_default.a, {
-          key: o.value,
-          value: o.value,
-          control: external_React_["createElement"](Radio_default.a, null),
-          label: o.label
-        });
-      }));
+      {
+        var options = props.options;
+        return external_React_["createElement"](RadioGroup_default.a, field, external_React_["createElement"](FormLabel_default.a, {
+          component: "legend"
+        }, label), options.map(function (o) {
+          return external_React_["createElement"](FormControlLabel_default.a, {
+            key: o.value,
+            value: o.value,
+            control: external_React_["createElement"](Radio_default.a, null),
+            label: o.label
+          });
+        }));
+      }
 
     case FieldTypes.SELECT:
-      return external_React_["createElement"]("div", null, "select");
+      {
+        var _options = props.options;
+        return external_React_["createElement"](Select_default.a, FormikInputWrapper_extends({
+          "native": true
+        }, field), _options.map(function (o) {
+          return external_React_["createElement"]("option", {
+            value: o.value
+          }, o.label);
+        }));
+      }
   }
 
   return null;
@@ -40744,7 +40760,13 @@ var StepThree_StepTwo = function StepTwo(props) {
             form = _ref8.form;
         return external_React_["createElement"](frontend_FormikInputWrapper, {
           type: FieldTypes.SELECT,
-          options: [],
+          options: [{
+            value: {
+              repoName: "dev-smart-monitoring",
+              repoUser: "aalcott14"
+            },
+            label: "smart-monitoring"
+          }],
           field: field,
           form: form,
           label: props.intl.formatMessage(stepper_messages.password)

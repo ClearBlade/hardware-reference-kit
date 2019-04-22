@@ -5,6 +5,7 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import Radio from "@material-ui/core/Radio";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormLabel from "@material-ui/core/FormLabel";
+import Select from "@material-ui/core/Select";
 
 export enum FieldTypes {
   TEXT,
@@ -50,7 +51,7 @@ function FormikInputWrapper<T extends FieldTypes>(props: IProps<T>) {
           type={type === FieldTypes.PASSWORD ? "password" : "text"}
         />
       );
-    case FieldTypes.RADIO_GROUP:
+    case FieldTypes.RADIO_GROUP: {
       const options = (props as IProps<FieldTypes.RADIO_GROUP>).options;
       return (
         <RadioGroup {...field}>
@@ -65,8 +66,17 @@ function FormikInputWrapper<T extends FieldTypes>(props: IProps<T>) {
           ))}
         </RadioGroup>
       );
-    case FieldTypes.SELECT:
-      return <div>select</div>;
+    }
+    case FieldTypes.SELECT: {
+      const options = (props as IProps<FieldTypes.SELECT>).options;
+      return (
+        <Select native {...field}>
+          {options.map(o => (
+            <option value={o.value}>{o.label}</option>
+          ))}
+        </Select>
+      );
+    }
   }
   return null;
 }

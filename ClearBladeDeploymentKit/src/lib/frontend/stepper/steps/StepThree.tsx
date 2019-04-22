@@ -211,7 +211,15 @@ const StepTwo = (props: IProps) => {
                     return (
                       <FormikInputWrapper
                         type={FieldTypes.SELECT}
-                        options={[]}
+                        options={[
+                          {
+                            value: {
+                              repoName: "dev-smart-monitoring",
+                              repoUser: "aalcott14"
+                            },
+                            label: "smart-monitoring"
+                          }
+                        ]}
                         field={field}
                         form={form}
                         label={props.intl.formatMessage(messages.password)}
