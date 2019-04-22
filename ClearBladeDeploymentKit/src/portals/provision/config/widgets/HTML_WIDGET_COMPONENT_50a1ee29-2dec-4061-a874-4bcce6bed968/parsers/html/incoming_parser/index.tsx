@@ -13,13 +13,15 @@ import messages from "../../../../../../../../lib/frontend/stepper/messages";
 import StepOne from "../../../../../../../../lib/frontend/stepper/steps/StepOne";
 import StepTwo from "../../../../../../../../lib/frontend/stepper/steps/StepTwo";
 import StepThree from "../../../../../../../../lib/frontend/stepper/steps/StepThree";
+import StepFour from "../../../../../../../../lib/frontend/stepper/steps/StepFour";
 import {
   FLOW,
   TARGET_CONFIGURATION,
   Configuration,
   PlatformConfiguration,
   DeveloperConfiguration,
-  SystemConfiguration
+  SystemConfiguration,
+  EdgeConfiguration
 } from "../../../../../../../../lib/backend/Configuration";
 
 // existing vs preconfigured platform
@@ -136,6 +138,10 @@ function getStepContent(step: number, state: IState, handlers: SubmitHandlers) {
           onSubmit={handlers.stepThree}
         />
       );
+    case 3:
+      return (
+        <StepFour {...state.workflowConfig.EDGE} onSubmit={handlers.stepFour} />
+      );
     default:
       return "Unknown step";
   }
@@ -145,6 +151,7 @@ interface SubmitHandlers {
   stepOne: VerticalLinearStepper["submitStepOne"];
   stepTwo: VerticalLinearStepper["submitStepTwo"];
   stepThree: VerticalLinearStepper["submitStepThree"];
+  stepFour: VerticalLinearStepper["submitStepFour"];
 }
 
 interface IState {
@@ -243,6 +250,17 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
     }));
   };
 
+  submitStepFour = (config: EdgeConfiguration) => {
+    this.setState(state => ({
+      ...state,
+      activeStep: state.activeStep + 1,
+      workflowConfig: {
+        ...state.workflowConfig,
+        EDGE: config
+      }
+    }));
+  };
+
   componentDidMount() {
     console.log("DID MOUNT!");
   }
@@ -267,7 +285,8 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
                   {getStepContent(index, this.state, {
                     stepOne: this.submitStepOne,
                     stepTwo: this.submitStepTwo,
-                    stepThree: this.submitStepThree
+                    stepThree: this.submitStepThree,
+                    stepFour: this.submitStepFour
                   })}
                 </StepContent>
               </Step>

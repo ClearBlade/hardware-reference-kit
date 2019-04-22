@@ -100,5 +100,21 @@ export default defineMessages({
   systemName: {
     id: "app.components.stepper.systemName",
     defaultMessage: "System Name"
+  },
+  newEdge: {
+    id: "app.components.stepper.newEdge",
+    defaultMessage: "New Edge"
+  },
+  existingEdge: {
+    id: "app.components.stepper.existingEdge",
+    defaultMessage: "Existing Edge"
+  },
+  edgeToken: {
+    id: "app.components.stepper.edgeToken",
+    defaultMessage: "Edge Token"
+  },
+  edgeID: {
+    id: "app.components.stepper.edgeID",
+    defaultMessage: "Edge Name"
   }
 });

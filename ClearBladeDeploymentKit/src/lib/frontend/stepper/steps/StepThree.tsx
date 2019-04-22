@@ -20,7 +20,7 @@ interface IProps extends SystemConfiguration, InjectedIntlProps {
   onSubmit: (config: SystemConfiguration) => void;
 }
 
-const StepTwo = (props: IProps) => {
+const StepThree = (props: IProps) => {
   const systemOptions: Option[] = [
     { value: FLOW.NEW, label: props.intl.formatMessage(messages.emptySystem) },
     {
@@ -35,17 +35,19 @@ const StepTwo = (props: IProps) => {
   return (
     <Formik
       validateOnBlur
-      initialValues={{
-        flow: props.flow,
-        systemName: props.systemName,
-        systemKey: props.systemKey,
-        systemSecret: props.systemSecret,
-        provEmail: props.provEmail,
-        provPassword: props.provPassword,
-        repoUser: props.repoUser,
-        repoName: props.repoName,
-        entrypoint: props.entrypoint
-      }}
+      initialValues={
+        {
+          flow: props.flow,
+          systemName: props.systemName,
+          systemKey: props.systemKey,
+          systemSecret: props.systemSecret,
+          provEmail: props.provEmail,
+          provPassword: props.provPassword,
+          repoUser: props.repoUser,
+          repoName: props.repoName,
+          entrypoint: props.entrypoint
+        } as SystemConfiguration
+      }
       validationSchema={Yup.object().shape({
         systemName: Yup.string().when("flow", {
           is: FLOW.NEW,
@@ -246,4 +248,4 @@ const StepTwo = (props: IProps) => {
   );
 };
 
-export default injectIntl(StepTwo);
+export default injectIntl(StepThree);

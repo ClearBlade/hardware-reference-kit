@@ -10,22 +10,19 @@ import FormikInputWrapper, {
   FieldTypes,
   Option
 } from "../../../../lib/frontend/FormikInputWrapper";
-import {
-  DeveloperConfiguration,
-  FLOW
-} from "../../../../lib/backend/Configuration";
+import { FLOW, EdgeConfiguration } from "../../../../lib/backend/Configuration";
 import messages from "../messages";
 
-interface IProps extends DeveloperConfiguration, InjectedIntlProps {
-  onSubmit: (config: DeveloperConfiguration) => void;
+interface IProps extends EdgeConfiguration, InjectedIntlProps {
+  onSubmit: (config: EdgeConfiguration) => void;
 }
 
-const StepTwo = (props: IProps) => {
-  const developerOptions: Option[] = [
-    { value: FLOW.NEW, label: props.intl.formatMessage(messages.newDeveloper) },
+const StepFour = (props: IProps) => {
+  const edgeOptions: Option[] = [
+    { value: FLOW.NEW, label: props.intl.formatMessage(messages.newEdge) },
     {
       value: FLOW.EXISTING,
-      label: props.intl.formatMessage(messages.existingDeveloper)
+      label: props.intl.formatMessage(messages.existingEdge)
     }
   ];
   return (
@@ -33,31 +30,20 @@ const StepTwo = (props: IProps) => {
       validateOnBlur
       initialValues={
         {
-          devEmail: props.devEmail,
           flow: props.flow,
-          devPassword: props.devPassword,
-          devPasswordConfirm: props.devPassword,
-          key: props.key
-        } as DeveloperConfiguration
+          edgeID: props.edgeID,
+          edgeToken: props.edgeToken
+        } as EdgeConfiguration
       }
       validationSchema={Yup.object().shape({
-        devEmail: Yup.string()
-          .required(props.intl.formatMessage(messages.required))
-          .matches(
-            /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
-            props.intl.formatMessage(messages.invalidEmail)
-          ),
-        devPassword: Yup.string().required(
+        edgeID: Yup.string().required(
           props.intl.formatMessage(messages.required)
         ),
-        devPasswordConfirm: Yup.string().when("flow", {
-          is: FLOW.NEW,
-          then: Yup.string()
-            .oneOf(
-              [Yup.ref("devPassword"), null],
-              props.intl.formatMessage(messages.passwordsMustMatch)
-            )
-            .required(props.intl.formatMessage(messages.required))
+        edgeToken: Yup.string().when("flow", {
+          is: FLOW.EXISTING,
+          then: Yup.string().required(
+            props.intl.formatMessage(messages.required)
+          )
         })
       })}
       onSubmit={values => {
@@ -77,7 +63,7 @@ const StepTwo = (props: IProps) => {
                       field={field}
                       form={form}
                       label=""
-                      options={developerOptions}
+                      options={edgeOptions}
                     />
                   );
                 }}
@@ -85,45 +71,30 @@ const StepTwo = (props: IProps) => {
             </FormControl>
             <FormControl>
               <Field
-                name="devEmail"
+                name="edgeID"
                 render={({ field, form }: FieldProps) => {
                   return (
                     <FormikInputWrapper
                       type={FieldTypes.TEXT}
                       field={field}
                       form={form}
-                      label={props.intl.formatMessage(messages.email)}
+                      label={props.intl.formatMessage(messages.edgeID)}
                     />
                   );
                 }}
               />
             </FormControl>
-            <FormControl>
-              <Field
-                name="devPassword"
-                render={({ field, form }: FieldProps) => {
-                  return (
-                    <FormikInputWrapper
-                      type={FieldTypes.PASSWORD}
-                      field={field}
-                      form={form}
-                      label={props.intl.formatMessage(messages.password)}
-                    />
-                  );
-                }}
-              />
-            </FormControl>
-            {values.flow === FLOW.NEW && (
+            {values.flow === FLOW.EXISTING && (
               <FormControl>
                 <Field
-                  name="devPasswordConfirm"
+                  name="edgeToken"
                   render={({ field, form }: FieldProps) => {
                     return (
                       <FormikInputWrapper
-                        type={FieldTypes.PASSWORD}
+                        type={FieldTypes.TEXT}
                         field={field}
                         form={form}
-                        label={props.intl.formatMessage(messages.confirm)}
+                        label={props.intl.formatMessage(messages.edgeToken)}
                       />
                     );
                   }}
@@ -147,4 +118,4 @@ const StepTwo = (props: IProps) => {
   );
 };
 
-export default injectIntl(StepTwo);
+export default injectIntl(StepFour);

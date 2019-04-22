@@ -34,7 +34,12 @@ const StepOne = (props: IProps) => {
   return (
     <Formik
       validateOnBlur
-      initialValues={{ platformURL: props.platformURL, flow: props.flow }}
+      initialValues={
+        {
+          platformURL: props.platformURL,
+          flow: props.flow
+        } as PlatformConfiguration
+      }
       validationSchema={Yup.object().shape({
         platformURL: Yup.string().when("flow", {
           is: FLOW.EXISTING,

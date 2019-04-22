@@ -35067,6 +35067,22 @@ addLocaleData(locale_data_ignored_default.a);
   systemName: {
     id: "app.components.stepper.systemName",
     defaultMessage: "System Name"
+  },
+  newEdge: {
+    id: "app.components.stepper.newEdge",
+    defaultMessage: "New Edge"
+  },
+  existingEdge: {
+    id: "app.components.stepper.existingEdge",
+    defaultMessage: "Existing Edge"
+  },
+  edgeToken: {
+    id: "app.components.stepper.edgeToken",
+    defaultMessage: "Edge Token"
+  },
+  edgeID: {
+    id: "app.components.stepper.edgeID",
+    defaultMessage: "Edge Name"
   }
 }));
 // CONCATENATED MODULE: ./node_modules/tslib/tslib.es6.js
@@ -40618,7 +40634,7 @@ var StepTwo_StepTwo = function StepTwo(props) {
 
 
 
-var StepThree_StepTwo = function StepTwo(props) {
+var StepThree_StepThree = function StepThree(props) {
   var systemOptions = [{
     value: FLOW.NEW,
     label: props.intl.formatMessage(stepper_messages.emptySystem)
@@ -40781,7 +40797,96 @@ var StepThree_StepTwo = function StepTwo(props) {
   });
 };
 
-/* harmony default export */ var StepThree = (injectIntl(StepThree_StepTwo));
+/* harmony default export */ var steps_StepThree = (injectIntl(StepThree_StepThree));
+// CONCATENATED MODULE: ./src/lib/frontend/stepper/steps/StepFour.tsx
+
+
+
+
+
+
+
+
+
+
+
+var StepFour_StepFour = function StepFour(props) {
+  var edgeOptions = [{
+    value: FLOW.NEW,
+    label: props.intl.formatMessage(stepper_messages.newEdge)
+  }, {
+    value: FLOW.EXISTING,
+    label: props.intl.formatMessage(stepper_messages.existingEdge)
+  }];
+  return external_React_["createElement"](formik_esm_Formik, {
+    validateOnBlur: true,
+    initialValues: {
+      flow: props.flow,
+      edgeID: props.edgeID,
+      edgeToken: props.edgeToken
+    },
+    validationSchema: yup_lib["object"]().shape({
+      edgeID: yup_lib["string"]().required(props.intl.formatMessage(stepper_messages.required)),
+      edgeToken: yup_lib["string"]().when("flow", {
+        is: FLOW.EXISTING,
+        then: yup_lib["string"]().required(props.intl.formatMessage(stepper_messages.required))
+      })
+    }),
+    onSubmit: function onSubmit(values) {
+      props.onSubmit(values);
+    }
+  }, function (_ref) {
+    var handleSubmit = _ref.handleSubmit,
+        values = _ref.values;
+    return external_React_["createElement"](Form, null, external_React_["createElement"](FormGroup_default.a, null, external_React_["createElement"](FormControl_default.a, {
+      component: "fieldset"
+    }, external_React_["createElement"](Field, {
+      name: "flow",
+      render: function render(_ref2) {
+        var field = _ref2.field,
+            form = _ref2.form;
+        return external_React_["createElement"](frontend_FormikInputWrapper, {
+          type: FieldTypes.RADIO_GROUP,
+          field: field,
+          form: form,
+          label: "",
+          options: edgeOptions
+        });
+      }
+    })), external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Field, {
+      name: "edgeID",
+      render: function render(_ref3) {
+        var field = _ref3.field,
+            form = _ref3.form;
+        return external_React_["createElement"](frontend_FormikInputWrapper, {
+          type: FieldTypes.TEXT,
+          field: field,
+          form: form,
+          label: props.intl.formatMessage(stepper_messages.edgeID)
+        });
+      }
+    })), values.flow === FLOW.EXISTING && external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Field, {
+      name: "edgeToken",
+      render: function render(_ref4) {
+        var field = _ref4.field,
+            form = _ref4.form;
+        return external_React_["createElement"](frontend_FormikInputWrapper, {
+          type: FieldTypes.TEXT,
+          field: field,
+          form: form,
+          label: props.intl.formatMessage(stepper_messages.edgeToken)
+        });
+      }
+    })), external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Button_default.a, {
+      variant: "contained",
+      color: "primary",
+      type: "submit",
+      onSubmit: handleSubmit
+    }, "Continue"))));
+  });
+};
+
+/* harmony default export */ var steps_StepFour = (injectIntl(StepFour_StepFour));
 // CONCATENATED MODULE: ./src/portals/provision/config/widgets/HTML_WIDGET_COMPONENT_50a1ee29-2dec-4061-a874-4bcce6bed968/parsers/html/incoming_parser/index.tsx
 function incoming_parser_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { incoming_parser_typeof = function _typeof(obj) { return typeof obj; }; } else { incoming_parser_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return incoming_parser_typeof(obj); }
 
@@ -40806,6 +40911,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 function incoming_parser_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function incoming_parser_extends() { incoming_parser_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return incoming_parser_extends.apply(this, arguments); }
+
 
 
 
@@ -40916,8 +41022,13 @@ function getStepContent(step, state, handlers) {
       }));
 
     case 2:
-      return external_React_["createElement"](StepThree, incoming_parser_extends({}, state.workflowConfig.SYSTEM, {
+      return external_React_["createElement"](steps_StepThree, incoming_parser_extends({}, state.workflowConfig.SYSTEM, {
         onSubmit: handlers.stepThree
+      }));
+
+    case 3:
+      return external_React_["createElement"](steps_StepFour, incoming_parser_extends({}, state.workflowConfig.EDGE, {
+        onSubmit: handlers.stepFour
       }));
 
     default:
@@ -41036,6 +41147,17 @@ function (_React$Component) {
       });
     });
 
+    incoming_parser_defineProperty(_assertThisInitialized(_this), "submitStepFour", function (config) {
+      _this.setState(function (state) {
+        return _objectSpread({}, state, {
+          activeStep: state.activeStep + 1,
+          workflowConfig: _objectSpread({}, state.workflowConfig, {
+            EDGE: config
+          })
+        });
+      });
+    });
+
     return _this;
   }
 
@@ -41065,7 +41187,8 @@ function (_React$Component) {
         }, msg), external_React_["createElement"](StepContent_default.a, null, getStepContent(index, _this2.state, {
           stepOne: _this2.submitStepOne,
           stepTwo: _this2.submitStepTwo,
-          stepThree: _this2.submitStepThree
+          stepThree: _this2.submitStepThree,
+          stepFour: _this2.submitStepFour
         })));
       })), activeStep === steps.length && external_React_["createElement"](Paper_default.a, {
         square: true,

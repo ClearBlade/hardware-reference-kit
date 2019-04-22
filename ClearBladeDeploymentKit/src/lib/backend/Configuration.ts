@@ -28,15 +28,17 @@ export interface SystemConfiguration {
   entrypoint: { portal: string };
 }
 
+export interface EdgeConfiguration {
+  flow: FLOW;
+  edgeID: string;
+  edgeToken: string;
+}
+
 export interface Configuration {
   PLATFORM: PlatformConfiguration;
   DEVELOPER: DeveloperConfiguration;
   SYSTEM: SystemConfiguration;
-  EDGE: {
-    flow: FLOW;
-    edgeID: string;
-    edgeToken: string;
-  };
+  EDGE: EdgeConfiguration;
 }
 export interface WorkflowConfig extends Configuration {
   AUTOROUTE: boolean;
