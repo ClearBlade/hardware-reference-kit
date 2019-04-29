@@ -7,7 +7,12 @@ import StepContent from "@material-ui/core/StepContent";
 import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
-import { FormattedMessage, IntlProvider } from "react-intl";
+import {
+  FormattedMessage,
+  IntlProvider,
+  injectIntl,
+  InjectedIntlProps
+} from "react-intl";
 
 import messages from "../../../../../../../../lib/frontend/stepper/messages";
 import PlatformConfigurationStep from "../../../../../../../../lib/frontend/stepper/steps/PlatformConfigurationStep";
@@ -24,6 +29,7 @@ import {
   SystemConfiguration,
   EdgeConfiguration
 } from "../../../../../../../../lib/backend/Configuration";
+import ResponsiveDialog from "../../../../../../../../lib/frontend/ResponsiveDialog";
 
 // existing vs preconfigured platform
 // existing -> enter platform URL - TEXT
@@ -172,11 +178,13 @@ interface SubmitHandlers {
 interface IState {
   workflowConfig: Configuration;
   activeStep: number;
+  targetError: any;
 }
 
 class VerticalLinearStepper extends React.Component<{}, IState> {
   state = {
     activeStep: 4,
+    targetError: null,
     workflowConfig: {
       PLATFORM: {
         flow: FLOW.EXISTING,
@@ -280,13 +288,30 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
   onSubmit = () => {
     const prom = datasources.SetupPlatformSystemForEdge.sendData(
       this.state.workflowConfig
-    );
+    ).then(resp => {
+      console.log("resp", resp);
+      if (!resp.success) {
+        console.log("call setstate");
+        this.setState({
+          targetError: resp.results
+        });
+      } else {
+      }
+    });
     CB_PORTAL.Loader.waitFor(prom);
+  };
+
+  closeErrorModal = () => {
+    this.setState({
+      targetError: null
+    });
   };
 
   render() {
     const steps = getSteps();
-    const { activeStep } = this.state;
+    const { activeStep, targetError } = this.state;
+
+    console.log("render", targetError);
 
     return (
       <IntlProvider>
@@ -320,6 +345,13 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
               </Typography>
               <Button onClick={this.handleReset}>Reset</Button>
             </Paper>
+          )}
+          {targetError && (
+            <ResponsiveDialog
+              bodyText={targetError}
+              headerMsg={messages.targetErrorHeader}
+              onClose={this.closeErrorModal}
+            />
           )}
         </div>
       </IntlProvider>

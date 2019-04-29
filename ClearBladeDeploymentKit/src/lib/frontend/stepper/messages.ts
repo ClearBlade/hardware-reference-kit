@@ -116,5 +116,9 @@ export default defineMessages({
   edgeID: {
     id: "app.components.stepper.edgeID",
     defaultMessage: "Edge Name"
+  },
+  targetErrorHeader: {
+    id: "app.components.stepper.targetErrorHeader",
+    defaultMessage: "An error occurred while targeting"
   }
 });
