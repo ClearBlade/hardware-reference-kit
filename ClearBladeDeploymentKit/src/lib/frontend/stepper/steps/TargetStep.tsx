@@ -3,9 +3,10 @@ import { Formik, Form } from "formik";
 import FormControl from "@material-ui/core/FormControl";
 import FormGroup from "@material-ui/core/FormGroup";
 import Button from "@material-ui/core/Button";
-import { injectIntl, InjectedIntlProps } from "react-intl";
+import { injectIntl, InjectedIntlProps, FormattedMessage } from "react-intl";
 
 import { Configuration } from "../../../backend/Configuration";
+import messages from "../messages";
 
 interface IProps extends InjectedIntlProps {
   config: Configuration;
@@ -53,7 +54,7 @@ class TargetStep extends React.Component<IProps, IState> {
                   type="submit"
                   onSubmit={handleSubmit}
                 >
-                  Target
+                  <FormattedMessage {...messages.retarget} />
                 </Button>
               </FormControl>
             </FormGroup>
