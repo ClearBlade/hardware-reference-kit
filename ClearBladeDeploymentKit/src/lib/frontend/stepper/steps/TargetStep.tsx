@@ -1,0 +1,76 @@
+import * as React from "react";
+import { Formik, Form } from "formik";
+import FormControl from "@material-ui/core/FormControl";
+import FormGroup from "@material-ui/core/FormGroup";
+import Button from "@material-ui/core/Button";
+import { injectIntl, InjectedIntlProps } from "react-intl";
+
+import { Configuration } from "../../../backend/Configuration";
+
+interface IProps extends InjectedIntlProps {
+  config: Configuration;
+  updateConfig: (c: Configuration) => void;
+}
+
+interface IState {
+  didMount: boolean;
+}
+
+class TargetStep extends React.Component<IProps, IState> {
+  state = {
+    didMount: false
+  };
+
+  componentDidMount() {
+    // added this hack to re-render the JsonEditor after mounting because of the way the JsonEditor sets its state (it does so inside componentWillReceiveProps)
+    this.setState({
+      didMount: true
+    });
+  }
+
+  updateConfig = (value: Configuration) => {
+    this.props.updateConfig(value);
+  };
+
+  render() {
+    const JsonEditor = CB_PORTAL.portalModel.widgetTypes.JsonEditorWidget.class;
+    return (
+      <Formik
+        validateOnBlur
+        initialValues={this.props}
+        validationSchema={{}}
+        onSubmit={values => {
+          // props.onSubmit(values);
+        }}
+      >
+        {({ handleSubmit, values }) => (
+          <Form>
+            <FormGroup>
+              <FormControl>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  onSubmit={handleSubmit}
+                >
+                  Target
+                </Button>
+              </FormControl>
+            </FormGroup>
+            <div style={{ height: "400px" }}>
+              <JsonEditor
+                settings={{
+                  buttonColor: "#3f51b5"
+                }}
+                data={{ textContent: this.props.config }}
+                updateCallback={this.updateConfig}
+              />
+            </div>
+          </Form>
+        )}
+      </Formik>
+    );
+  }
+}
+
+export default injectIntl(TargetStep);

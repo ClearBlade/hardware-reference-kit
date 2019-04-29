@@ -14,6 +14,7 @@ import PlatformConfigurationStep from "../../../../../../../../lib/frontend/step
 import DeveloperConfigurationStep from "../../../../../../../../lib/frontend/stepper/steps/DeveloperConfigurationStep";
 import SystemConfigurationStep from "../../../../../../../../lib/frontend/stepper/steps/SystemConfigurationStep";
 import EdgeConfigurationStep from "../../../../../../../../lib/frontend/stepper/steps/EdgeConfigurationStep";
+import TargetStep from "../../../../../../../../lib/frontend/stepper/steps/TargetStep";
 import {
   FLOW,
   TARGET_CONFIGURATION,
@@ -111,7 +112,8 @@ function getSteps() {
     <FormattedMessage {...messages.platform} />,
     <FormattedMessage {...messages.developer} />,
     <FormattedMessage {...messages.system} />,
-    <FormattedMessage {...messages.edge} />
+    <FormattedMessage {...messages.edge} />,
+    <FormattedMessage {...messages.retarget} />
   ];
 }
 
@@ -145,6 +147,13 @@ function getStepContent(step: number, state: IState, handlers: SubmitHandlers) {
           onSubmit={handlers.edgeConfiguration}
         />
       );
+    case 4:
+      return (
+        <TargetStep
+          config={state.workflowConfig}
+          updateConfig={handlers.updateConfiguration}
+        />
+      );
     default:
       return "Unknown step";
   }
@@ -155,6 +164,7 @@ interface SubmitHandlers {
   developerConfiguration: VerticalLinearStepper["submitDeveloperConfiguration"];
   systemConfiguration: VerticalLinearStepper["submitSystemConfiguration"];
   edgeConfiguration: VerticalLinearStepper["submitEdgeConfiguration"];
+  updateConfiguration: VerticalLinearStepper["updateConfiguration"];
 }
 
 interface IState {
@@ -164,7 +174,7 @@ interface IState {
 
 class VerticalLinearStepper extends React.Component<{}, IState> {
   state = {
-    activeStep: 0,
+    activeStep: 4,
     workflowConfig: {
       PLATFORM: {
         flow: FLOW.EXISTING,
@@ -197,7 +207,6 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
 
   jumpToStep = (idx: number) => {
     this.setState({
-      ...this.state,
       activeStep: idx
     });
   };
@@ -222,7 +231,6 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
 
   submitPlatformConfiguration = (config: PlatformConfiguration) => {
     this.setState(state => ({
-      ...state,
       activeStep: state.activeStep + 1,
       workflowConfig: {
         ...state.workflowConfig,
@@ -233,7 +241,6 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
 
   submitDeveloperConfiguration = (config: DeveloperConfiguration) => {
     this.setState(state => ({
-      ...state,
       activeStep: state.activeStep + 1,
       workflowConfig: {
         ...state.workflowConfig,
@@ -244,7 +251,6 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
 
   submitSystemConfiguration = (config: SystemConfiguration) => {
     this.setState(state => ({
-      ...state,
       activeStep: state.activeStep + 1,
       workflowConfig: {
         ...state.workflowConfig,
@@ -255,7 +261,6 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
 
   submitEdgeConfiguration = (config: EdgeConfiguration) => {
     this.setState(state => ({
-      ...state,
       activeStep: state.activeStep + 1,
       workflowConfig: {
         ...state.workflowConfig,
@@ -264,9 +269,11 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
     }));
   };
 
-  componentDidMount() {
-    console.log("DID MOUNT!");
-  }
+  updateConfiguration = (config: Configuration) => {
+    this.setState(state => ({
+      workflowConfig: config
+    }));
+  };
 
   render() {
     const steps = getSteps();
@@ -289,7 +296,8 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
                     platformConfiguration: this.submitPlatformConfiguration,
                     developerConfiguration: this.submitDeveloperConfiguration,
                     systemConfiguration: this.submitSystemConfiguration,
-                    edgeConfiguration: this.submitEdgeConfiguration
+                    edgeConfiguration: this.submitEdgeConfiguration,
+                    updateConfiguration: this.updateConfiguration
                   })}
                 </StepContent>
               </Step>
