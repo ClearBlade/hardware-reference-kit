@@ -289,9 +289,7 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
     const prom = datasources.SetupPlatformSystemForEdge.sendData(
       this.state.workflowConfig
     ).then(resp => {
-      console.log("resp", resp);
       if (!resp.success) {
-        console.log("call setstate");
         this.setState({
           targetError: resp.results
         });
@@ -310,8 +308,6 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
   render() {
     const steps = getSteps();
     const { activeStep, targetError } = this.state;
-
-    console.log("render", targetError);
 
     return (
       <IntlProvider>

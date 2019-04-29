@@ -42363,11 +42363,7 @@ function (_React$Component) {
 
     incoming_parser_defineProperty(incoming_parser_assertThisInitialized(_this), "onSubmit", function () {
       var prom = datasources.SetupPlatformSystemForEdge.sendData(_this.state.workflowConfig).then(function (resp) {
-        console.log("resp", resp);
-
         if (!resp.success) {
-          console.log("call setstate");
-
           _this.setState({
             targetError: resp.results
           });
@@ -42394,7 +42390,6 @@ function (_React$Component) {
       var _this$state = this.state,
           activeStep = _this$state.activeStep,
           targetError = _this$state.targetError;
-      console.log("render", targetError);
       return external_React_["createElement"](index_es_IntlProvider, null, external_React_["createElement"]("div", null, external_React_["createElement"](Stepper_default.a, {
         activeStep: activeStep,
         orientation: "vertical"
