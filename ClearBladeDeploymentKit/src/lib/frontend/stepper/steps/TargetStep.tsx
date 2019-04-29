@@ -11,6 +11,7 @@ import messages from "../messages";
 interface IProps extends InjectedIntlProps {
   config: Configuration;
   updateConfig: (c: Configuration) => void;
+  onSubmit: () => void;
 }
 
 interface IState {
@@ -40,11 +41,9 @@ class TargetStep extends React.Component<IProps, IState> {
         validateOnBlur
         initialValues={this.props}
         validationSchema={{}}
-        onSubmit={values => {
-          // props.onSubmit(values);
-        }}
+        onSubmit={this.props.onSubmit}
       >
-        {({ handleSubmit, values }) => (
+        {({ handleSubmit }) => (
           <Form>
             <FormGroup>
               <FormControl>

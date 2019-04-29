@@ -40964,11 +40964,9 @@ function (_React$Component) {
         validateOnBlur: true,
         initialValues: this.props,
         validationSchema: {},
-        onSubmit: function onSubmit(values) {// props.onSubmit(values);
-        }
+        onSubmit: this.props.onSubmit
       }, function (_ref) {
-        var handleSubmit = _ref.handleSubmit,
-            values = _ref.values;
+        var handleSubmit = _ref.handleSubmit;
         return external_React_["createElement"](Form, null, external_React_["createElement"](FormGroup_default.a, null, external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Button_default.a, {
           variant: "contained",
           color: "primary",
@@ -41143,7 +41141,8 @@ function getStepContent(step, state, handlers) {
     case 4:
       return external_React_["createElement"](steps_TargetStep, {
         config: state.workflowConfig,
-        updateConfig: handlers.updateConfiguration
+        updateConfig: handlers.updateConfiguration,
+        onSubmit: handlers.onSubmit
       });
 
     default:
@@ -41281,6 +41280,11 @@ function (_React$Component) {
       });
     });
 
+    incoming_parser_defineProperty(incoming_parser_assertThisInitialized(_this), "onSubmit", function () {
+      var prom = datasources.SetupPlatformSystemForEdge.sendData(_this.state.workflowConfig);
+      CB_PORTAL.Loader.waitFor(prom);
+    });
+
     return _this;
   }
 
@@ -41307,7 +41311,8 @@ function (_React$Component) {
           developerConfiguration: _this2.submitDeveloperConfiguration,
           systemConfiguration: _this2.submitSystemConfiguration,
           edgeConfiguration: _this2.submitEdgeConfiguration,
-          updateConfiguration: _this2.updateConfiguration
+          updateConfiguration: _this2.updateConfiguration,
+          onSubmit: _this2.onSubmit
         })));
       })), activeStep === steps.length && external_React_["createElement"](Paper_default.a, {
         square: true,

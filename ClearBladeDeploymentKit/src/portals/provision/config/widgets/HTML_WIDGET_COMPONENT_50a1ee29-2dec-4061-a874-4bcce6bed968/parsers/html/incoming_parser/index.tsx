@@ -152,6 +152,7 @@ function getStepContent(step: number, state: IState, handlers: SubmitHandlers) {
         <TargetStep
           config={state.workflowConfig}
           updateConfig={handlers.updateConfiguration}
+          onSubmit={handlers.onSubmit}
         />
       );
     default:
@@ -165,6 +166,7 @@ interface SubmitHandlers {
   systemConfiguration: VerticalLinearStepper["submitSystemConfiguration"];
   edgeConfiguration: VerticalLinearStepper["submitEdgeConfiguration"];
   updateConfiguration: VerticalLinearStepper["updateConfiguration"];
+  onSubmit: VerticalLinearStepper["onSubmit"];
 }
 
 interface IState {
@@ -275,6 +277,13 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
     }));
   };
 
+  onSubmit = () => {
+    const prom = datasources.SetupPlatformSystemForEdge.sendData(
+      this.state.workflowConfig
+    );
+    CB_PORTAL.Loader.waitFor(prom);
+  };
+
   render() {
     const steps = getSteps();
     const { activeStep } = this.state;
@@ -297,7 +306,8 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
                     developerConfiguration: this.submitDeveloperConfiguration,
                     systemConfiguration: this.submitSystemConfiguration,
                     edgeConfiguration: this.submitEdgeConfiguration,
-                    updateConfiguration: this.updateConfiguration
+                    updateConfiguration: this.updateConfiguration,
+                    onSubmit: this.onSubmit
                   })}
                 </StepContent>
               </Step>
