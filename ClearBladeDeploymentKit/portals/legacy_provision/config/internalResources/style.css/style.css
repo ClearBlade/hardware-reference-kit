@@ -1,0 +1,54 @@
+[class^="CbPane__HiddenHeader-"] span {
+  color: whitesmoke;
+}
+
+#portal-header {
+  height: 100px;
+  max-height: 300px;
+}
+
+[class^="CbWidget__"] .btn.btn-secondary.btn-block {
+  font-size: 2em;
+  height: 3em;
+  color: #5c5c5c;
+}
+
+[class^="CbWidget__"] .btn.btn-secondary.btn-block:hover {
+  border-color: rgb(0, 123, 255) !important;
+  background: none !important;
+  color: rgb(0, 123, 255) !important;
+}
+
+#home-btn button:hover {
+  border-color: initial !important;
+  background: initial !important;
+  color: initial !important;
+}
+
+#home-btn button,
+form .form-inline button,
+#final-json button,
+#retarget-btn button {
+  font-size: 16px;
+  height: inherit;
+}
+
+#home-btn button {
+  height: 30px;
+}
+
+/* [class^="PortalView__MainContentWrapper"] > div > section { 
+    background: #777; 
+} */
+
+.card {
+  border: none;
+}
+
+h3.list-title {
+  color: #090909 !important;
+}
+
+.labelText {
+  color: #535353;
+}
