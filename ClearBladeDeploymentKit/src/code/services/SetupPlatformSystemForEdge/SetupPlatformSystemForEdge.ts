@@ -3,7 +3,6 @@ import CONFIGURATION, { WorkflowConfig } from "lib/backend/Configuration";
 import {
   IClearBladeAdminREST,
   SystemDetails,
-  EdgeDetails,
   SystemSetupInfo,
   EdgeSetupInfo
 } from "lib/backend/ClearBladeAdminRESTLib";
