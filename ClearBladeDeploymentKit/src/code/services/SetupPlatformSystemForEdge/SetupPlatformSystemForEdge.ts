@@ -88,34 +88,31 @@ function SetupPlatformSystemForEdge(
     response: SystemSetupInfo
   ): Q.Promise<SystemSetupInfo> {
     const deferred = Q.defer<SystemSetupInfo>();
-    deferred.resolve(response);
+    log("a");
+    const rest = response.rest;
+    log("a");
+    const systemDetails = response.systemDetails;
+    log("a");
+    const systemKey = systemDetails.systemKey;
+    log("a");
+    const systemSecret = systemDetails.systemSecret;
+    log("a");
+    const portalName = provisionConfig.SYSTEM.entrypoint.portal;
+    log("a");
+    rest
+      .getEncodedPortalURL(systemKey, systemSecret, portalName)
+      .then(function(raw) {
+        try {
+          const json = JSON.parse(raw);
+          log("got url: " + json.url);
+          response.systemDetails.entrypoint = { portal: json.url };
+          deferred.resolve(response);
+        } catch (e) {
+          log("Unable to parse portal url response: " + raw);
+          deferred.reject(e);
+        }
+      });
     return deferred.promise;
-    // log("a");
-    // const rest = response.rest;
-    // log("a");
-    // const systemDetails = response.systemDetails;
-    // log("a");
-    // const systemKey = systemDetails.systemKey;
-    // log("a");
-    // const systemSecret = systemDetails.systemSecret;
-    // log("a");
-    // const portalName = provisionConfig.SYSTEM.entrypoint.portal;
-    // log("a");
-    // const deferred = Q.defer();
-    // rest
-    //   .getEncodedPortalURL(systemKey, systemSecret, portalName)
-    //   .then(function(raw) {
-    //     try {
-    //       json = JSON.parse(raw);
-    //       log("got url: " + json.url);
-    //       response.systemDetails.entrypoint = { portal: json.url };
-    //       deferred.resolve(response);
-    //     } catch (e) {
-    //       log("Unable to parse portal url response: " + raw);
-    //       deferred.reject(e);
-    //     }
-    //   });
-    // return deferred.promise;
   }
   function setupEdge(edgeRetargetCreds: SystemSetupInfo) {
     const flow = provisionConfig.EDGE.flow;

@@ -398,7 +398,7 @@ function ClearBladeAdminREST(url: string) {
     systemKey: string,
     systemSecret: string,
     portalName: string
-  ): Q.Promise<object> {
+  ): Q.Promise<string> {
     const headers = {};
     const body = {};
     const qs = [
@@ -416,7 +416,7 @@ function ClearBladeAdminREST(url: string) {
       body
     };
     log(options);
-    const deferred = Q.defer();
+    const deferred = Q.defer<string>();
     http.get(options, function(err, data) {
       if (err) {
         deferred.reject(err);
