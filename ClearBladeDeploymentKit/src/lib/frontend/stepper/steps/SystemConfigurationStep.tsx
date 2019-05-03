@@ -210,19 +210,37 @@ const SystemConfigurationStep = (props: IProps) => {
             {values.flow === FLOW.IPM && (
               <FormControl>
                 <Field
-                  name="devPassword"
+                  name="templateId"
                   render={({ field, form }: FieldProps) => {
                     return (
                       <FormikInputWrapper
                         type={FieldTypes.SELECT}
                         options={templateOptions.map(t => ({
-                          value: {
-                            repoName: t.IPM_REPO_NAME,
-                            repoUser: t.IPM_REPO_USER
-                          },
+                          value: t.ID,
                           label: t.LABEL
                         }))}
-                        field={field}
+                        field={{
+                          ...field,
+                          onChange: (e: React.ChangeEvent) => {
+                            const template = templateOptions.find(
+                              t => t.ID === (e.target as HTMLInputElement).value
+                            );
+                            if (template) {
+                              form.setFieldValue(
+                                "repoName",
+                                template.IPM_REPO_NAME
+                              );
+                              form.setFieldValue(
+                                "repoUser",
+                                template.IPM_REPO_USER
+                              );
+                              form.setFieldValue(
+                                "entrypoint",
+                                template.IPM_ENTRYPOINT
+                              );
+                            }
+                          }
+                        }}
                         form={form}
                         label={props.intl.formatMessage(messages.password)}
                       />

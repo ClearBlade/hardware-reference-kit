@@ -41189,6 +41189,23 @@ var WORKFLOW_CONFIGURATION = {
     edgeToken: ""
   }
 };
+var TEMPLATE_OPTIONS = [{
+  ID: "aalcott14_dev-smart-monitoring",
+  LABEL: "Smart Monitoring",
+  IPM_REPO_USER: "aalcott14",
+  IPM_REPO_NAME: "dev-smart-monitoring",
+  IPM_ENTRYPOINT: {
+    portal: "smart_monitoring"
+  }
+}, {
+  ID: "rreinold_anomaly-detection-template",
+  LABEL: "Anomaly Detection",
+  IPM_REPO_USER: "rreinold",
+  IPM_REPO_NAME: "anomaly-detection-template",
+  IPM_ENTRYPOINT: {
+    portal: "AnomalyDetection"
+  }
+}];
 /**
  *
  * TODO Append uid to email to allow multiple provisioners per system
@@ -41198,21 +41215,7 @@ var CONFIGURATION = {
   TARGET: TARGET_CONFIGURATION,
   PORTAL: PORTAL_CONFIGURATION,
   WORKFLOW: WORKFLOW_CONFIGURATION,
-  TEMPLATE_OPTIONS: [{
-    LABEL: "Smart Monitoring",
-    IPM_REPO_USER: "aalcott14",
-    IPM_REPO_NAME: "dev-smart-monitoring",
-    IPM_ENTRYPOINT: {
-      portal: "smart_monitoring"
-    }
-  }, {
-    LABEL: "Anomaly Detection",
-    IPM_REPO_USER: "rreinold",
-    IPM_REPO_NAME: "anomaly-detection-template",
-    IPM_ENTRYPOINT: {
-      portal: "AnomalyDetection"
-    }
-  }],
+  TEMPLATE_OPTIONS: TEMPLATE_OPTIONS,
   WORKFLOW_MAP: {
     PLATFORM: Configuration_defineProperty({}, FLOW.PRECONFIGURED, function (config) {
       // needs nothing
@@ -41611,6 +41614,10 @@ var DeveloperConfigurationStep_DeveloperConfigurationStep = function DeveloperCo
 
 /* harmony default export */ var steps_DeveloperConfigurationStep = (injectIntl(DeveloperConfigurationStep_DeveloperConfigurationStep));
 // CONCATENATED MODULE: ./src/lib/frontend/stepper/steps/SystemConfigurationStep.tsx
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { SystemConfigurationStep_defineProperty(target, key, source[key]); }); } return target; }
+
+function SystemConfigurationStep_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -41759,7 +41766,7 @@ var SystemConfigurationStep_SystemConfigurationStep = function SystemConfigurati
         });
       }
     })), values.flow === FLOW.IPM && external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Field, {
-      name: "devPassword",
+      name: "templateId",
       render: function render(_ref8) {
         var field = _ref8.field,
             form = _ref8.form;
@@ -41767,14 +41774,23 @@ var SystemConfigurationStep_SystemConfigurationStep = function SystemConfigurati
           type: FieldTypes.SELECT,
           options: templateOptions.map(function (t) {
             return {
-              value: {
-                repoName: t.IPM_REPO_NAME,
-                repoUser: t.IPM_REPO_USER
-              },
+              value: t.ID,
               label: t.LABEL
             };
           }),
-          field: field,
+          field: _objectSpread({}, field, {
+            onChange: function onChange(e) {
+              var template = templateOptions.find(function (t) {
+                return t.ID === e.target.value;
+              });
+
+              if (template) {
+                form.setFieldValue("repoName", template.IPM_REPO_NAME);
+                form.setFieldValue("repoUser", template.IPM_REPO_USER);
+                form.setFieldValue("entrypoint", template.IPM_ENTRYPOINT);
+              }
+            }
+          }),
           form: form,
           label: props.intl.formatMessage(stepper_messages.password)
         });
@@ -42092,7 +42108,7 @@ function (_React$PureComponent) {
 // CONCATENATED MODULE: ./src/portals/provision/config/widgets/HTML_WIDGET_COMPONENT_50a1ee29-2dec-4061-a874-4bcce6bed968/parsers/html/incoming_parser/index.tsx
 function incoming_parser_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { incoming_parser_typeof = function _typeof(obj) { return typeof obj; }; } else { incoming_parser_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return incoming_parser_typeof(obj); }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { incoming_parser_defineProperty(target, key, source[key]); }); } return target; }
+function incoming_parser_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { incoming_parser_defineProperty(target, key, source[key]); }); } return target; }
 
 function incoming_parser_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -42271,7 +42287,7 @@ function (_React$Component) {
       _this.setState(function (state) {
         return {
           activeStep: state.activeStep + 1,
-          workflowConfig: _objectSpread({}, state.workflowConfig, {
+          workflowConfig: incoming_parser_objectSpread({}, state.workflowConfig, {
             PLATFORM: config
           })
         };
@@ -42282,7 +42298,7 @@ function (_React$Component) {
       _this.setState(function (state) {
         return {
           activeStep: state.activeStep + 1,
-          workflowConfig: _objectSpread({}, state.workflowConfig, {
+          workflowConfig: incoming_parser_objectSpread({}, state.workflowConfig, {
             DEVELOPER: config
           })
         };
@@ -42293,7 +42309,7 @@ function (_React$Component) {
       _this.setState(function (state) {
         return {
           activeStep: state.activeStep + 1,
-          workflowConfig: _objectSpread({}, state.workflowConfig, {
+          workflowConfig: incoming_parser_objectSpread({}, state.workflowConfig, {
             SYSTEM: config
           })
         };
@@ -42304,7 +42320,7 @@ function (_React$Component) {
       _this.setState(function (state) {
         return {
           activeStep: state.activeStep + 1,
-          workflowConfig: _objectSpread({}, state.workflowConfig, {
+          workflowConfig: incoming_parser_objectSpread({}, state.workflowConfig, {
             EDGE: config
           })
         };
