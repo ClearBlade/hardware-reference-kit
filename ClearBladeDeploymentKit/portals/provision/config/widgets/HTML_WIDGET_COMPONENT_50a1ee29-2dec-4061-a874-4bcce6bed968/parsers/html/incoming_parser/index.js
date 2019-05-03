@@ -42207,7 +42207,7 @@ function (_React$Component) {
     _this = incoming_parser_possibleConstructorReturn(this, (_getPrototypeOf2 = incoming_parser_getPrototypeOf(VerticalLinearStepper)).call.apply(_getPrototypeOf2, [this].concat(args)));
 
     incoming_parser_defineProperty(incoming_parser_assertThisInitialized(_this), "state", {
-      activeStep: 4,
+      activeStep: 0,
       targetError: null,
       workflowConfig: {
         PLATFORM: {
@@ -42237,7 +42237,8 @@ function (_React$Component) {
           edgeToken: ""
         }
       },
-      templateOptions: []
+      templateOptions: [],
+      fetchedWorkflowConfig: false
     });
 
     incoming_parser_defineProperty(incoming_parser_assertThisInitialized(_this), "retrieveWorkflowConfig", function () {
@@ -42363,7 +42364,8 @@ function (_React$Component) {
       this.retrieveWorkflowConfig().then(function (results) {
         _this2.setState({
           workflowConfig: results.WORKFLOW,
-          templateOptions: results.TEMPLATE_OPTIONS
+          templateOptions: results.TEMPLATE_OPTIONS,
+          fetchedWorkflowConfig: true
         });
       });
     }
@@ -42375,8 +42377,9 @@ function (_React$Component) {
       var steps = getSteps();
       var _this$state = this.state,
           activeStep = _this$state.activeStep,
-          targetError = _this$state.targetError;
-      return external_React_["createElement"](index_es_IntlProvider, null, external_React_["createElement"]("div", null, external_React_["createElement"](Stepper_default.a, {
+          targetError = _this$state.targetError,
+          fetchedWorkflowConfig = _this$state.fetchedWorkflowConfig;
+      return external_React_["createElement"](index_es_IntlProvider, null, external_React_["createElement"]("div", null, fetchedWorkflowConfig && external_React_["createElement"](Stepper_default.a, {
         activeStep: activeStep,
         orientation: "vertical"
       }, steps.map(function (msg, index) {

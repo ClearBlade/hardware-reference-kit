@@ -94,11 +94,12 @@ interface IState {
   templateOptions: typeof CONFIGURATION["TEMPLATE_OPTIONS"];
   activeStep: number;
   targetError: any;
+  fetchedWorkflowConfig: boolean;
 }
 
 class VerticalLinearStepper extends React.Component<{}, IState> {
   state = {
-    activeStep: 4,
+    activeStep: 0,
     targetError: null,
     workflowConfig: {
       PLATFORM: {
@@ -128,14 +129,16 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
         edgeToken: ""
       }
     },
-    templateOptions: []
+    templateOptions: [],
+    fetchedWorkflowConfig: false
   };
 
   componentDidMount() {
     this.retrieveWorkflowConfig().then(results => {
       this.setState({
         workflowConfig: results.WORKFLOW,
-        templateOptions: results.TEMPLATE_OPTIONS
+        templateOptions: results.TEMPLATE_OPTIONS,
+        fetchedWorkflowConfig: true
       });
     });
   }
@@ -246,33 +249,35 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
 
   render() {
     const steps = getSteps();
-    const { activeStep, targetError } = this.state;
+    const { activeStep, targetError, fetchedWorkflowConfig } = this.state;
 
     return (
       <IntlProvider>
         <div>
-          <Stepper activeStep={activeStep} orientation="vertical">
-            {steps.map((msg, index) => (
-              <Step key={index}>
-                <StepButton
-                  onClick={() => this.jumpToStep(index)}
-                  // completed={this.state.completed[index]}
-                >
-                  {msg}
-                </StepButton>
-                <StepContent>
-                  {getStepContent(index, this.state, {
-                    platformConfiguration: this.submitPlatformConfiguration,
-                    developerConfiguration: this.submitDeveloperConfiguration,
-                    systemConfiguration: this.submitSystemConfiguration,
-                    edgeConfiguration: this.submitEdgeConfiguration,
-                    updateConfiguration: this.updateConfiguration,
-                    onSubmit: this.onSubmit
-                  })}
-                </StepContent>
-              </Step>
-            ))}
-          </Stepper>
+          {fetchedWorkflowConfig && (
+            <Stepper activeStep={activeStep} orientation="vertical">
+              {steps.map((msg, index) => (
+                <Step key={index}>
+                  <StepButton
+                    onClick={() => this.jumpToStep(index)}
+                    // completed={this.state.completed[index]}
+                  >
+                    {msg}
+                  </StepButton>
+                  <StepContent>
+                    {getStepContent(index, this.state, {
+                      platformConfiguration: this.submitPlatformConfiguration,
+                      developerConfiguration: this.submitDeveloperConfiguration,
+                      systemConfiguration: this.submitSystemConfiguration,
+                      edgeConfiguration: this.submitEdgeConfiguration,
+                      updateConfiguration: this.updateConfiguration,
+                      onSubmit: this.onSubmit
+                    })}
+                  </StepContent>
+                </Step>
+              ))}
+            </Stepper>
+          )}
           {activeStep === steps.length && (
             <Paper square elevation={0}>
               <Typography>
