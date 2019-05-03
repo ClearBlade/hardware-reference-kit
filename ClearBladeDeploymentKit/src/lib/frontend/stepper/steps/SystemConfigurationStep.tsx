@@ -26,7 +26,7 @@ const SystemConfigurationStep = (props: IProps) => {
     },
     {
       value: FLOW.IPM,
-      label: props.intl.formatMessage(messages.newSystemFromIpm)
+      label: props.intl.formatMessage(messages.newSystemFromTemplate)
     }
   ];
   return (

@@ -185,34 +185,36 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
   state = {
     activeStep: 4,
     targetError: null,
-    workflowConfig: {
-      PLATFORM: {
-        flow: FLOW.EXISTING,
-        platformURL: ""
-      },
-      DEVELOPER: {
-        flow: FLOW.NEW,
-        devEmail: "",
-        devPassword: "",
-        key: ""
-      },
-      SYSTEM: {
-        flow: FLOW.IPM,
-        systemName: "",
-        systemKey: "",
-        systemSecret: "",
-        provEmail: "provisioner@clearblade.com",
-        provPassword: "clearblade",
-        repoUser: TARGET_CONFIGURATION.IPM_REPO_USER,
-        repoName: TARGET_CONFIGURATION.IPM_REPO_NAME,
-        entrypoint: TARGET_CONFIGURATION.IPM_ENTRYPOINT
-      },
-      EDGE: {
-        flow: FLOW.NEW,
-        edgeID: "",
-        edgeToken: ""
-      }
-    }
+    workflowConfig: datasources.RetrieveWorkflowConfig.latestData().results
+      .WORKFLOW
+    // workflowConfig: {
+    //   PLATFORM: {
+    //     flow: FLOW.EXISTING,
+    //     platformURL: ""
+    //   },
+    //   DEVELOPER: {
+    //     flow: FLOW.NEW,
+    //     devEmail: "",
+    //     devPassword: "",
+    //     key: ""
+    //   },
+    //   SYSTEM: {
+    //     flow: FLOW.IPM,
+    //     systemName: "",
+    //     systemKey: "",
+    //     systemSecret: "",
+    //     provEmail: "provisioner@clearblade.com",
+    //     provPassword: "clearblade",
+    //     repoUser: TARGET_CONFIGURATION.IPM_REPO_USER,
+    //     repoName: TARGET_CONFIGURATION.IPM_REPO_NAME,
+    //     entrypoint: TARGET_CONFIGURATION.IPM_ENTRYPOINT
+    //   },
+    //   EDGE: {
+    //     flow: FLOW.NEW,
+    //     edgeID: "",
+    //     edgeToken: ""
+    //   }
+    // }
   };
 
   jumpToStep = (idx: number) => {

@@ -69,9 +69,9 @@ export default defineMessages({
     id: "app.components.stepper.passwordsMustMatch",
     defaultMessage: "Passwords must match"
   },
-  newSystemFromIpm: {
-    id: "app.components.stepper.newSystemFromIpm",
-    defaultMessage: "IPM System"
+  newSystemFromTemplate: {
+    id: "app.components.stepper.newSystemFromTemplate",
+    defaultMessage: "Template System"
   },
   emptySystem: {
     id: "app.components.stepper.emptySystem",

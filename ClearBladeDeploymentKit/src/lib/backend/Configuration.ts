@@ -64,7 +64,7 @@ export enum FLOW {
 }
 
 export const TARGET_CONFIGURATION = {
-  URL: "https://amd.clearblade.com",
+  URL: "https://dev.clearblade.com",
   REGISTRATION_KEY: "AMDBlade",
   IPM_REPO_USER: "aalcott14",
   IPM_REPO_NAME: "dev-smart-monitoring",
