@@ -41264,9 +41264,8 @@ var CONFIGURATION = {
       return deferred.promise;
     }), _DEVELOPER),
     SYSTEM: (_SYSTEM = {}, Configuration_defineProperty(_SYSTEM, FLOW.IPM, function (rest, config) {
-      var systemAttributes = config.SYSTEM;
-      var repoUser = CONFIGURATION.TARGET.IPM_REPO_USER;
-      var repoName = CONFIGURATION.TARGET.IPM_REPO_NAME; // RR: Not willing to implement devEmail
+      var repoUser = config.SYSTEM.repoUser;
+      var repoName = config.SYSTEM.repoName; // RR: Not willing to implement devEmail
 
       var devEmail = "notprovided@gmail.com";
       log("sys");
@@ -42414,8 +42413,8 @@ function (_React$Component) {
   return VerticalLinearStepper;
 }(external_React_["Component"]);
 
-var MOUNT_NODE = document.getElementById("deployment-kit-stepper");
-external_ReactDOM_["unmountComponentAtNode"](MOUNT_NODE);
+var MOUNT_NODE = document.getElementById("deployment-kit-stepper"); // ReactDOM.unmountComponentAtNode(MOUNT_NODE as HTMLElement);
+
 external_ReactDOM_["render"](external_React_["createElement"](incoming_parser_VerticalLinearStepper, null), MOUNT_NODE);
 
 /***/ })

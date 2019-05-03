@@ -204,9 +204,8 @@ const CONFIGURATION = {
         rest: IClearBladeAdminREST,
         config: WorkflowConfig
       ): Q.Promise<SystemSetupInfo> {
-        const systemAttributes = config.SYSTEM;
-        const repoUser = CONFIGURATION.TARGET.IPM_REPO_USER;
-        const repoName = CONFIGURATION.TARGET.IPM_REPO_NAME;
+        const repoUser = config.SYSTEM.repoUser;
+        const repoName = config.SYSTEM.repoName;
         // RR: Not willing to implement devEmail
         const devEmail = "notprovided@gmail.com";
         log("sys");

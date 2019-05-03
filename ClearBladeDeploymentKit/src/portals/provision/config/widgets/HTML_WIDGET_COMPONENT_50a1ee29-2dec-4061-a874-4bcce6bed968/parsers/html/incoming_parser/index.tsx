@@ -300,6 +300,6 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
 }
 
 const MOUNT_NODE = document.getElementById("deployment-kit-stepper");
-ReactDOM.unmountComponentAtNode(MOUNT_NODE as HTMLElement);
+// ReactDOM.unmountComponentAtNode(MOUNT_NODE as HTMLElement);
 
 ReactDOM.render(<VerticalLinearStepper />, MOUNT_NODE);
