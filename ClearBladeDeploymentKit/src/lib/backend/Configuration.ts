@@ -118,6 +118,20 @@ const CONFIGURATION = {
   TARGET: TARGET_CONFIGURATION,
   PORTAL: PORTAL_CONFIGURATION,
   WORKFLOW: WORKFLOW_CONFIGURATION,
+  TEMPLATE_OPTIONS: [
+    {
+      LABEL: "Smart Monitoring",
+      IPM_REPO_USER: "aalcott14",
+      IPM_REPO_NAME: "dev-smart-monitoring",
+      IPM_ENTRYPOINT: { portal: "smart_monitoring" }
+    },
+    {
+      LABEL: "Anomaly Detection",
+      IPM_REPO_USER: "rreinold",
+      IPM_REPO_NAME: "anomaly-detection-template",
+      IPM_ENTRYPOINT: { portal: "AnomalyDetection" }
+    }
+  ],
   WORKFLOW_MAP: {
     PLATFORM: {
       [FLOW.PRECONFIGURED]: function(

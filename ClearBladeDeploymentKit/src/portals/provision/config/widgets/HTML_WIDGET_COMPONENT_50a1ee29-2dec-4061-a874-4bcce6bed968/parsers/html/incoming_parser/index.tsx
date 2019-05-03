@@ -7,12 +7,7 @@ import StepContent from "@material-ui/core/StepContent";
 import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
-import {
-  FormattedMessage,
-  IntlProvider,
-  injectIntl,
-  InjectedIntlProps
-} from "react-intl";
+import { FormattedMessage, IntlProvider } from "react-intl";
 
 import messages from "../../../../../../../../lib/frontend/stepper/messages";
 import PlatformConfigurationStep from "../../../../../../../../lib/frontend/stepper/steps/PlatformConfigurationStep";
@@ -20,98 +15,16 @@ import DeveloperConfigurationStep from "../../../../../../../../lib/frontend/ste
 import SystemConfigurationStep from "../../../../../../../../lib/frontend/stepper/steps/SystemConfigurationStep";
 import EdgeConfigurationStep from "../../../../../../../../lib/frontend/stepper/steps/EdgeConfigurationStep";
 import TargetStep from "../../../../../../../../lib/frontend/stepper/steps/TargetStep";
-import {
-  FLOW,
-  TARGET_CONFIGURATION,
+import CONFIGURATION, {
   Configuration,
   PlatformConfiguration,
   DeveloperConfiguration,
   SystemConfiguration,
-  EdgeConfiguration
+  EdgeConfiguration,
+  FLOW,
+  TARGET_CONFIGURATION
 } from "../../../../../../../../lib/backend/Configuration";
 import ResponsiveDialog from "../../../../../../../../lib/frontend/ResponsiveDialog";
-
-// existing vs preconfigured platform
-// existing -> enter platform URL - TEXT
-// preconfigured -> continue
-
-// new developer vs existing developer
-// existing -> enter creds - TEXT
-// new -> enter email, confirm password - TEXT and PASSWORD
-
-// new IPM system vs existing system vs new EMPTY system
-// existing system -> enter system key, secret, provisioner email and password - TEXT and PASSWORD
-// EMPTY system -> enter system name - TEXT
-// IPM system -> select template from dropdown - SELECT
-
-// new edge vs existing edge
-// new edge -> enter edge name - TEXT
-// existing edge -> enter edge name, edge token - TEXT
-
-// retarget (show config)
-
-// workflow config -
-/*
-{
-	"results": {
-		"PORTAL": {
-			"AUTOROUTE": false
-		},
-		"TARGET": {
-			"IPM_ENTRYPOINT": {
-				"portal": "smart_monitoring"
-			},
-			"IPM_REPO_NAME": "dev-smart-monitoring",
-			"IPM_REPO_USER": "aalcott14",
-			"PROVISIONER_USER_EMAIL": "provisioner@clearblade.com",
-			"REGISTRATION_KEY": "AMDBlade",
-			"URL": "https://amd.clearblade.com"
-		},
-		"WORKFLOW": {
-			"AUTOROUTE": false,
-			"DEVELOPER": {
-				"devEmail": "",
-				"devPassword": "",
-				"flow": "NEW",
-				"key": "AMDBlade",
-				"route": false
-			},
-			"EDGE": {
-				"edgeID": "",
-				"edgeToken": "",
-				"flow": "NEW",
-				"route": false
-			},
-			"PLATFORM": {
-				"flow": "PRECONFIGURED",
-				"platformURL": "https://amd.clearblade.com",
-				"route": false
-			},
-			"SYSTEM": {
-				"entrypoint": {
-					"portal": "smart_monitoring"
-				},
-				"flow": "IPM",
-				"provEmail": "provisioner@clearblade.com",
-				"provPassword": "clearblade",
-				"repoName": "dev-smart-monitoring",
-				"repoUser": "aalcott14",
-				"route": false,
-				"systemKey": "",
-				"systemName": "",
-				"systemSecret": ""
-			}
-		},
-		"WORKFLOW_MAP": {
-			"DEVELOPER": {},
-			"EDGE": {},
-			"PLATFORM": {},
-			"SYSTEM": {}
-		}
-	},
-	"success": true
-}
-*/
 
 function getSteps() {
   return [
@@ -143,6 +56,7 @@ function getStepContent(step: number, state: IState, handlers: SubmitHandlers) {
       return (
         <SystemConfigurationStep
           {...state.workflowConfig.SYSTEM}
+          templateOptions={state.templateOptions}
           onSubmit={handlers.systemConfiguration}
         />
       );
@@ -177,6 +91,7 @@ interface SubmitHandlers {
 
 interface IState {
   workflowConfig: Configuration;
+  templateOptions: typeof CONFIGURATION["TEMPLATE_OPTIONS"];
   activeStep: number;
   targetError: any;
 }
@@ -185,36 +100,58 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
   state = {
     activeStep: 4,
     targetError: null,
-    workflowConfig: datasources.RetrieveWorkflowConfig.latestData().results
-      .WORKFLOW
-    // workflowConfig: {
-    //   PLATFORM: {
-    //     flow: FLOW.EXISTING,
-    //     platformURL: ""
-    //   },
-    //   DEVELOPER: {
-    //     flow: FLOW.NEW,
-    //     devEmail: "",
-    //     devPassword: "",
-    //     key: ""
-    //   },
-    //   SYSTEM: {
-    //     flow: FLOW.IPM,
-    //     systemName: "",
-    //     systemKey: "",
-    //     systemSecret: "",
-    //     provEmail: "provisioner@clearblade.com",
-    //     provPassword: "clearblade",
-    //     repoUser: TARGET_CONFIGURATION.IPM_REPO_USER,
-    //     repoName: TARGET_CONFIGURATION.IPM_REPO_NAME,
-    //     entrypoint: TARGET_CONFIGURATION.IPM_ENTRYPOINT
-    //   },
-    //   EDGE: {
-    //     flow: FLOW.NEW,
-    //     edgeID: "",
-    //     edgeToken: ""
-    //   }
-    // }
+    workflowConfig: {
+      PLATFORM: {
+        flow: FLOW.EXISTING,
+        platformURL: ""
+      },
+      DEVELOPER: {
+        flow: FLOW.NEW,
+        devEmail: "",
+        devPassword: "",
+        key: ""
+      },
+      SYSTEM: {
+        flow: FLOW.IPM,
+        systemName: "",
+        systemKey: "",
+        systemSecret: "",
+        provEmail: "provisioner@clearblade.com",
+        provPassword: "clearblade",
+        repoUser: TARGET_CONFIGURATION.IPM_REPO_USER,
+        repoName: TARGET_CONFIGURATION.IPM_REPO_NAME,
+        entrypoint: TARGET_CONFIGURATION.IPM_ENTRYPOINT
+      },
+      EDGE: {
+        flow: FLOW.NEW,
+        edgeID: "",
+        edgeToken: ""
+      }
+    },
+    templateOptions: []
+  };
+
+  componentDidMount() {
+    this.retrieveWorkflowConfig().then(results => {
+      this.setState({
+        workflowConfig: results.WORKFLOW,
+        templateOptions: results.TEMPLATE_OPTIONS
+      });
+    });
+  }
+
+  retrieveWorkflowConfig = (): Promise<typeof CONFIGURATION> => {
+    return new Promise(res => {
+      if (datasources.RetrieveWorkflowConfig.latestData()) {
+        res(datasources.RetrieveWorkflowConfig.latestData().results);
+      } else {
+        datasources.RetrieveWorkflowConfig.latestData.subscribe(handle);
+      }
+      function handle(data: { results: typeof CONFIGURATION }) {
+        datasources.RetrieveWorkflowConfig.latestData.unsubscribe(handle);
+        res(data.results);
+      }
+    });
   };
 
   jumpToStep = (idx: number) => {
@@ -290,7 +227,7 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
   onSubmit = () => {
     const prom = datasources.SetupPlatformSystemForEdge.sendData(
       this.state.workflowConfig
-    ).then(resp => {
+    ).then((resp: { success: boolean; results: string }) => {
       if (!resp.success) {
         this.setState({
           targetError: resp.results

@@ -41198,6 +41198,21 @@ var CONFIGURATION = {
   TARGET: TARGET_CONFIGURATION,
   PORTAL: PORTAL_CONFIGURATION,
   WORKFLOW: WORKFLOW_CONFIGURATION,
+  TEMPLATE_OPTIONS: [{
+    LABEL: "Smart Monitoring",
+    IPM_REPO_USER: "aalcott14",
+    IPM_REPO_NAME: "dev-smart-monitoring",
+    IPM_ENTRYPOINT: {
+      portal: "smart_monitoring"
+    }
+  }, {
+    LABEL: "Anomaly Detection",
+    IPM_REPO_USER: "rreinold",
+    IPM_REPO_NAME: "anomaly-detection-template",
+    IPM_ENTRYPOINT: {
+      portal: "AnomalyDetection"
+    }
+  }],
   WORKFLOW_MAP: {
     PLATFORM: Configuration_defineProperty({}, FLOW.PRECONFIGURED, function (config) {
       // needs nothing
@@ -41618,6 +41633,7 @@ var SystemConfigurationStep_SystemConfigurationStep = function SystemConfigurati
     value: FLOW.IPM,
     label: props.intl.formatMessage(stepper_messages.newSystemFromTemplate)
   }];
+  var templateOptions = props.templateOptions;
   return external_React_["createElement"](formik_esm_Formik, {
     validateOnBlur: true,
     initialValues: {
@@ -41749,13 +41765,15 @@ var SystemConfigurationStep_SystemConfigurationStep = function SystemConfigurati
             form = _ref8.form;
         return external_React_["createElement"](frontend_FormikInputWrapper, {
           type: FieldTypes.SELECT,
-          options: [{
-            value: {
-              repoName: "dev-smart-monitoring",
-              repoUser: "aalcott14"
-            },
-            label: "smart-monitoring"
-          }],
+          options: templateOptions.map(function (t) {
+            return {
+              value: {
+                repoName: t.IPM_REPO_NAME,
+                repoUser: t.IPM_REPO_USER
+              },
+              label: t.LABEL
+            };
+          }),
           field: field,
           form: form,
           label: props.intl.formatMessage(stepper_messages.password)
@@ -42112,83 +42130,8 @@ function incoming_parser_extends() { incoming_parser_extends = Object.assign || 
 
 
 
- // existing vs preconfigured platform
-// existing -> enter platform URL - TEXT
-// preconfigured -> continue
-// new developer vs existing developer
-// existing -> enter creds - TEXT
-// new -> enter email, confirm password - TEXT and PASSWORD
-// new IPM system vs existing system vs new EMPTY system
-// existing system -> enter system key, secret, provisioner email and password - TEXT and PASSWORD
-// EMPTY system -> enter system name - TEXT
-// IPM system -> select template from dropdown - SELECT
-// new edge vs existing edge
-// new edge -> enter edge name - TEXT
-// existing edge -> enter edge name, edge token - TEXT
-// retarget (show config)
-// workflow config -
 
-/*
-{
-	"results": {
-		"PORTAL": {
-			"AUTOROUTE": false
-		},
-		"TARGET": {
-			"IPM_ENTRYPOINT": {
-				"portal": "smart_monitoring"
-			},
-			"IPM_REPO_NAME": "dev-smart-monitoring",
-			"IPM_REPO_USER": "aalcott14",
-			"PROVISIONER_USER_EMAIL": "provisioner@clearblade.com",
-			"REGISTRATION_KEY": "AMDBlade",
-			"URL": "https://amd.clearblade.com"
-		},
-		"WORKFLOW": {
-			"AUTOROUTE": false,
-			"DEVELOPER": {
-				"devEmail": "",
-				"devPassword": "",
-				"flow": "NEW",
-				"key": "AMDBlade",
-				"route": false
-			},
-			"EDGE": {
-				"edgeID": "",
-				"edgeToken": "",
-				"flow": "NEW",
-				"route": false
-			},
-			"PLATFORM": {
-				"flow": "PRECONFIGURED",
-				"platformURL": "https://amd.clearblade.com",
-				"route": false
-			},
-			"SYSTEM": {
-				"entrypoint": {
-					"portal": "smart_monitoring"
-				},
-				"flow": "IPM",
-				"provEmail": "provisioner@clearblade.com",
-				"provPassword": "clearblade",
-				"repoName": "dev-smart-monitoring",
-				"repoUser": "aalcott14",
-				"route": false,
-				"systemKey": "",
-				"systemName": "",
-				"systemSecret": ""
-			}
-		},
-		"WORKFLOW_MAP": {
-			"DEVELOPER": {},
-			"EDGE": {},
-			"PLATFORM": {},
-			"SYSTEM": {}
-		}
-	},
-	"success": true
-}
-*/
+
 
 function getSteps() {
   return [external_React_["createElement"](index_es_FormattedMessage, stepper_messages.platform), external_React_["createElement"](index_es_FormattedMessage, stepper_messages.developer), external_React_["createElement"](index_es_FormattedMessage, stepper_messages.system), external_React_["createElement"](index_es_FormattedMessage, stepper_messages.edge), external_React_["createElement"](index_es_FormattedMessage, stepper_messages.retarget)];
@@ -42208,6 +42151,7 @@ function getStepContent(step, state, handlers) {
 
     case 2:
       return external_React_["createElement"](steps_SystemConfigurationStep, incoming_parser_extends({}, state.workflowConfig.SYSTEM, {
+        templateOptions: state.templateOptions,
         onSubmit: handlers.systemConfiguration
       }));
 
@@ -42249,35 +42193,50 @@ function (_React$Component) {
     incoming_parser_defineProperty(incoming_parser_assertThisInitialized(_this), "state", {
       activeStep: 4,
       targetError: null,
-      workflowConfig: datasources.RetrieveWorkflowConfig.latestData().results.WORKFLOW // workflowConfig: {
-      //   PLATFORM: {
-      //     flow: FLOW.EXISTING,
-      //     platformURL: ""
-      //   },
-      //   DEVELOPER: {
-      //     flow: FLOW.NEW,
-      //     devEmail: "",
-      //     devPassword: "",
-      //     key: ""
-      //   },
-      //   SYSTEM: {
-      //     flow: FLOW.IPM,
-      //     systemName: "",
-      //     systemKey: "",
-      //     systemSecret: "",
-      //     provEmail: "provisioner@clearblade.com",
-      //     provPassword: "clearblade",
-      //     repoUser: TARGET_CONFIGURATION.IPM_REPO_USER,
-      //     repoName: TARGET_CONFIGURATION.IPM_REPO_NAME,
-      //     entrypoint: TARGET_CONFIGURATION.IPM_ENTRYPOINT
-      //   },
-      //   EDGE: {
-      //     flow: FLOW.NEW,
-      //     edgeID: "",
-      //     edgeToken: ""
-      //   }
-      // }
+      workflowConfig: {
+        PLATFORM: {
+          flow: FLOW.EXISTING,
+          platformURL: ""
+        },
+        DEVELOPER: {
+          flow: FLOW.NEW,
+          devEmail: "",
+          devPassword: "",
+          key: ""
+        },
+        SYSTEM: {
+          flow: FLOW.IPM,
+          systemName: "",
+          systemKey: "",
+          systemSecret: "",
+          provEmail: "provisioner@clearblade.com",
+          provPassword: "clearblade",
+          repoUser: TARGET_CONFIGURATION.IPM_REPO_USER,
+          repoName: TARGET_CONFIGURATION.IPM_REPO_NAME,
+          entrypoint: TARGET_CONFIGURATION.IPM_ENTRYPOINT
+        },
+        EDGE: {
+          flow: FLOW.NEW,
+          edgeID: "",
+          edgeToken: ""
+        }
+      },
+      templateOptions: []
+    });
 
+    incoming_parser_defineProperty(incoming_parser_assertThisInitialized(_this), "retrieveWorkflowConfig", function () {
+      return new Promise(function (res) {
+        if (datasources.RetrieveWorkflowConfig.latestData()) {
+          res(datasources.RetrieveWorkflowConfig.latestData().results);
+        } else {
+          datasources.RetrieveWorkflowConfig.latestData.subscribe(handle);
+        }
+
+        function handle(data) {
+          datasources.RetrieveWorkflowConfig.latestData.unsubscribe(handle);
+          res(data.results);
+        }
+      });
     });
 
     incoming_parser_defineProperty(incoming_parser_assertThisInitialized(_this), "jumpToStep", function (idx) {
@@ -42381,9 +42340,21 @@ function (_React$Component) {
   }
 
   incoming_parser_createClass(VerticalLinearStepper, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      this.retrieveWorkflowConfig().then(function (results) {
+        _this2.setState({
+          workflowConfig: results.WORKFLOW,
+          templateOptions: results.TEMPLATE_OPTIONS
+        });
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
       var steps = getSteps();
       var _this$state = this.state,
@@ -42397,16 +42368,16 @@ function (_React$Component) {
           key: index
         }, external_React_["createElement"](StepButton_default.a, {
           onClick: function onClick() {
-            return _this2.jumpToStep(index);
+            return _this3.jumpToStep(index);
           } // completed={this.state.completed[index]}
 
-        }, msg), external_React_["createElement"](StepContent_default.a, null, getStepContent(index, _this2.state, {
-          platformConfiguration: _this2.submitPlatformConfiguration,
-          developerConfiguration: _this2.submitDeveloperConfiguration,
-          systemConfiguration: _this2.submitSystemConfiguration,
-          edgeConfiguration: _this2.submitEdgeConfiguration,
-          updateConfiguration: _this2.updateConfiguration,
-          onSubmit: _this2.onSubmit
+        }, msg), external_React_["createElement"](StepContent_default.a, null, getStepContent(index, _this3.state, {
+          platformConfiguration: _this3.submitPlatformConfiguration,
+          developerConfiguration: _this3.submitDeveloperConfiguration,
+          systemConfiguration: _this3.submitSystemConfiguration,
+          edgeConfiguration: _this3.submitEdgeConfiguration,
+          updateConfiguration: _this3.updateConfiguration,
+          onSubmit: _this3.onSubmit
         })));
       })), activeStep === steps.length && external_React_["createElement"](Paper_default.a, {
         square: true,

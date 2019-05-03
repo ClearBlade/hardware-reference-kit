@@ -10,10 +10,14 @@ import FormikInputWrapper, {
   FieldTypes,
   Option
 } from "../../FormikInputWrapper";
-import { FLOW, SystemConfiguration } from "../../../backend/Configuration";
+import CONFIGURATION, {
+  FLOW,
+  SystemConfiguration
+} from "../../../backend/Configuration";
 import messages from "../messages";
 
 interface IProps extends SystemConfiguration, InjectedIntlProps {
+  templateOptions: typeof CONFIGURATION["TEMPLATE_OPTIONS"];
   onSubmit: (config: SystemConfiguration) => void;
 }
 
@@ -29,6 +33,7 @@ const SystemConfigurationStep = (props: IProps) => {
       label: props.intl.formatMessage(messages.newSystemFromTemplate)
     }
   ];
+  const { templateOptions } = props;
   return (
     <Formik
       validateOnBlur
@@ -210,15 +215,13 @@ const SystemConfigurationStep = (props: IProps) => {
                     return (
                       <FormikInputWrapper
                         type={FieldTypes.SELECT}
-                        options={[
-                          {
-                            value: {
-                              repoName: "dev-smart-monitoring",
-                              repoUser: "aalcott14"
-                            },
-                            label: "smart-monitoring"
-                          }
-                        ]}
+                        options={templateOptions.map(t => ({
+                          value: {
+                            repoName: t.IPM_REPO_NAME,
+                            repoUser: t.IPM_REPO_USER
+                          },
+                          label: t.LABEL
+                        }))}
                         field={field}
                         form={form}
                         label={props.intl.formatMessage(messages.password)}
