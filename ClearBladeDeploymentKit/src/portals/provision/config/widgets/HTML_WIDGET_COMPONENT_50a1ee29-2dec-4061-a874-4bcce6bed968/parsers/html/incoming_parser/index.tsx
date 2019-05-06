@@ -122,8 +122,6 @@ const configTemplate = {
     systemName: "",
     systemKey: "",
     systemSecret: "",
-    provEmail: "provisioner@clearblade.com",
-    provPassword: "clearblade",
     repoUser: TARGET_CONFIGURATION.IPM_REPO_USER,
     repoName: TARGET_CONFIGURATION.IPM_REPO_NAME,
     entrypoint: TARGET_CONFIGURATION.IPM_ENTRYPOINT

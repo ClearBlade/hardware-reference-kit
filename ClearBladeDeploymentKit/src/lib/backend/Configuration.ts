@@ -21,8 +21,6 @@ export interface SystemConfiguration {
   systemName: string;
   systemKey: string;
   systemSecret: string;
-  provEmail: string;
-  provPassword: string;
   repoUser: string;
   repoName: string;
   entrypoint: { portal: string };
@@ -96,8 +94,6 @@ const WORKFLOW_CONFIGURATION: WorkflowConfig = {
     systemName: "",
     systemKey: "",
     systemSecret: "",
-    provEmail: "provisioner@clearblade.com",
-    provPassword: "clearblade",
     repoUser: TARGET_CONFIGURATION.IPM_REPO_USER,
     repoName: TARGET_CONFIGURATION.IPM_REPO_NAME,
     entrypoint: TARGET_CONFIGURATION.IPM_ENTRYPOINT

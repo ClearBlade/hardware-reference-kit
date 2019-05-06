@@ -41184,8 +41184,6 @@ var WORKFLOW_CONFIGURATION = {
     systemName: "",
     systemKey: "",
     systemSecret: "",
-    provEmail: "provisioner@clearblade.com",
-    provPassword: "clearblade",
     repoUser: TARGET_CONFIGURATION.IPM_REPO_USER,
     repoName: TARGET_CONFIGURATION.IPM_REPO_NAME,
     entrypoint: TARGET_CONFIGURATION.IPM_ENTRYPOINT
@@ -41655,8 +41653,6 @@ var SystemConfigurationStep_SystemConfigurationStep = function SystemConfigurati
       systemName: props.systemName,
       systemKey: props.systemKey,
       systemSecret: props.systemSecret,
-      provEmail: props.provEmail,
-      provPassword: props.provPassword,
       repoUser: props.repoUser,
       repoName: props.repoName,
       entrypoint: props.entrypoint
@@ -41671,14 +41667,6 @@ var SystemConfigurationStep_SystemConfigurationStep = function SystemConfigurati
         then: yup_lib["string"]().required(props.intl.formatMessage(stepper_messages.required))
       }),
       systemSecret: yup_lib["string"]().when("flow", {
-        is: FLOW.EXISTING,
-        then: yup_lib["string"]().required(props.intl.formatMessage(stepper_messages.required))
-      }),
-      provEmail: yup_lib["string"]().when("flow", {
-        is: FLOW.EXISTING,
-        then: yup_lib["string"]().required(props.intl.formatMessage(stepper_messages.required)).matches(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i, props.intl.formatMessage(stepper_messages.invalidEmail))
-      }),
-      provPassword: yup_lib["string"]().when("flow", {
         is: FLOW.EXISTING,
         then: yup_lib["string"]().required(props.intl.formatMessage(stepper_messages.required))
       }),
@@ -41736,35 +41724,11 @@ var SystemConfigurationStep_SystemConfigurationStep = function SystemConfigurati
           label: props.intl.formatMessage(stepper_messages.systemSecret)
         });
       }
-    })), external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Field, {
-      name: "provEmail",
+    }))), values.flow === FLOW.NEW && external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Field, {
+      name: "systemName",
       render: function render(_ref5) {
         var field = _ref5.field,
             form = _ref5.form;
-        return external_React_["createElement"](frontend_FormikInputWrapper, {
-          type: FieldTypes.TEXT,
-          field: field,
-          form: form,
-          label: props.intl.formatMessage(stepper_messages.provisionerEmail)
-        });
-      }
-    })), external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Field, {
-      name: "provPassword",
-      render: function render(_ref6) {
-        var field = _ref6.field,
-            form = _ref6.form;
-        return external_React_["createElement"](frontend_FormikInputWrapper, {
-          type: FieldTypes.PASSWORD,
-          field: field,
-          form: form,
-          label: props.intl.formatMessage(stepper_messages.provisionerPassword)
-        });
-      }
-    }))), values.flow === FLOW.NEW && external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Field, {
-      name: "systemName",
-      render: function render(_ref7) {
-        var field = _ref7.field,
-            form = _ref7.form;
         return external_React_["createElement"](frontend_FormikInputWrapper, {
           type: FieldTypes.TEXT,
           field: field,
@@ -41774,9 +41738,9 @@ var SystemConfigurationStep_SystemConfigurationStep = function SystemConfigurati
       }
     })), values.flow === FLOW.IPM && external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Field, {
       name: "templateId",
-      render: function render(_ref8) {
-        var field = _ref8.field,
-            form = _ref8.form;
+      render: function render(_ref6) {
+        var field = _ref6.field,
+            form = _ref6.form;
         return external_React_["createElement"](frontend_FormikInputWrapper, {
           type: FieldTypes.SELECT,
           options: templateOptions.map(function (t) {
@@ -42211,8 +42175,6 @@ var configTemplate = {
     systemName: "",
     systemKey: "",
     systemSecret: "",
-    provEmail: "provisioner@clearblade.com",
-    provPassword: "clearblade",
     repoUser: TARGET_CONFIGURATION.IPM_REPO_USER,
     repoName: TARGET_CONFIGURATION.IPM_REPO_NAME,
     entrypoint: TARGET_CONFIGURATION.IPM_ENTRYPOINT

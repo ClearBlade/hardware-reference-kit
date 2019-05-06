@@ -2,7 +2,7 @@
     "id": "041319f2-7c6a-4ede-8781-9e329effaeeb",
     "name": "ProvisionConfig",
     "settings": {
-        "defaultValue": "{\n  \"PLATFORM\": {\n    \"flow\": \"\",\n    \"platformURL\": \"\"\n  },\n  \"DEVELOPER\": {\n    \"flow\": \"\",\n    \"devEmail\": \"\",\n    \"devPassword\": \"\"\n  },\n  \"SYSTEM\": {\n    \"flow\": \"\",\n    \"systemName\": \"\",\n    \"systemKey\": \"\",\n    \"systemSecret\": \"\",\n    \"provEmail\": \"\",\n    \"provPassword\": \"\",\n    \"repoUser\": \"\",\n    \"repoName\": \"\"\n  },\n  \"EDGE\": {\n    \"flow\": \"\",\n    \"edgeId\": \"\",\n    \"edgeToken\": \"\"\n  }\n}"
+        "defaultValue": "{\n  \"PLATFORM\": {\n    \"flow\": \"\",\n    \"platformURL\": \"\"\n  },\n  \"DEVELOPER\": {\n    \"flow\": \"\",\n    \"devEmail\": \"\",\n    \"devPassword\": \"\"\n  },\n  \"SYSTEM\": {\n    \"flow\": \"\",\n    \"systemName\": \"\",\n    \"systemKey\": \"\",\n    \"systemSecret\": \"\",\n    \"repoUser\": \"\",\n    \"repoName\": \"\"\n  },\n  \"EDGE\": {\n    \"flow\": \"\",\n    \"edgeId\": \"\",\n    \"edgeToken\": \"\"\n  }\n}"
     },
     "type": "LOCAL_DATASOURCE_PLUGIN"
 }

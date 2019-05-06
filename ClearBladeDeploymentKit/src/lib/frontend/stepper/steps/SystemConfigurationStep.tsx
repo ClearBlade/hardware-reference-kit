@@ -43,8 +43,6 @@ const SystemConfigurationStep = (props: IProps) => {
           systemName: props.systemName,
           systemKey: props.systemKey,
           systemSecret: props.systemSecret,
-          provEmail: props.provEmail,
-          provPassword: props.provPassword,
           repoUser: props.repoUser,
           repoName: props.repoName,
           entrypoint: props.entrypoint
@@ -64,21 +62,6 @@ const SystemConfigurationStep = (props: IProps) => {
           )
         }),
         systemSecret: Yup.string().when("flow", {
-          is: FLOW.EXISTING,
-          then: Yup.string().required(
-            props.intl.formatMessage(messages.required)
-          )
-        }),
-        provEmail: Yup.string().when("flow", {
-          is: FLOW.EXISTING,
-          then: Yup.string()
-            .required(props.intl.formatMessage(messages.required))
-            .matches(
-              /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
-              props.intl.formatMessage(messages.invalidEmail)
-            )
-        }),
-        provPassword: Yup.string().when("flow", {
           is: FLOW.EXISTING,
           then: Yup.string().required(
             props.intl.formatMessage(messages.required)
@@ -148,40 +131,6 @@ const SystemConfigurationStep = (props: IProps) => {
                           form={form}
                           label={props.intl.formatMessage(
                             messages.systemSecret
-                          )}
-                        />
-                      );
-                    }}
-                  />
-                </FormControl>
-                <FormControl>
-                  <Field
-                    name="provEmail"
-                    render={({ field, form }: FieldProps) => {
-                      return (
-                        <FormikInputWrapper
-                          type={FieldTypes.TEXT}
-                          field={field}
-                          form={form}
-                          label={props.intl.formatMessage(
-                            messages.provisionerEmail
-                          )}
-                        />
-                      );
-                    }}
-                  />
-                </FormControl>
-                <FormControl>
-                  <Field
-                    name="provPassword"
-                    render={({ field, form }: FieldProps) => {
-                      return (
-                        <FormikInputWrapper
-                          type={FieldTypes.PASSWORD}
-                          field={field}
-                          form={form}
-                          label={props.intl.formatMessage(
-                            messages.provisionerPassword
                           )}
                         />
                       );
