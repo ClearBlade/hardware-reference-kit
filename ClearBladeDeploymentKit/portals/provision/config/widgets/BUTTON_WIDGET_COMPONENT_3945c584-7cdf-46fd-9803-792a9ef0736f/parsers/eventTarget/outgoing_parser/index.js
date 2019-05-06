@@ -1,1 +1,1 @@
-CB_PORTAL.selectPage("/Platform");
+CB_PORTAL.selectPage("/Steps");

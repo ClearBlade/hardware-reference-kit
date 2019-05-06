@@ -2,41 +2,165 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
-import StepLabel from "@material-ui/core/StepLabel";
+import StepButton from "@material-ui/core/StepButton";
 import StepContent from "@material-ui/core/StepContent";
 import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
+import { FormattedMessage, IntlProvider } from "react-intl";
+
+import messages from "../../../../../../../../lib/frontend/stepper/messages";
+import PlatformConfigurationStep from "../../../../../../../../lib/frontend/stepper/steps/PlatformConfigurationStep";
+import DeveloperConfigurationStep from "../../../../../../../../lib/frontend/stepper/steps/DeveloperConfigurationStep";
+import SystemConfigurationStep from "../../../../../../../../lib/frontend/stepper/steps/SystemConfigurationStep";
+import EdgeConfigurationStep from "../../../../../../../../lib/frontend/stepper/steps/EdgeConfigurationStep";
+import TargetStep from "../../../../../../../../lib/frontend/stepper/steps/TargetStep";
+import CONFIGURATION, {
+  Configuration,
+  PlatformConfiguration,
+  DeveloperConfiguration,
+  SystemConfiguration,
+  EdgeConfiguration,
+  FLOW,
+  TARGET_CONFIGURATION
+} from "../../../../../../../../lib/backend/Configuration";
+import ResponsiveDialog from "../../../../../../../../lib/frontend/ResponsiveDialog";
 
 function getSteps() {
-  return ["Step 1", "Create an ad group", "Create an ad"];
+  return [
+    <FormattedMessage {...messages.platform} />,
+    <FormattedMessage {...messages.developer} />,
+    <FormattedMessage {...messages.system} />,
+    <FormattedMessage {...messages.edge} />,
+    <FormattedMessage {...messages.retarget} />
+  ];
 }
 
-function getStepContent(step: number) {
+function getStepContent(step: number, state: IState, handlers: SubmitHandlers) {
   switch (step) {
     case 0:
-      return `For each ad campaign that you create, you can control how much
-                you're willing to spend on clicks and conversions, which networks
-                and geographical locations you want your ads to show on, and more.`;
+      return (
+        <PlatformConfigurationStep
+          {...state.workflowConfig.PLATFORM}
+          onSubmit={handlers.platformConfiguration}
+        />
+      );
     case 1:
-      return "An ad group contains one or more ads which target a shared set of keywords.";
+      return (
+        <DeveloperConfigurationStep
+          {...state.workflowConfig.DEVELOPER}
+          onSubmit={handlers.developerConfiguration}
+        />
+      );
     case 2:
-      return `Try out different ad text to see what brings in the most customers,
-                and learn how to enhance your ads using features like ad extensions.
-                If you run into any problems with your ads, find out how to tell if
-                they're running and how to resolve approval issues.`;
+      return (
+        <SystemConfigurationStep
+          {...state.workflowConfig.SYSTEM}
+          templateOptions={state.templateOptions}
+          onSubmit={handlers.systemConfiguration}
+        />
+      );
+    case 3:
+      return (
+        <EdgeConfigurationStep
+          {...state.workflowConfig.EDGE}
+          onSubmit={handlers.edgeConfiguration}
+        />
+      );
+    case 4:
+      return (
+        <TargetStep
+          config={state.workflowConfig}
+          updateConfig={handlers.updateConfiguration}
+          onSubmit={handlers.onSubmit}
+        />
+      );
     default:
       return "Unknown step";
   }
 }
 
+interface SubmitHandlers {
+  platformConfiguration: VerticalLinearStepper["submitPlatformConfiguration"];
+  developerConfiguration: VerticalLinearStepper["submitDeveloperConfiguration"];
+  systemConfiguration: VerticalLinearStepper["submitSystemConfiguration"];
+  edgeConfiguration: VerticalLinearStepper["submitEdgeConfiguration"];
+  updateConfiguration: VerticalLinearStepper["updateConfiguration"];
+  onSubmit: VerticalLinearStepper["onSubmit"];
+}
+
 interface IState {
+  workflowConfig: Configuration;
+  templateOptions: typeof CONFIGURATION["TEMPLATE_OPTIONS"];
   activeStep: number;
+  targetError: any;
+  fetchedWorkflowConfig: boolean;
 }
 
 class VerticalLinearStepper extends React.Component<{}, IState> {
   state = {
-    activeStep: 0
+    activeStep: 0,
+    targetError: null,
+    workflowConfig: {
+      PLATFORM: {
+        flow: FLOW.EXISTING,
+        platformURL: ""
+      },
+      DEVELOPER: {
+        flow: FLOW.NEW,
+        devEmail: "",
+        devPassword: "",
+        key: ""
+      },
+      SYSTEM: {
+        flow: FLOW.IPM,
+        systemName: "",
+        systemKey: "",
+        systemSecret: "",
+        provEmail: "provisioner@clearblade.com",
+        provPassword: "clearblade",
+        repoUser: TARGET_CONFIGURATION.IPM_REPO_USER,
+        repoName: TARGET_CONFIGURATION.IPM_REPO_NAME,
+        entrypoint: TARGET_CONFIGURATION.IPM_ENTRYPOINT
+      },
+      EDGE: {
+        flow: FLOW.NEW,
+        edgeID: "",
+        edgeToken: ""
+      }
+    },
+    templateOptions: [],
+    fetchedWorkflowConfig: false
+  };
+
+  componentDidMount() {
+    this.retrieveWorkflowConfig().then(results => {
+      this.setState({
+        workflowConfig: results.WORKFLOW,
+        templateOptions: results.TEMPLATE_OPTIONS,
+        fetchedWorkflowConfig: true
+      });
+    });
+  }
+
+  retrieveWorkflowConfig = (): Promise<typeof CONFIGURATION> => {
+    return new Promise(res => {
+      if (datasources.RetrieveWorkflowConfig.latestData()) {
+        res(datasources.RetrieveWorkflowConfig.latestData().results);
+      } else {
+        datasources.RetrieveWorkflowConfig.latestData.subscribe(handle);
+      }
+      function handle(data: { results: typeof CONFIGURATION }) {
+        datasources.RetrieveWorkflowConfig.latestData.unsubscribe(handle);
+        res(data.results);
+      }
+    });
+  };
+
+  jumpToStep = (idx: number) => {
+    this.setState({
+      activeStep: idx
+    });
   };
 
   handleNext = () => {
@@ -57,59 +181,125 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
     });
   };
 
-  componentDidMount() {
-    console.log("DID MOUNT!");
-  }
+  submitPlatformConfiguration = (config: PlatformConfiguration) => {
+    this.setState(state => ({
+      activeStep: state.activeStep + 1,
+      workflowConfig: {
+        ...state.workflowConfig,
+        PLATFORM: config
+      }
+    }));
+  };
 
-  componentWillUnmount() {
-    console.log("WILL UNMOUNT!");
-  }
+  submitDeveloperConfiguration = (config: DeveloperConfiguration) => {
+    this.setState(state => ({
+      activeStep: state.activeStep + 1,
+      workflowConfig: {
+        ...state.workflowConfig,
+        DEVELOPER: config
+      }
+    }));
+  };
+
+  submitSystemConfiguration = (config: SystemConfiguration) => {
+    this.setState(state => ({
+      activeStep: state.activeStep + 1,
+      workflowConfig: {
+        ...state.workflowConfig,
+        SYSTEM: config
+      }
+    }));
+  };
+
+  submitEdgeConfiguration = (config: EdgeConfiguration) => {
+    this.setState(state => ({
+      activeStep: state.activeStep + 1,
+      workflowConfig: {
+        ...state.workflowConfig,
+        EDGE: config
+      }
+    }));
+  };
+
+  updateConfiguration = (config: Configuration) => {
+    this.setState(state => ({
+      workflowConfig: config
+    }));
+  };
+
+  onSubmit = () => {
+    const prom = datasources.SetupPlatformSystemForEdge.sendData(
+      this.state.workflowConfig
+    ).then((resp: { success: boolean; results: string }) => {
+      if (!resp.success) {
+        this.setState({
+          targetError: resp.results
+        });
+      } else {
+      }
+    });
+    CB_PORTAL.Loader.waitFor(prom);
+  };
+
+  closeErrorModal = () => {
+    this.setState({
+      targetError: null
+    });
+  };
 
   render() {
     const steps = getSteps();
-    const { activeStep } = this.state;
+    const { activeStep, targetError, fetchedWorkflowConfig } = this.state;
 
     return (
-      <div>
-        <Stepper activeStep={activeStep} orientation="vertical">
-          {steps.map((label, index) => (
-            <Step key={label}>
-              <StepLabel>{label}</StepLabel>
-              <StepContent>
-                <Typography>{getStepContent(index)}</Typography>
-                <div>
-                  <div>
-                    <Button
-                      disabled={activeStep === 0}
-                      onClick={this.handleBack}
-                    >
-                      Hello
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={this.handleNext}
-                    >
-                      {activeStep === steps.length - 1 ? "Finish" : "Next"}
-                    </Button>
-                  </div>
-                </div>
-              </StepContent>
-            </Step>
-          ))}
-        </Stepper>
-        {activeStep === steps.length && (
-          <Paper square elevation={0}>
-            <Typography>All steps completed - you&apos;re finished</Typography>
-            <Button onClick={this.handleReset}>Reset</Button>
-          </Paper>
-        )}
-      </div>
+      <IntlProvider>
+        <div>
+          {fetchedWorkflowConfig && (
+            <Stepper activeStep={activeStep} orientation="vertical">
+              {steps.map((msg, index) => (
+                <Step key={index}>
+                  <StepButton
+                    onClick={() => this.jumpToStep(index)}
+                    // completed={this.state.completed[index]}
+                  >
+                    {msg}
+                  </StepButton>
+                  <StepContent>
+                    {getStepContent(index, this.state, {
+                      platformConfiguration: this.submitPlatformConfiguration,
+                      developerConfiguration: this.submitDeveloperConfiguration,
+                      systemConfiguration: this.submitSystemConfiguration,
+                      edgeConfiguration: this.submitEdgeConfiguration,
+                      updateConfiguration: this.updateConfiguration,
+                      onSubmit: this.onSubmit
+                    })}
+                  </StepContent>
+                </Step>
+              ))}
+            </Stepper>
+          )}
+          {activeStep === steps.length && (
+            <Paper square elevation={0}>
+              <Typography>
+                All steps completed - you&apos;re finished
+              </Typography>
+              <Button onClick={this.handleReset}>Reset</Button>
+            </Paper>
+          )}
+          {targetError && (
+            <ResponsiveDialog
+              bodyText={targetError}
+              headerMsg={messages.targetErrorHeader}
+              onClose={this.closeErrorModal}
+            />
+          )}
+        </div>
+      </IntlProvider>
     );
   }
 }
 
-ReactDOM.render(
-  <VerticalLinearStepper />,
-  document.getElementById("deployment-kit-stepper")
-);
+const MOUNT_NODE = document.getElementById("deployment-kit-stepper");
+// ReactDOM.unmountComponentAtNode(MOUNT_NODE as HTMLElement);
+
+ReactDOM.render(<VerticalLinearStepper />, MOUNT_NODE);

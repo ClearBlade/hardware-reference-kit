@@ -1,0 +1,10 @@
+{
+    "HAS_UNIQUE_STYLE": false,
+    "fontColor": "#000000",
+    "fontFamily": "Helvetica",
+    "fontSize": 18,
+    "textContent": {
+        "dataType": "STATIC_DATA_TYPE",
+        "value": "./parsers/textContent/incoming_parser/index.js"
+    }
+}

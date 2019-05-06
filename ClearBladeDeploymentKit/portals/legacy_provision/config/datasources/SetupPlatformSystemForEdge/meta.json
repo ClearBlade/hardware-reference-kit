@@ -1,0 +1,12 @@
+{
+    "id": "57bcda39-21e2-46a9-9c7c-4d9b45dd9c58",
+    "name": "SetupPlatformSystemForEdge",
+    "settings": {
+        "CALL_ON_LOAD": false,
+        "SUPPRESS_DATASOURCE_ERRORS": false,
+        "code_name": "SetupPlatformSystemForEdge",
+        "payload": "{}",
+        "refresh_interval": 0
+    },
+    "type": "CB_CODE_SERVICE"
+}

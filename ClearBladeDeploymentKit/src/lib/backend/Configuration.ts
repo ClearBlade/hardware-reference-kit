@@ -4,17 +4,67 @@ import ClearBladeAdminREST, {
   EdgeSetupInfo
 } from "./ClearBladeAdminRESTLib";
 
-export type WorkflowConfig = typeof WORKFLOW_CONFIGURATION;
+export interface PlatformConfiguration {
+  flow: FLOW;
+  platformURL: string;
+}
 
-enum FLOW {
+export interface DeveloperConfiguration {
+  flow: FLOW;
+  devEmail: string;
+  devPassword: string;
+  key: string;
+}
+
+export interface SystemConfiguration {
+  flow: FLOW;
+  systemName: string;
+  systemKey: string;
+  systemSecret: string;
+  provEmail: string;
+  provPassword: string;
+  repoUser: string;
+  repoName: string;
+  entrypoint: { portal: string };
+}
+
+export interface EdgeConfiguration {
+  flow: FLOW;
+  edgeID: string;
+  edgeToken: string;
+}
+
+export interface Configuration {
+  PLATFORM: PlatformConfiguration;
+  DEVELOPER: DeveloperConfiguration;
+  SYSTEM: SystemConfiguration;
+  EDGE: EdgeConfiguration;
+}
+export interface WorkflowConfig extends Configuration {
+  AUTOROUTE: boolean;
+  PLATFORM: Configuration["PLATFORM"] & {
+    route: boolean;
+  };
+  DEVELOPER: Configuration["DEVELOPER"] & {
+    route: boolean;
+  };
+  SYSTEM: Configuration["SYSTEM"] & {
+    route: boolean;
+  };
+  EDGE: Configuration["EDGE"] & {
+    route: boolean;
+  };
+}
+
+export enum FLOW {
   NEW = "NEW",
   EXISTING = "EXISTING",
   IPM = "IPM",
   PRECONFIGURED = "PRECONFIGURED"
 }
 
-const TARGET_CONFIGURATION = {
-  URL: "https://amd.clearblade.com",
+export const TARGET_CONFIGURATION = {
+  URL: "https://dev.clearblade.com",
   REGISTRATION_KEY: "AMDBlade",
   IPM_REPO_USER: "aalcott14",
   IPM_REPO_NAME: "dev-smart-monitoring",
@@ -26,7 +76,7 @@ const PORTAL_CONFIGURATION = {
   AUTOROUTE: false
 };
 
-const WORKFLOW_CONFIGURATION = {
+const WORKFLOW_CONFIGURATION: WorkflowConfig = {
   AUTOROUTE: PORTAL_CONFIGURATION.AUTOROUTE,
   PLATFORM: {
     route: true && PORTAL_CONFIGURATION.AUTOROUTE,
@@ -60,6 +110,31 @@ const WORKFLOW_CONFIGURATION = {
   }
 };
 
+interface TemplateOption {
+  ID: string;
+  LABEL: string;
+  IPM_REPO_USER: string;
+  IPM_REPO_NAME: string;
+  IPM_ENTRYPOINT: { portal: string };
+}
+
+const TEMPLATE_OPTIONS: TemplateOption[] = [
+  {
+    ID: "aalcott14_dev-smart-monitoring",
+    LABEL: "Smart Monitoring",
+    IPM_REPO_USER: "aalcott14",
+    IPM_REPO_NAME: "dev-smart-monitoring",
+    IPM_ENTRYPOINT: { portal: "smart_monitoring" }
+  },
+  {
+    ID: "rreinold_anomaly-detection-template",
+    LABEL: "Anomaly Detection",
+    IPM_REPO_USER: "rreinold",
+    IPM_REPO_NAME: "anomaly-detection-template",
+    IPM_ENTRYPOINT: { portal: "AnomalyDetection" }
+  }
+];
+
 /**
  *
  * TODO Append uid to email to allow multiple provisioners per system
@@ -68,6 +143,7 @@ const CONFIGURATION = {
   TARGET: TARGET_CONFIGURATION,
   PORTAL: PORTAL_CONFIGURATION,
   WORKFLOW: WORKFLOW_CONFIGURATION,
+  TEMPLATE_OPTIONS,
   WORKFLOW_MAP: {
     PLATFORM: {
       [FLOW.PRECONFIGURED]: function(
@@ -128,9 +204,8 @@ const CONFIGURATION = {
         rest: IClearBladeAdminREST,
         config: WorkflowConfig
       ): Q.Promise<SystemSetupInfo> {
-        const systemAttributes = config.SYSTEM;
-        const repoUser = CONFIGURATION.TARGET.IPM_REPO_USER;
-        const repoName = CONFIGURATION.TARGET.IPM_REPO_NAME;
+        const repoUser = config.SYSTEM.repoUser;
+        const repoName = config.SYSTEM.repoName;
         // RR: Not willing to implement devEmail
         const devEmail = "notprovided@gmail.com";
         log("sys");
