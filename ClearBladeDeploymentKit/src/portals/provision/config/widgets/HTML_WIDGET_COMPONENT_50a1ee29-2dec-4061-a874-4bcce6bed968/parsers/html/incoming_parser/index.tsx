@@ -22,14 +22,23 @@ import CONFIGURATION, {
   SystemConfiguration,
   EdgeConfiguration,
   FLOW,
-  TARGET_CONFIGURATION
+  TARGET_CONFIGURATION,
+  WorkflowConfig
 } from "../../../../../../../../lib/backend/Configuration";
 import ResponsiveDialog from "../../../../../../../../lib/frontend/ResponsiveDialog";
 
-function getSteps() {
+function getSteps(config: Configuration) {
   return [
-    <FormattedMessage {...messages.platform} />,
-    <FormattedMessage {...messages.developer} />,
+    config.PLATFORM.flow === FLOW.PRECONFIGURED ? (
+      <FormattedMessage {...messages.platformPreconfigured} />
+    ) : (
+      <FormattedMessage {...messages.platform} />
+    ),
+    config.DEVELOPER.flow === FLOW.PRECONFIGURED ? (
+      <FormattedMessage {...messages.developerPreconfigured} />
+    ) : (
+      <FormattedMessage {...messages.developer} />
+    ),
     <FormattedMessage {...messages.system} />,
     <FormattedMessage {...messages.edge} />,
     <FormattedMessage {...messages.retarget} />
@@ -97,49 +106,78 @@ interface IState {
   fetchedWorkflowConfig: boolean;
 }
 
+const configTemplate = {
+  PLATFORM: {
+    flow: FLOW.EXISTING,
+    platformURL: ""
+  },
+  DEVELOPER: {
+    flow: FLOW.NEW,
+    devEmail: "",
+    devPassword: "",
+    key: ""
+  },
+  SYSTEM: {
+    flow: FLOW.IPM,
+    systemName: "",
+    systemKey: "",
+    systemSecret: "",
+    provEmail: "provisioner@clearblade.com",
+    provPassword: "clearblade",
+    repoUser: TARGET_CONFIGURATION.IPM_REPO_USER,
+    repoName: TARGET_CONFIGURATION.IPM_REPO_NAME,
+    entrypoint: TARGET_CONFIGURATION.IPM_ENTRYPOINT
+  },
+  EDGE: {
+    flow: FLOW.NEW,
+    edgeID: "",
+    edgeToken: ""
+  }
+};
+
 class VerticalLinearStepper extends React.Component<{}, IState> {
+  config: WorkflowConfig = {
+    AUTOROUTE: false,
+    ...configTemplate,
+    PLATFORM: {
+      ...configTemplate.PLATFORM,
+      route: false
+    },
+    DEVELOPER: {
+      ...configTemplate.DEVELOPER,
+      route: false
+    },
+    SYSTEM: {
+      ...configTemplate.SYSTEM,
+      route: false
+    },
+    EDGE: {
+      ...configTemplate.EDGE,
+      route: false
+    }
+  };
   state = {
     activeStep: 0,
     targetError: null,
-    workflowConfig: {
-      PLATFORM: {
-        flow: FLOW.EXISTING,
-        platformURL: ""
-      },
-      DEVELOPER: {
-        flow: FLOW.NEW,
-        devEmail: "",
-        devPassword: "",
-        key: ""
-      },
-      SYSTEM: {
-        flow: FLOW.IPM,
-        systemName: "",
-        systemKey: "",
-        systemSecret: "",
-        provEmail: "provisioner@clearblade.com",
-        provPassword: "clearblade",
-        repoUser: TARGET_CONFIGURATION.IPM_REPO_USER,
-        repoName: TARGET_CONFIGURATION.IPM_REPO_NAME,
-        entrypoint: TARGET_CONFIGURATION.IPM_ENTRYPOINT
-      },
-      EDGE: {
-        flow: FLOW.NEW,
-        edgeID: "",
-        edgeToken: ""
-      }
-    },
+    workflowConfig: configTemplate,
     templateOptions: [],
     fetchedWorkflowConfig: false
   };
 
   componentDidMount() {
     this.retrieveWorkflowConfig().then(results => {
+      this.config = results.WORKFLOW;
       this.setState({
         workflowConfig: results.WORKFLOW,
         templateOptions: results.TEMPLATE_OPTIONS,
         fetchedWorkflowConfig: true
       });
+      if (
+        this.config.PLATFORM.route &&
+        this.config.PLATFORM.flow === FLOW.PRECONFIGURED
+      ) {
+        this.submitPlatformConfiguration(this.config.PLATFORM);
+      }
     });
   }
 
@@ -189,6 +227,12 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
         PLATFORM: config
       }
     }));
+    if (
+      this.config.DEVELOPER.route &&
+      this.state.workflowConfig.DEVELOPER.flow === FLOW.PRECONFIGURED
+    ) {
+      this.submitDeveloperConfiguration(this.state.workflowConfig.DEVELOPER);
+    }
   };
 
   submitDeveloperConfiguration = (config: DeveloperConfiguration) => {
@@ -248,7 +292,7 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
   };
 
   render() {
-    const steps = getSteps();
+    const steps = getSteps(this.state.workflowConfig);
     const { activeStep, targetError, fetchedWorkflowConfig } = this.state;
 
     return (

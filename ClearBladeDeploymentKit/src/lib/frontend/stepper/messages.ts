@@ -5,9 +5,17 @@ export default defineMessages({
     id: "app.components.stepper.platform",
     defaultMessage: "Platform"
   },
+  platformPreconfigured: {
+    id: "app.components.stepper.platformPreconfigured",
+    defaultMessage: "Platform (Preconfigured)"
+  },
   developer: {
     id: "app.components.stepper.developer",
     defaultMessage: "Developer"
+  },
+  developerPreconfigured: {
+    id: "app.components.stepper.developerPreconfigured",
+    defaultMessage: "Developer (Preconfigured)"
   },
   system: {
     id: "app.components.stepper.system",

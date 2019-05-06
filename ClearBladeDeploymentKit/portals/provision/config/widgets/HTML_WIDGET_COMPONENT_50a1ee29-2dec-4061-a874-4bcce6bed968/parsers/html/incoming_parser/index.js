@@ -35940,9 +35940,17 @@ addLocaleData(locale_data_ignored_default.a);
     id: "app.components.stepper.platform",
     defaultMessage: "Platform"
   },
+  platformPreconfigured: {
+    id: "app.components.stepper.platformPreconfigured",
+    defaultMessage: "Platform (Preconfigured)"
+  },
   developer: {
     id: "app.components.stepper.developer",
     defaultMessage: "Developer"
+  },
+  developerPreconfigured: {
+    id: "app.components.stepper.developerPreconfigured",
+    defaultMessage: "Developer (Preconfigured)"
   },
   system: {
     id: "app.components.stepper.system",
@@ -42148,8 +42156,8 @@ function incoming_parser_extends() { incoming_parser_extends = Object.assign || 
 
 
 
-function getSteps() {
-  return [external_React_["createElement"](index_es_FormattedMessage, stepper_messages.platform), external_React_["createElement"](index_es_FormattedMessage, stepper_messages.developer), external_React_["createElement"](index_es_FormattedMessage, stepper_messages.system), external_React_["createElement"](index_es_FormattedMessage, stepper_messages.edge), external_React_["createElement"](index_es_FormattedMessage, stepper_messages.retarget)];
+function getSteps(config) {
+  return [config.PLATFORM.flow === FLOW.PRECONFIGURED ? external_React_["createElement"](index_es_FormattedMessage, stepper_messages.platformPreconfigured) : external_React_["createElement"](index_es_FormattedMessage, stepper_messages.platform), config.DEVELOPER.flow === FLOW.PRECONFIGURED ? external_React_["createElement"](index_es_FormattedMessage, stepper_messages.developerPreconfigured) : external_React_["createElement"](index_es_FormattedMessage, stepper_messages.developer), external_React_["createElement"](index_es_FormattedMessage, stepper_messages.system), external_React_["createElement"](index_es_FormattedMessage, stepper_messages.edge), external_React_["createElement"](index_es_FormattedMessage, stepper_messages.retarget)];
 }
 
 function getStepContent(step, state, handlers) {
@@ -42187,6 +42195,35 @@ function getStepContent(step, state, handlers) {
   }
 }
 
+var configTemplate = {
+  PLATFORM: {
+    flow: FLOW.EXISTING,
+    platformURL: ""
+  },
+  DEVELOPER: {
+    flow: FLOW.NEW,
+    devEmail: "",
+    devPassword: "",
+    key: ""
+  },
+  SYSTEM: {
+    flow: FLOW.IPM,
+    systemName: "",
+    systemKey: "",
+    systemSecret: "",
+    provEmail: "provisioner@clearblade.com",
+    provPassword: "clearblade",
+    repoUser: TARGET_CONFIGURATION.IPM_REPO_USER,
+    repoName: TARGET_CONFIGURATION.IPM_REPO_NAME,
+    entrypoint: TARGET_CONFIGURATION.IPM_ENTRYPOINT
+  },
+  EDGE: {
+    flow: FLOW.NEW,
+    edgeID: "",
+    edgeToken: ""
+  }
+};
+
 var incoming_parser_VerticalLinearStepper =
 /*#__PURE__*/
 function (_React$Component) {
@@ -42205,37 +42242,27 @@ function (_React$Component) {
 
     _this = incoming_parser_possibleConstructorReturn(this, (_getPrototypeOf2 = incoming_parser_getPrototypeOf(VerticalLinearStepper)).call.apply(_getPrototypeOf2, [this].concat(args)));
 
+    incoming_parser_defineProperty(incoming_parser_assertThisInitialized(_this), "config", incoming_parser_objectSpread({
+      AUTOROUTE: false
+    }, configTemplate, {
+      PLATFORM: incoming_parser_objectSpread({}, configTemplate.PLATFORM, {
+        route: false
+      }),
+      DEVELOPER: incoming_parser_objectSpread({}, configTemplate.DEVELOPER, {
+        route: false
+      }),
+      SYSTEM: incoming_parser_objectSpread({}, configTemplate.SYSTEM, {
+        route: false
+      }),
+      EDGE: incoming_parser_objectSpread({}, configTemplate.EDGE, {
+        route: false
+      })
+    }));
+
     incoming_parser_defineProperty(incoming_parser_assertThisInitialized(_this), "state", {
       activeStep: 0,
       targetError: null,
-      workflowConfig: {
-        PLATFORM: {
-          flow: FLOW.EXISTING,
-          platformURL: ""
-        },
-        DEVELOPER: {
-          flow: FLOW.NEW,
-          devEmail: "",
-          devPassword: "",
-          key: ""
-        },
-        SYSTEM: {
-          flow: FLOW.IPM,
-          systemName: "",
-          systemKey: "",
-          systemSecret: "",
-          provEmail: "provisioner@clearblade.com",
-          provPassword: "clearblade",
-          repoUser: TARGET_CONFIGURATION.IPM_REPO_USER,
-          repoName: TARGET_CONFIGURATION.IPM_REPO_NAME,
-          entrypoint: TARGET_CONFIGURATION.IPM_ENTRYPOINT
-        },
-        EDGE: {
-          flow: FLOW.NEW,
-          edgeID: "",
-          edgeToken: ""
-        }
-      },
+      workflowConfig: configTemplate,
       templateOptions: [],
       fetchedWorkflowConfig: false
     });
@@ -42292,6 +42319,10 @@ function (_React$Component) {
           })
         };
       });
+
+      if (_this.config.DEVELOPER.route && _this.state.workflowConfig.DEVELOPER.flow === FLOW.PRECONFIGURED) {
+        _this.submitDeveloperConfiguration(_this.state.workflowConfig.DEVELOPER);
+      }
     });
 
     incoming_parser_defineProperty(incoming_parser_assertThisInitialized(_this), "submitDeveloperConfiguration", function (config) {
@@ -42361,11 +42392,17 @@ function (_React$Component) {
       var _this2 = this;
 
       this.retrieveWorkflowConfig().then(function (results) {
+        _this2.config = results.WORKFLOW;
+
         _this2.setState({
           workflowConfig: results.WORKFLOW,
           templateOptions: results.TEMPLATE_OPTIONS,
           fetchedWorkflowConfig: true
         });
+
+        if (_this2.config.PLATFORM.route && _this2.config.PLATFORM.flow === FLOW.PRECONFIGURED) {
+          _this2.submitPlatformConfiguration(_this2.config.PLATFORM);
+        }
       });
     }
   }, {
@@ -42373,7 +42410,7 @@ function (_React$Component) {
     value: function render() {
       var _this3 = this;
 
-      var steps = getSteps();
+      var steps = getSteps(this.state.workflowConfig);
       var _this$state = this.state,
           activeStep = _this$state.activeStep,
           targetError = _this$state.targetError,
