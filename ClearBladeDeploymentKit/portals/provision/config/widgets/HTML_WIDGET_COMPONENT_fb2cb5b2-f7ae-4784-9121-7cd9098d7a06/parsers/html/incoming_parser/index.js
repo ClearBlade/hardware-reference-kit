@@ -6781,9 +6781,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(47);
 /* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_2__);
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
 
+
+var listStyle = {
+  textAlign: "left",
+  marginLeft: "auto",
+  marginRight: "auto",
+  width: "50%",
+  listStyle: "none"
+};
 
 var WelcomeWidget = function WelcomeWidget() {
   return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
@@ -6793,7 +6804,10 @@ var WelcomeWidget = function WelcomeWidget() {
     variant: "h2"
   }, "ClearBlade Deployment Kit"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_2___default.a, {
     gutterBottom: true,
-    variant: "subtitle1"
+    variant: "subtitle1",
+    style: {
+      marginBottom: "4rem"
+    }
   }, "Interactive kit to accelerate edge deployments for new and existing IoT Solutions."), react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_2___default.a, {
     gutterBottom: true,
     variant: "subtitle2"
@@ -6801,14 +6815,18 @@ var WelcomeWidget = function WelcomeWidget() {
     gutterBottom: true,
     variant: "overline"
   }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("ul", {
-    style: {
-      textAlign: "left",
-      marginLeft: "auto",
-      marginRight: "auto",
-      width: "50%",
-      listStyle: "none"
-    }
-  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("li", null, "- Stand up a new Edge Platform"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("li", null, "- Create an IoT Solution manageable from cloud with an active connection to this gateway"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("li", null, "- Onboard edges at scale to existing IoT Solutions"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("li", null, "- Build upon fully-featured IoT Solution Templates"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("li", null, "- Create a new development environment or connect to existing"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("li", null, "- Add Theme and Preconfigure for out-of-box experiences"))));
+    style: _objectSpread({}, listStyle, {
+      marginBottom: "4rem"
+    })
+  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("li", null, "- Stand up a new Edge Platform"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("li", null, "- Create an IoT Solution manageable from cloud with an active connection to this gateway"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("li", null, "- Onboard edges at scale to existing IoT Solutions"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("li", null, "- Build upon fully-featured IoT Solution Templates"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("li", null, "- Create a new development environment or connect to existing"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("li", null, "- Add Theme and Preconfigure for out-of-box experiences"))), react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_2___default.a, {
+    gutterBottom: true,
+    variant: "subtitle2"
+  }, "Templates:"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_2___default.a, {
+    gutterBottom: true,
+    variant: "overline"
+  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("ul", {
+    style: listStyle
+  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("li", null, "- Smart Monitoring"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("li", null, "- Anomaly Detection"))));
 };
 
 var MOUNT_NODE = document.getElementById("welcome-widget");
