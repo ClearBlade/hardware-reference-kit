@@ -41223,11 +41223,6 @@ function initAdminRest(platformURL) {
   deferred.resolve(rest);
   return deferred.promise;
 }
-/**
- *
- * TODO Append uid to email to allow multiple provisioners per system
- */
-
 
 var CONFIGURATION = {
   TARGET: TARGET_CONFIGURATION,

@@ -140,10 +140,6 @@ function initAdminRest(platformURL: string) {
   return deferred.promise;
 }
 
-/**
- *
- * TODO Append uid to email to allow multiple provisioners per system
- */
 const CONFIGURATION = {
   TARGET: TARGET_CONFIGURATION,
   PORTAL: PORTAL_CONFIGURATION,
