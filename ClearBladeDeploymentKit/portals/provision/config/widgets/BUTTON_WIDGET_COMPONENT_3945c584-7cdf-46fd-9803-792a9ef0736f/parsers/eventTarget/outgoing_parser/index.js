@@ -1,1 +1,0 @@
-CB_PORTAL.selectPage("/Steps");

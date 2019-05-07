@@ -1297,84 +1297,18 @@
             "a398d167-e3ee-4bb7-995b-1909d41394d5": {
                 "lg": [
                     {
-                        "h": 6,
-                        "i": "3945c584-7cdf-46fd-9803-792a9ef0736f",
+                        "h": 9,
+                        "i": "fb2cb5b2-f7ae-4784-9121-7cd9098d7a06",
                         "minH": 3,
-                        "moved": false,
-                        "static": false,
-                        "w": 12,
-                        "x": 0,
-                        "y": 24
-                    },
-                    {
-                        "h": 24,
-                        "i": "fe380d5f-ac22-476f-80d9-5b6134b4aa49",
-                        "minH": 3,
-                        "moved": false,
-                        "static": false,
                         "w": 12,
                         "x": 0,
                         "y": 0
                     }
                 ],
-                "md": [
-                    {
-                        "h": 7,
-                        "i": "3945c584-7cdf-46fd-9803-792a9ef0736f",
-                        "minH": 3,
-                        "moved": false,
-                        "static": false,
-                        "w": 10,
-                        "x": 0,
-                        "y": 0
-                    }
-                ],
-                "sm": [
-                    {
-                        "h": 8,
-                        "i": "3945c584-7cdf-46fd-9803-792a9ef0736f",
-                        "minH": 3,
-                        "moved": false,
-                        "static": false,
-                        "w": 6,
-                        "x": 0,
-                        "y": 0
-                    }
-                ],
-                "xl": [
-                    {
-                        "h": 6,
-                        "i": "3945c584-7cdf-46fd-9803-792a9ef0736f",
-                        "minH": 3,
-                        "moved": false,
-                        "static": false,
-                        "w": 12,
-                        "x": 0,
-                        "y": 31
-                    },
-                    {
-                        "h": 24,
-                        "i": "fe380d5f-ac22-476f-80d9-5b6134b4aa49",
-                        "minH": 3,
-                        "moved": false,
-                        "static": false,
-                        "w": 12,
-                        "x": 0,
-                        "y": 0
-                    }
-                ],
-                "xs": [
-                    {
-                        "h": 8,
-                        "i": "3945c584-7cdf-46fd-9803-792a9ef0736f",
-                        "minH": 3,
-                        "moved": false,
-                        "static": false,
-                        "w": 4,
-                        "x": 0,
-                        "y": 0
-                    }
-                ],
+                "md": [],
+                "sm": [],
+                "xl": [],
+                "xs": [],
                 "xxs": []
             },
             "be1d2001-f07e-43fa-82b0-259a20b85e4c": {
