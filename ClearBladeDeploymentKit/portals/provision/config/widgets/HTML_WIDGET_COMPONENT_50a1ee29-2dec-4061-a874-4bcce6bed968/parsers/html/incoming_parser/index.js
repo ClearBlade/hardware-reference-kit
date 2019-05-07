@@ -41135,7 +41135,7 @@ function ClearBladeAdminREST(url) {
 
 /* harmony default export */ var ClearBladeAdminRESTLib = (ClearBladeAdminREST);
 // CONCATENATED MODULE: ./src/lib/backend/Configuration.ts
-var _DEVELOPER, _SYSTEM;
+var _PLATFORM, _DEVELOPER, _SYSTEM;
 
 function Configuration_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Configuration_typeof = function _typeof(obj) { return typeof obj; }; } else { Configuration_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Configuration_typeof(obj); }
 
@@ -41212,10 +41212,22 @@ var TEMPLATE_OPTIONS = [{
     portal: "AnomalyDetection"
   }
 }];
+
+function initAdminRest(platformURL) {
+  log("platform");
+  log({
+    platformURL: platformURL
+  });
+  var deferred = Q.defer();
+  var rest = ClearBladeAdminRESTLib(platformURL);
+  deferred.resolve(rest);
+  return deferred.promise;
+}
 /**
  *
  * TODO Append uid to email to allow multiple provisioners per system
  */
+
 
 var CONFIGURATION = {
   TARGET: TARGET_CONFIGURATION,
@@ -41223,18 +41235,11 @@ var CONFIGURATION = {
   WORKFLOW: WORKFLOW_CONFIGURATION,
   TEMPLATE_OPTIONS: TEMPLATE_OPTIONS,
   WORKFLOW_MAP: {
-    PLATFORM: Configuration_defineProperty({}, FLOW.PRECONFIGURED, function (config) {
-      // needs nothing
-      var platformURL = config.PLATFORM.platformURL;
-      log("platform");
-      log({
-        platformURL: platformURL
-      });
-      var deferred = Q.defer();
-      var rest = ClearBladeAdminRESTLib(platformURL);
-      deferred.resolve(rest);
-      return deferred.promise;
-    }),
+    PLATFORM: (_PLATFORM = {}, Configuration_defineProperty(_PLATFORM, FLOW.PRECONFIGURED, function (config) {
+      return initAdminRest(config.PLATFORM.platformURL);
+    }), Configuration_defineProperty(_PLATFORM, FLOW.EXISTING, function (config) {
+      return initAdminRest(config.PLATFORM.platformURL);
+    }), _PLATFORM),
     DEVELOPER: (_DEVELOPER = {}, Configuration_defineProperty(_DEVELOPER, FLOW.NEW, function (rest, config) {
       var devAttributes = config.DEVELOPER;
       var devEmail = devAttributes.devEmail;

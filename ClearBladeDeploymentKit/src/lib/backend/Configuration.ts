@@ -131,6 +131,15 @@ const TEMPLATE_OPTIONS: TemplateOption[] = [
   }
 ];
 
+function initAdminRest(platformURL: string) {
+  log("platform");
+  log({ platformURL });
+  const deferred = Q.defer<IClearBladeAdminREST>();
+  const rest = ClearBladeAdminREST(platformURL);
+  deferred.resolve(rest);
+  return deferred.promise;
+}
+
 /**
  *
  * TODO Append uid to email to allow multiple provisioners per system
@@ -145,14 +154,12 @@ const CONFIGURATION = {
       [FLOW.PRECONFIGURED]: function(
         config: WorkflowConfig
       ): Q.Promise<IClearBladeAdminREST> {
-        // needs nothing
-        const platformURL = config.PLATFORM.platformURL;
-        log("platform");
-        log({ platformURL });
-        const deferred = Q.defer<IClearBladeAdminREST>();
-        const rest = ClearBladeAdminREST(platformURL);
-        deferred.resolve(rest);
-        return deferred.promise;
+        return initAdminRest(config.PLATFORM.platformURL);
+      },
+      [FLOW.EXISTING]: function(
+        config: WorkflowConfig
+      ): Q.Promise<IClearBladeAdminREST> {
+        return initAdminRest(config.PLATFORM.platformURL);
       }
     },
     DEVELOPER: {
