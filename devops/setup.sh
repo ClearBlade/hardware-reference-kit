@@ -37,14 +37,13 @@ echo "Changing directories"
 
 cd ../ClearBladeDeploymentKit
 
-echo "Pushing assets to base system"
-
-# target the running edge
+echo "Targeting edge"
 cb-cli target -url=http://localhost:9005 -messaging-url=localhost:1885 -email=admin@clearblade.com -password=ClearBladeDeploymentKit -system-key=f8969acd0b92de96f69dfa92e09801
+echo "Pushing deployment kit system to edge"
 # seed the edge dbs with the deployment kit system
 cb-cli push -all -auto-approve
 
-echo "Pushed assets to base system"
+echo "Pushed assets to edge"
 
 pgrep edge > /dev/null 2>/dev/null && pkill edge
 
