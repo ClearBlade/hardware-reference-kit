@@ -1,3 +1,5 @@
 .cb-cli
 ClearBladeDeploymentKit/system.json
 node_modules
+devops/*.db
+devops/setup_log

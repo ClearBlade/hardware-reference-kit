@@ -1,0 +1,37 @@
+Title = "ClearBlade Edge Configuration File"
+
+[HTTP]
+HttpPort = ":9005"
+
+[MQTT]
+BrokerTCPPort = ":1885"
+BrokerTLSPort = ":1886"
+MessagingAuthPort = ":8956"
+MessagingAuthWSPort = ":8952"
+
+
+[Debug]
+DevelopmentMode = true
+
+[Logging]
+LogLevel = "debug"
+
+[Security]
+Insecure = true
+
+[Edge]
+PlatformIP = "127.0.0.1"
+PlatformPort = "1883"
+EdgeID = "unprovisioned"
+EdgeIP = "localhost"
+EdgeCookie = "null"
+ParentSystemKey = "null"
+    [Provisioning]
+    ProvisioningMode = true
+    ProvisioningSystem = "f8969acd0b92de96f69dfa92e09801"
+    ProvisionalSqliteAdmin = "./baseedge.db"
+    ProvisionalSqliteUserdata = "./baseedgeusers.db"
+
+[Database]
+SqliteAdmin = "./baseedge.db"
+SqliteUserdata = "./baseedgeusers.db"
