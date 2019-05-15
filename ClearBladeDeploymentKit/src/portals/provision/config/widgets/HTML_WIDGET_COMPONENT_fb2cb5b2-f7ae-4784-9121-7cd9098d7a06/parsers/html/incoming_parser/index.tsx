@@ -1,6 +1,9 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import { FormattedMessage } from "react-intl";
+import messages from "../../../../../../../../lib/frontend/home/messages";
 
 const listStyle = {
   textAlign: "left" as "left",
@@ -21,29 +24,36 @@ const WelcomeWidget: React.SFC<{}> = () => {
         variant="subtitle1"
         style={{ marginBottom: "4rem" }}
       >
-        Interactive kit to accelerate edge deployments for new and existing IoT
-        Solutions.
+        <FormattedMessage {...messages.subtitle} />
       </Typography>
       <Typography gutterBottom variant="subtitle2">
-        This kit walks you through the steps to accomplish the following
-        deployment tasks:
+        <FormattedMessage {...messages.subtitle2} />
       </Typography>
 
       <Typography gutterBottom variant="overline">
         <ul style={{ ...listStyle, marginBottom: "4rem" }}>
-          <li>- Stand up a new Edge Platform</li>
           <li>
-            - Create an IoT Solution manageable from cloud with an active
-            connection to this gateway
+            - <FormattedMessage {...messages.standUpEdgePlatform} />
           </li>
-          <li>- Onboard edges at scale to existing IoT Solutions</li>
-          <li>- Build upon fully-featured IoT Solution Templates</li>
-          <li>- Create a new development environment or connect to existing</li>
-          <li>- Add Theme and Preconfigure for out-of-box experiences</li>
+          <li>
+            - <FormattedMessage {...messages.createIotSolution} />
+          </li>
+          <li>
+            - <FormattedMessage {...messages.onboardEdges} />
+          </li>
+          <li>
+            - <FormattedMessage {...messages.buildOnTemplates} />
+          </li>
+          <li>
+            - <FormattedMessage {...messages.createEnvironment} />
+          </li>
+          <li>
+            - <FormattedMessage {...messages.addTheme} />
+          </li>
         </ul>
       </Typography>
       <Typography gutterBottom variant="subtitle2">
-        Templates:
+        <FormattedMessage {...messages.templates} />
       </Typography>
       <Typography gutterBottom variant="overline">
         <ul style={listStyle}>
@@ -51,6 +61,14 @@ const WelcomeWidget: React.SFC<{}> = () => {
           <li>- Anomaly Detection</li>
         </ul>
       </Typography>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => CB_PORTAL.selectPage("/Steps")}
+        data-cy="begin"
+      >
+        <FormattedMessage {...messages.continue} />
+      </Button>
     </div>
   );
 };

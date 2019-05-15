@@ -104,20 +104,20 @@
             "xl": [
                 {
                     "h": 1,
-                    "i": "brand",
-                    "moved": false,
-                    "static": false,
-                    "w": 57,
-                    "x": 3,
-                    "y": 0
-                },
-                {
-                    "h": 1,
                     "i": "title",
                     "moved": false,
                     "static": false,
                     "w": 46,
                     "x": 230,
+                    "y": 0
+                },
+                {
+                    "h": 1,
+                    "i": "385764a5-3295-4ffd-a207-3c019eec95ce",
+                    "moved": false,
+                    "static": false,
+                    "w": 1,
+                    "x": 0,
                     "y": 0
                 }
             ],
@@ -1503,7 +1503,7 @@
                 ],
                 "md": [
                     {
-                        "h": 3,
+                        "h": 6,
                         "i": "ac8202cc-3aea-43d1-b1b5-abdc55cfbe32",
                         "moved": false,
                         "static": false,
@@ -1529,7 +1529,7 @@
                         "i": "ac8202cc-3aea-43d1-b1b5-abdc55cfbe32",
                         "moved": false,
                         "static": false,
-                        "w": 12,
+                        "w": 16,
                         "x": 0,
                         "y": 0
                     }

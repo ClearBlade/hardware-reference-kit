@@ -1,13 +1,11 @@
 {
-    "auto_balance": false,
-    "auto_restart": false,
-    "concurrency": 0,
-    "dependencies": "log,http,Configuration,ClearBladeAdminRESTLib,QPromiseLib,Util,clearblade",
-    "execution_timeout": 60,
-    "logging_enabled": true,
-    "name": "SetupPlatformSystemForEdge",
-    "params": [
-        "{}"
-    ],
-    "run_user": ""
+  "auto_balance": false,
+  "auto_restart": false,
+  "concurrency": 0,
+  "dependencies": "log,http,ClearBladeAdminRESTLib,QPromiseLib,Util,clearblade",
+  "execution_timeout": 60,
+  "logging_enabled": true,
+  "name": "SetupPlatformSystemForEdge",
+  "params": ["{}"],
+  "run_user": ""
 }

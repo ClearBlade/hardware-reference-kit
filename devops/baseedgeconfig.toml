@@ -29,9 +29,9 @@ ParentSystemKey = "null"
     [Provisioning]
     ProvisioningMode = true
     ProvisioningSystem = "f8969acd0b92de96f69dfa92e09801"
-    ProvisionalSqliteAdmin = "./baseedge.db"
-    ProvisionalSqliteUserdata = "./baseedgeusers.db"
+    ProvisionalSqliteAdmin = "./edge.db"
+    ProvisionalSqliteUserdata = "./edgeusers.db"
 
 [Database]
-SqliteAdmin = "./baseedge.db"
-SqliteUserdata = "./baseedgeusers.db"
+SqliteAdmin = "./edge.db"
+SqliteUserdata = "./edgeusers.db"

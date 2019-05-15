@@ -18,7 +18,8 @@ pgrep edge > /dev/null 2>/dev/null && pkill edge
 
 echo "Copy base edge db files into working directory"
 
-tar -xvf baseedgedbs.tar.gz
+ls ./baseedgedbs.tar.gz
+tar -xvf ./baseedgedbs.tar.gz
 
 echo "Starting edge"
 
@@ -42,6 +43,8 @@ cb-cli target -url=http://localhost:9005 -messaging-url=localhost:1885 -email=ad
 echo "Pushing deployment kit system to edge"
 # seed the edge dbs with the deployment kit system
 cb-cli push -all -auto-approve
+# push -all will fail on pushing edge schema so we need to do a separate call for all portals
+cb-cli push -all-portals -auto-approve
 
 echo "Pushed assets to edge"
 
@@ -49,4 +52,12 @@ pgrep edge > /dev/null 2>/dev/null && pkill edge
 
 echo "Killed edge"
 
-# todo: grab edge db files
+echo "Changing back to devops directory"
+cd ../devops
+
+echo "Packaging edge db files"
+tar -zcf ../advanced/dbs.tar.gz edge.db edgeusers.db
+cp edge.db ..
+cp edgeusers.db ..
+
+echo "Finished"

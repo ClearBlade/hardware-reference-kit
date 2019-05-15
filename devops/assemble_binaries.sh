@@ -30,10 +30,10 @@ assemble(){
 	DOWNLOAD_DIR=${WORK_DIR}/download
 
 	REPO_DIR=$GOPATH/src/clearblade-deployment-kit
-	
 	ARTIFACTS_DIR=${WORK_DIR}/artifacts
 	mkdir -p $OUTPUT_DIR
 	cp -r $REPO_DIR/* $OUTPUT_DIR/
+	mkdir -p $DOWNLOAD_DIR
 	
 	# Pull and extract cb_console and edge
 	# https://github.com/ClearBlade/Edge/releases/download/4.3.4/edge-darwin-amd64.tar.gz
@@ -51,7 +51,7 @@ assemble(){
 	tar -xf ${DOWNLOAD_DIR}/${FILENAME} -C $OUTPUT_DIR
 
 	# Add provision redirect webpage
-	cp -r $GOPATH/src/github.com/clearblade/clearblade-deployment-kit/advanced/provision $OUTPUT_DIR/public/
+	cp -r $OUTPUT_DIR/advanced/provision $OUTPUT_DIR/public/
 	cd $OUTPUT_DIR
 	tar -zcf $ARTIFACTS_DIR/$ARTIFACT_FILENAME $OUTPUT_DIR/*
 

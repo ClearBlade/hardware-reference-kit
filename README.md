@@ -15,13 +15,7 @@ You must have a `ClearBlade Platform System` to which to attach this Edge.
 
 1. Download the latest release here: https://github.com/ClearBlade/clearblade-deployment-kit/releases
 
-2. In your pre-existing system, create a service user account with any email account. Example: provisioner@clearblade.com.
-
-3. Grant this user a role with Edge Create and Deployment Read permissions.
-
-4. Configure a Deployment that is applied to 'All Current and Future Edges'
-
-5. Download and unzip the release kit for your OS and Architecture (ex. amd64-darwin)
+2. Download and unzip the release kit for your OS and Architecture (ex. amd64-darwin)
 
 
 ## Usage
@@ -57,4 +51,14 @@ Note: If you've already executed ./runEdge.sh once, you will need to run ./reset
 ## Detailed workflow
 
 ![](workflow.png)
+
+## Contributing
+
+### How to create the edge databases
+
+The deployment kit runs on a preconfigured system which contains portals and services that are responsible for taking user input and creating an edge on behalf of the user. Whenever a change is made in the preconfigured system, the edge databases must be rebuilt in order to see the changes reflected in the end result. This is accomplished by the `devops/setup.sh` script with the following steps:
+1. Stand up an edge that uses databases (`devops/baseedgedbs.tar.gz`) that have one empty system in them
+2. Once the edge is running, `cb-cli` is used to push all the deployment kit assets into the base system. 
+3. By pushing assets to the edge, the edge databases will be modified which will then be packaged for distribution
+
 
