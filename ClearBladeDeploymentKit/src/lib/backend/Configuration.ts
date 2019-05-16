@@ -67,11 +67,15 @@ export const TARGET_CONFIGURATION = {
   IPM_REPO_USER: "aalcott14",
   IPM_REPO_NAME: "dev-smart-monitoring",
   IPM_ENTRYPOINT: { portal: "smart_monitoring" },
-  PROVISIONER_USER_EMAIL: "provisioner@clearblade.com"
+  PROVISIONER_USER_EMAIL: "provisioner@clearblade.com",
+  DEVELOPER: {
+    email: "a@a.com",
+    password: "b"
+  }
 };
 
 const PORTAL_CONFIGURATION = {
-  AUTOROUTE: false
+  AUTOROUTE: true
 };
 
 const WORKFLOW_CONFIGURATION: WorkflowConfig = {
@@ -82,10 +86,10 @@ const WORKFLOW_CONFIGURATION: WorkflowConfig = {
     platformURL: TARGET_CONFIGURATION.URL
   },
   DEVELOPER: {
-    route: false && PORTAL_CONFIGURATION.AUTOROUTE,
-    flow: FLOW.NEW,
-    devEmail: "",
-    devPassword: "",
+    route: true && PORTAL_CONFIGURATION.AUTOROUTE,
+    flow: FLOW.PRECONFIGURED,
+    devEmail: TARGET_CONFIGURATION.DEVELOPER.email,
+    devPassword: TARGET_CONFIGURATION.DEVELOPER.password,
     key: TARGET_CONFIGURATION.REGISTRATION_KEY
   },
   SYSTEM: {
@@ -140,6 +144,21 @@ function initAdminRest(platformURL: string) {
   return deferred.promise;
 }
 
+function initDevWithCreds(rest: IClearBladeAdminREST, config: WorkflowConfig) {
+  const devAttributes = config.DEVELOPER;
+
+  const devEmail = devAttributes.devEmail;
+  const devPassword = devAttributes.devPassword;
+
+  log("dev");
+  log({ devEmail, devPassword });
+  const deferred = Q.defer<IClearBladeAdminREST>();
+  rest
+    .initWithCreds(devEmail, devPassword)
+    .then(() => deferred.resolve(rest), err => deferred.reject(err));
+  return deferred.promise;
+}
+
 const CONFIGURATION = {
   TARGET: TARGET_CONFIGURATION,
   PORTAL: PORTAL_CONFIGURATION,
@@ -184,18 +203,13 @@ const CONFIGURATION = {
         rest: IClearBladeAdminREST,
         config: WorkflowConfig
       ): Q.Promise<IClearBladeAdminREST> {
-        const devAttributes = config.DEVELOPER;
-
-        const devEmail = devAttributes.devEmail;
-        const devPassword = devAttributes.devPassword;
-
-        log("dev");
-        log({ devEmail, devPassword });
-        const deferred = Q.defer<IClearBladeAdminREST>();
-        rest
-          .initWithCreds(devEmail, devPassword)
-          .then(() => deferred.resolve(rest), err => deferred.reject(err));
-        return deferred.promise;
+        return initDevWithCreds(rest, config);
+      },
+      [FLOW.PRECONFIGURED]: function(
+        rest: IClearBladeAdminREST,
+        config: WorkflowConfig
+      ): Q.Promise<IClearBladeAdminREST> {
+        return initDevWithCreds(rest, config);
       }
     },
     SYSTEM: {

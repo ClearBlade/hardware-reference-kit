@@ -41166,10 +41166,14 @@ var TARGET_CONFIGURATION = {
   IPM_ENTRYPOINT: {
     portal: "smart_monitoring"
   },
-  PROVISIONER_USER_EMAIL: "provisioner@clearblade.com"
+  PROVISIONER_USER_EMAIL: "provisioner@clearblade.com",
+  DEVELOPER: {
+    email: "a@a.com",
+    password: "b"
+  }
 };
 var PORTAL_CONFIGURATION = {
-  AUTOROUTE: false
+  AUTOROUTE: true
 };
 var WORKFLOW_CONFIGURATION = {
   AUTOROUTE: PORTAL_CONFIGURATION.AUTOROUTE,
@@ -41179,10 +41183,10 @@ var WORKFLOW_CONFIGURATION = {
     platformURL: TARGET_CONFIGURATION.URL
   },
   DEVELOPER: {
-    route:  false && false,
-    flow: FLOW.NEW,
-    devEmail: "",
-    devPassword: "",
+    route:  true && PORTAL_CONFIGURATION.AUTOROUTE,
+    flow: FLOW.PRECONFIGURED,
+    devEmail: TARGET_CONFIGURATION.DEVELOPER.email,
+    devPassword: TARGET_CONFIGURATION.DEVELOPER.password,
     key: TARGET_CONFIGURATION.REGISTRATION_KEY
   },
   SYSTEM: {
@@ -41231,6 +41235,24 @@ function initAdminRest(platformURL) {
   return deferred.promise;
 }
 
+function initDevWithCreds(rest, config) {
+  var devAttributes = config.DEVELOPER;
+  var devEmail = devAttributes.devEmail;
+  var devPassword = devAttributes.devPassword;
+  log("dev");
+  log({
+    devEmail: devEmail,
+    devPassword: devPassword
+  });
+  var deferred = Q.defer();
+  rest.initWithCreds(devEmail, devPassword).then(function () {
+    return deferred.resolve(rest);
+  }, function (err) {
+    return deferred.reject(err);
+  });
+  return deferred.promise;
+}
+
 var CONFIGURATION = {
   TARGET: TARGET_CONFIGURATION,
   PORTAL: PORTAL_CONFIGURATION,
@@ -41260,21 +41282,9 @@ var CONFIGURATION = {
       });
       return deferred.promise;
     }), Configuration_defineProperty(_DEVELOPER, FLOW.EXISTING, function (rest, config) {
-      var devAttributes = config.DEVELOPER;
-      var devEmail = devAttributes.devEmail;
-      var devPassword = devAttributes.devPassword;
-      log("dev");
-      log({
-        devEmail: devEmail,
-        devPassword: devPassword
-      });
-      var deferred = Q.defer();
-      rest.initWithCreds(devEmail, devPassword).then(function () {
-        return deferred.resolve(rest);
-      }, function (err) {
-        return deferred.reject(err);
-      });
-      return deferred.promise;
+      return initDevWithCreds(rest, config);
+    }), Configuration_defineProperty(_DEVELOPER, FLOW.PRECONFIGURED, function (rest, config) {
+      return initDevWithCreds(rest, config);
     }), _DEVELOPER),
     SYSTEM: (_SYSTEM = {}, Configuration_defineProperty(_SYSTEM, FLOW.IPM, function (rest, config) {
       var repoUser = config.SYSTEM.repoUser;
