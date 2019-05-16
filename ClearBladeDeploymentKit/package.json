@@ -56,9 +56,11 @@
       "^.+\\.jsx?$": "babel-jest",
       "^.+\\.tsx?$": "ts-jest"
     },
-    "setupFiles": [
-      "./src/setupTests.ts"
-    ]
+    "globals": {
+      "ts-jest": {
+        "diagnostics": false
+      }
+    }
   },
   "devDependencies": {
     "@babel/core": "^7.3.3",
