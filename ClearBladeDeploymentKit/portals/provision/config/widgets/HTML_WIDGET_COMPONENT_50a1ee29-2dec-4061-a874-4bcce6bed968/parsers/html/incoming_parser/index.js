@@ -41428,14 +41428,17 @@ function FormikInputWrapper(props) {
     case FieldTypes.RADIO_GROUP:
       {
         var options = props.options;
-        return external_React_["createElement"](RadioGroup_default.a, field, external_React_["createElement"](FormLabel_default.a, {
+        return external_React_["createElement"](RadioGroup_default.a, _extends({}, field, {
+          "data-cy": inputProps["data-cy"]
+        }), external_React_["createElement"](FormLabel_default.a, {
           component: "legend"
         }, label), options.map(function (o) {
           return external_React_["createElement"](FormControlLabel_default.a, {
             key: o.value,
             value: o.value,
             control: external_React_["createElement"](Radio_default.a, null),
-            label: o.label
+            label: o.label,
+            "data-cy": "option-".concat(o.value)
           });
         }));
       }
@@ -41854,7 +41857,10 @@ var EdgeConfigurationStep_EdgeConfigurationStep = function EdgeConfigurationStep
           field: field,
           form: form,
           label: "",
-          options: edgeOptions
+          options: edgeOptions,
+          inputProps: {
+            "data-cy": "edge-options"
+          }
         });
       }
     })), external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Field, {

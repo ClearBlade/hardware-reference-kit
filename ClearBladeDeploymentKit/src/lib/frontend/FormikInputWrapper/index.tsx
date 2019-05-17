@@ -57,7 +57,7 @@ function FormikInputWrapper<T extends FieldTypes>(props: IProps<T>) {
     case FieldTypes.RADIO_GROUP: {
       const options = (props as IProps<FieldTypes.RADIO_GROUP>).options;
       return (
-        <RadioGroup {...field}>
+        <RadioGroup {...field} data-cy={inputProps["data-cy"]}>
           <FormLabel component="legend">{label}</FormLabel>
           {options.map(o => (
             <FormControlLabel
@@ -65,6 +65,7 @@ function FormikInputWrapper<T extends FieldTypes>(props: IProps<T>) {
               value={o.value}
               control={<Radio />}
               label={o.label}
+              data-cy={`option-${o.value}`}
             />
           ))}
         </RadioGroup>

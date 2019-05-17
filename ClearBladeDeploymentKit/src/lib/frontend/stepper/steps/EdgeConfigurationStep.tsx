@@ -64,6 +64,7 @@ const EdgeConfigurationStep = (props: IProps) => {
                       form={form}
                       label=""
                       options={edgeOptions}
+                      inputProps={{ "data-cy": "edge-options" }}
                     />
                   );
                 }}
