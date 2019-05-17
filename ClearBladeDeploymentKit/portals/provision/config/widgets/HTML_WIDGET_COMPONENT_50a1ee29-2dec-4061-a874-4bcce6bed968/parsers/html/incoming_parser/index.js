@@ -41407,7 +41407,9 @@ function FormikInputWrapper(props) {
       _props$form = props.form,
       touched = _props$form.touched,
       errors = _props$form.errors,
-      label = props.label;
+      label = props.label,
+      _props$inputProps = props.inputProps,
+      inputProps = _props$inputProps === void 0 ? {} : _props$inputProps;
   var fieldTouched = touched[field.name];
   var fieldError = errors[field.name];
 
@@ -41415,6 +41417,7 @@ function FormikInputWrapper(props) {
     case FieldTypes.TEXT:
     case FieldTypes.PASSWORD:
       return external_React_["createElement"](TextField_default.a, _extends({}, field, {
+        inputProps: inputProps,
         error: fieldTouched && fieldError ? true : false,
         helperText: fieldTouched && fieldError,
         label: label,
@@ -41442,7 +41445,9 @@ function FormikInputWrapper(props) {
         var _options = props.options;
         return external_React_["createElement"](Select_default.a, _extends({
           "native": true
-        }, field), _options.map(function (o) {
+        }, field, {
+          inputProps: inputProps
+        }), _options.map(function (o) {
           return external_React_["createElement"]("option", {
             key: "option-".concat(JSON.stringify(o.value)),
             value: o.value
@@ -41780,14 +41785,18 @@ var SystemConfigurationStep_SystemConfigurationStep = function SystemConfigurati
             }
           }),
           form: form,
-          label: props.intl.formatMessage(messages.password)
+          label: props.intl.formatMessage(messages.password),
+          inputProps: {
+            "data-cy": "system-template-id"
+          }
         });
       }
     })), external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Button_default.a, {
       variant: "contained",
       color: "primary",
       type: "submit",
-      onSubmit: handleSubmit
+      onSubmit: handleSubmit,
+      "data-cy": "continue"
     }, "Continue"))));
   });
 };
@@ -41854,6 +41863,9 @@ var EdgeConfigurationStep_EdgeConfigurationStep = function EdgeConfigurationStep
         var field = _ref3.field,
             form = _ref3.form;
         return external_React_["createElement"](frontend_FormikInputWrapper, {
+          inputProps: {
+            "data-cy": "edge-id"
+          },
           type: FieldTypes.TEXT,
           field: field,
           form: form,
@@ -41965,7 +41977,8 @@ function (_React$Component) {
           variant: "contained",
           color: "primary",
           type: "submit",
-          onSubmit: handleSubmit
+          onSubmit: handleSubmit,
+          "data-cy": "retarget-btn"
         }, external_React_["createElement"](index_es["a" /* FormattedMessage */], messages.retarget)))), external_React_["createElement"]("div", {
           style: {
             height: "400px"

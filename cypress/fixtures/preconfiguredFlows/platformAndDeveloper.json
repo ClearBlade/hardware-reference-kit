@@ -1,0 +1,80 @@
+{
+  "results": {
+    "PORTAL": {
+      "AUTOROUTE": true
+    },
+    "TARGET": {
+      "DEVELOPER": {
+        "email": "a@a.com",
+        "password": "b"
+      },
+      "IPM_ENTRYPOINT": {
+        "portal": "smart_monitoring"
+      },
+      "IPM_REPO_NAME": "dev-smart-monitoring",
+      "IPM_REPO_USER": "aalcott14",
+      "PROVISIONER_USER_EMAIL": "provisioner@clearblade.com",
+      "REGISTRATION_KEY": "AMDBlade",
+      "URL": "https://dev.clearblade.com"
+    },
+    "TEMPLATE_OPTIONS": [
+      {
+        "ID": "aalcott14_dev-smart-monitoring",
+        "IPM_ENTRYPOINT": {
+          "portal": "smart_monitoring"
+        },
+        "IPM_REPO_NAME": "dev-smart-monitoring",
+        "IPM_REPO_USER": "aalcott14",
+        "LABEL": "Smart Monitoring"
+      },
+      {
+        "ID": "rreinold_anomaly-detection-template",
+        "IPM_ENTRYPOINT": {
+          "portal": "AnomalyDetection"
+        },
+        "IPM_REPO_NAME": "anomaly-detection-template",
+        "IPM_REPO_USER": "rreinold",
+        "LABEL": "Anomaly Detection"
+      }
+    ],
+    "WORKFLOW": {
+      "AUTOROUTE": true,
+      "DEVELOPER": {
+        "devEmail": "a@a.com",
+        "devPassword": "b",
+        "flow": "PRECONFIGURED",
+        "key": "AMDBlade",
+        "route": true
+      },
+      "EDGE": {
+        "edgeID": "",
+        "edgeToken": "",
+        "flow": "NEW",
+        "route": true
+      },
+      "PLATFORM": {
+        "flow": "PRECONFIGURED",
+        "platformURL": "https://dev.clearblade.com",
+        "route": true
+      },
+      "SYSTEM": {
+        "entrypoint": {
+          "portal": "smart_monitoring"
+        },
+        "flow": "IPM",
+        "repoName": "dev-smart-monitoring",
+        "repoUser": "aalcott14",
+        "route": true,
+        "systemKey": "",
+        "systemName": "",
+        "systemSecret": ""
+      }
+    },
+    "WORKFLOW_MAP": {
+      "DEVELOPER": {},
+      "EDGE": {},
+      "PLATFORM": {},
+      "SYSTEM": {}
+    }
+  }
+}

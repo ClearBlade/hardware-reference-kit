@@ -192,6 +192,9 @@ const SystemConfigurationStep = (props: IProps) => {
                         }}
                         form={form}
                         label={props.intl.formatMessage(messages.password)}
+                        inputProps={{
+                          "data-cy": "system-template-id"
+                        }}
                       />
                     );
                   }}
@@ -204,6 +207,7 @@ const SystemConfigurationStep = (props: IProps) => {
                 color="primary"
                 type="submit"
                 onSubmit={handleSubmit}
+                data-cy="continue"
               >
                 Continue
               </Button>

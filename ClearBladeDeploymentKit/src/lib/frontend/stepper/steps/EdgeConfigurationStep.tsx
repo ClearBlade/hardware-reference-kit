@@ -75,6 +75,7 @@ const EdgeConfigurationStep = (props: IProps) => {
                 render={({ field, form }: FieldProps) => {
                   return (
                     <FormikInputWrapper
+                      inputProps={{ "data-cy": "edge-id" }}
                       type={FieldTypes.TEXT}
                       field={field}
                       form={form}

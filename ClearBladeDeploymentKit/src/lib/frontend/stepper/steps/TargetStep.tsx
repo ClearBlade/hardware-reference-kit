@@ -52,6 +52,7 @@ class TargetStep extends React.Component<IProps, IState> {
                   color="primary"
                   type="submit"
                   onSubmit={handleSubmit}
+                  data-cy="retarget-btn"
                 >
                   <FormattedMessage {...messages.retarget} />
                 </Button>

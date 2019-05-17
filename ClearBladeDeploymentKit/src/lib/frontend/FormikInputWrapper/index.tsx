@@ -22,6 +22,7 @@ export interface Option<T = any> {
 type IProps<T extends FieldTypes> = {
   type: T;
   label: string;
+  inputProps?: { "data-cy"?: string };
 } & FieldProps &
   (T extends FieldTypes.RADIO_GROUP | FieldTypes.SELECT
     ? {
@@ -34,7 +35,8 @@ function FormikInputWrapper<T extends FieldTypes>(props: IProps<T>) {
     type,
     field,
     form: { touched, errors },
-    label
+    label,
+    inputProps = {}
   } = props;
   const fieldTouched = touched[field.name];
   const fieldError = errors[field.name];
@@ -44,6 +46,7 @@ function FormikInputWrapper<T extends FieldTypes>(props: IProps<T>) {
       return (
         <TextField
           {...field}
+          inputProps={inputProps}
           error={fieldTouched && fieldError ? true : false}
           helperText={fieldTouched && fieldError}
           label={label}
@@ -70,7 +73,7 @@ function FormikInputWrapper<T extends FieldTypes>(props: IProps<T>) {
     case FieldTypes.SELECT: {
       const options = (props as IProps<FieldTypes.SELECT>).options;
       return (
-        <Select native {...field}>
+        <Select native {...field} inputProps={inputProps}>
           {options.map(o => (
             <option key={`option-${JSON.stringify(o.value)}`} value={o.value}>
               {o.label}
