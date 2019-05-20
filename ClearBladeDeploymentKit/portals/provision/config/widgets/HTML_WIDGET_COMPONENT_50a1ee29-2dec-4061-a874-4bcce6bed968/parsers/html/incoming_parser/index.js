@@ -41606,7 +41606,10 @@ var DeveloperConfigurationStep_DeveloperConfigurationStep = function DeveloperCo
           type: FieldTypes.TEXT,
           field: field,
           form: form,
-          label: props.intl.formatMessage(messages.email)
+          label: props.intl.formatMessage(messages.email),
+          inputProps: {
+            "data-cy": "dev-email"
+          }
         });
       }
     })), external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Field, {
@@ -41618,7 +41621,10 @@ var DeveloperConfigurationStep_DeveloperConfigurationStep = function DeveloperCo
           type: FieldTypes.PASSWORD,
           field: field,
           form: form,
-          label: props.intl.formatMessage(messages.password)
+          label: props.intl.formatMessage(messages.password),
+          inputProps: {
+            "data-cy": "dev-password"
+          }
         });
       }
     })), values.flow === FLOW.NEW && external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Field, {
@@ -41630,7 +41636,10 @@ var DeveloperConfigurationStep_DeveloperConfigurationStep = function DeveloperCo
           type: FieldTypes.PASSWORD,
           field: field,
           form: form,
-          label: props.intl.formatMessage(messages.confirm)
+          label: props.intl.formatMessage(messages.confirm),
+          inputProps: {
+            "data-cy": "dev-password-confirm"
+          }
         });
       }
     })), external_React_["createElement"](FormControl_default.a, null, external_React_["createElement"](Button_default.a, {

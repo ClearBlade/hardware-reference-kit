@@ -90,6 +90,9 @@ const DeveloperConfigurationStep = (props: IProps) => {
                       field={field}
                       form={form}
                       label={props.intl.formatMessage(messages.email)}
+                      inputProps={{
+                        "data-cy": "dev-email"
+                      }}
                     />
                   );
                 }}
@@ -105,6 +108,9 @@ const DeveloperConfigurationStep = (props: IProps) => {
                       field={field}
                       form={form}
                       label={props.intl.formatMessage(messages.password)}
+                      inputProps={{
+                        "data-cy": "dev-password"
+                      }}
                     />
                   );
                 }}
@@ -121,6 +127,9 @@ const DeveloperConfigurationStep = (props: IProps) => {
                         field={field}
                         form={form}
                         label={props.intl.formatMessage(messages.confirm)}
+                        inputProps={{
+                          "data-cy": "dev-password-confirm"
+                        }}
                       />
                     );
                   }}
