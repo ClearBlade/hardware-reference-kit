@@ -128,5 +128,9 @@ export default defineMessages({
   targetErrorHeader: {
     id: "app.components.stepper.targetErrorHeader",
     defaultMessage: "An error occurred while targeting"
+  },
+  targetSuccessHeader: {
+    id: "app.components.stepper.targetSuccessHeader",
+    defaultMessage: "Success"
   }
 });

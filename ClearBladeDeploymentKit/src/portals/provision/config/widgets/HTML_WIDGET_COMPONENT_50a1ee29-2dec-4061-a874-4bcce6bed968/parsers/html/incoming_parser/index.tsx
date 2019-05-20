@@ -26,6 +26,7 @@ import CONFIGURATION, {
   WorkflowConfig
 } from "../../../../../../../../lib/backend/Configuration";
 import ResponsiveDialog from "../../../../../../../../lib/frontend/ResponsiveDialog";
+import { SystemDetails } from "lib/backend/ClearBladeAdminRESTLib";
 
 function getSteps(config: Configuration) {
   return [
@@ -103,6 +104,7 @@ interface IState {
   templateOptions: typeof CONFIGURATION["TEMPLATE_OPTIONS"];
   activeStep: number;
   targetError: any;
+  targetSuccess: SystemDetails | null;
   fetchedWorkflowConfig: boolean;
 }
 
@@ -159,7 +161,8 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
     targetError: null,
     workflowConfig: configTemplate,
     templateOptions: [],
-    fetchedWorkflowConfig: false
+    fetchedWorkflowConfig: false,
+    targetSuccess: null
   };
 
   componentDidMount() {
@@ -272,12 +275,15 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
   onSubmit = () => {
     const prom = datasources.SetupPlatformSystemForEdge.sendData(
       this.state.workflowConfig
-    ).then((resp: { success: boolean; results: string }) => {
+    ).then((resp: { success: boolean; results: string | SystemDetails }) => {
       if (!resp.success) {
         this.setState({
           targetError: resp.results
         });
       } else {
+        this.setState({
+          targetSuccess: resp.results as SystemDetails
+        });
       }
     });
     CB_PORTAL.Loader.waitFor(prom);
@@ -291,7 +297,12 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
 
   render() {
     const steps = getSteps(this.state.workflowConfig);
-    const { activeStep, targetError, fetchedWorkflowConfig } = this.state;
+    const {
+      activeStep,
+      targetError,
+      fetchedWorkflowConfig,
+      targetSuccess
+    } = this.state;
 
     return (
       <IntlProvider>
@@ -327,6 +338,15 @@ class VerticalLinearStepper extends React.Component<{}, IState> {
               </Typography>
               <Button onClick={this.handleReset}>Reset</Button>
             </Paper>
+          )}
+          {targetSuccess && (
+            <ResponsiveDialog
+              bodyText={"success"}
+              headerMsg={messages.targetSuccessHeader}
+              onClose={() => {
+                return;
+              }}
+            />
           )}
           {targetError && (
             <ResponsiveDialog

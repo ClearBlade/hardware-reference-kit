@@ -1,5 +1,20 @@
 import { CDK_PORTAL_URL } from "../support";
 
+const performPreconfiguredPlatformAndDeveloperFlow = response => {
+  cy.getCy("system-template-id").select("rreinold_anomaly-detection-template");
+  cy.getCy("continue").click();
+  cy.getCy("edge-options").within(() => {
+    cy.getCy("option-NEW").click();
+  });
+  cy.getCy("edge-id").type("cypressEdge{enter}");
+  cy.route({
+    method: "POST",
+    url: "**/SetupPlatformSystemForEdge",
+    response
+  }).as("SetupPlatformSystemForEdge");
+  cy.getCy("retarget-btn").click();
+};
+
 describe("preconfigured platform and developer", () => {
   beforeEach(() => {
     cy.server();
@@ -14,20 +29,37 @@ describe("preconfigured platform and developer", () => {
   });
 
   it("should only need to set up system and edge info", () => {
-    cy.getCy("system-template-id").select(
-      "rreinold_anomaly-detection-template"
-    );
-    cy.getCy("continue").click();
-    cy.getCy("edge-options").within(() => {
-      cy.getCy("option-NEW").click();
+    performPreconfiguredPlatformAndDeveloperFlow({
+      success: true,
+      results: "hello results!!"
     });
-    cy.getCy("edge-id").type("cypressEdge{enter}");
-    cy.route({
-      method: "POST",
-      url: "**/SetupPlatformSystemForEdge",
-      response: { results: "hello results!!" }
-    }).as("SetupPlatformSystemForEdge");
-    cy.getCy("retarget-btn").click();
+    cy.wait("@SetupPlatformSystemForEdge").then(req => {
+      cy.wrap(req.request.body.PLATFORM)
+        .its("flow")
+        .should("eq", "PRECONFIGURED");
+      cy.wrap(req.request.body.DEVELOPER)
+        .its("flow")
+        .should("eq", "PRECONFIGURED");
+      cy.wrap(req.request.body.SYSTEM)
+        .its("flow")
+        .should("eq", "IPM");
+      cy.wrap(req.request.body.SYSTEM)
+        .its("repoName")
+        .should("eq", "anomaly-detection-template");
+      cy.wrap(req.request.body.EDGE)
+        .its("flow")
+        .should("eq", "NEW");
+      cy.wrap(req.request.body.EDGE)
+        .its("edgeID")
+        .should("eq", "cypressEdge");
+    });
+  });
+
+  it("shows error modal", () => {
+    performPreconfiguredPlatformAndDeveloperFlow({
+      success: false,
+      results: "something terrible happened"
+    });
     cy.wait("@SetupPlatformSystemForEdge").then(req => {
       cy.wrap(req.request.body.PLATFORM)
         .its("flow")

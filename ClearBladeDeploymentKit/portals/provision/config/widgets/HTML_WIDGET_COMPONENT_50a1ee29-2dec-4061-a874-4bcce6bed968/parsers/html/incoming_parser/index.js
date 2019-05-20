@@ -36070,6 +36070,10 @@ var index_es = __webpack_require__(9);
   targetErrorHeader: {
     id: "app.components.stepper.targetErrorHeader",
     defaultMessage: "An error occurred while targeting"
+  },
+  targetSuccessHeader: {
+    id: "app.components.stepper.targetSuccessHeader",
+    defaultMessage: "Success"
   }
 }));
 // CONCATENATED MODULE: ./node_modules/tslib/tslib.es6.js
@@ -42271,7 +42275,8 @@ function (_React$Component) {
       targetError: null,
       workflowConfig: configTemplate,
       templateOptions: [],
-      fetchedWorkflowConfig: false
+      fetchedWorkflowConfig: false,
+      targetSuccess: null
     });
 
     incoming_parser_defineProperty(incoming_parser_assertThisInitialized(_this), "retrieveWorkflowConfig", function () {
@@ -42379,7 +42384,11 @@ function (_React$Component) {
           _this.setState({
             targetError: resp.results
           });
-        } else {}
+        } else {
+          _this.setState({
+            targetSuccess: resp.results
+          });
+        }
       });
       CB_PORTAL.Loader.waitFor(prom);
     });
@@ -42421,7 +42430,8 @@ function (_React$Component) {
       var _this$state = this.state,
           activeStep = _this$state.activeStep,
           targetError = _this$state.targetError,
-          fetchedWorkflowConfig = _this$state.fetchedWorkflowConfig;
+          fetchedWorkflowConfig = _this$state.fetchedWorkflowConfig,
+          targetSuccess = _this$state.targetSuccess;
       return external_React_["createElement"](index_es["b" /* IntlProvider */], null, external_React_["createElement"]("div", null, fetchedWorkflowConfig && external_React_["createElement"](Stepper_default.a, {
         activeStep: activeStep,
         orientation: "vertical"
@@ -42446,7 +42456,13 @@ function (_React$Component) {
         elevation: 0
       }, external_React_["createElement"](Typography_default.a, null, "All steps completed - you're finished"), external_React_["createElement"](Button_default.a, {
         onClick: this.handleReset
-      }, "Reset")), targetError && external_React_["createElement"](frontend_ResponsiveDialog, {
+      }, "Reset")), targetSuccess && external_React_["createElement"](frontend_ResponsiveDialog, {
+        bodyText: "success",
+        headerMsg: messages.targetSuccessHeader,
+        onClose: function onClose() {
+          return;
+        }
+      }), targetError && external_React_["createElement"](frontend_ResponsiveDialog, {
         bodyText: targetError,
         headerMsg: messages.targetErrorHeader,
         onClose: this.closeErrorModal
